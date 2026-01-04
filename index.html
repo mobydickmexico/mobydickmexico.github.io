@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Pide tu Canción! | MobyDick @ Porter British Pub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --pub-red: #C8102E;
+            --pub-blue: #012169;
+            --pub-white: #FFFFFF;
+        }
+        
+        body { 
+            background: #f8f9fa;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        /* ========== HEADER MEJORADO ========== */
+        .header-compact {
+            background: white;
+            border-radius: 12px;
+            padding: 0.8rem;
+            margin: 0 auto 1rem auto;
+            max-width: 800px;
+            border: 3px solid var(--pub-blue);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* PATRÓN BRITÁNICO MÁS VISIBLE */
+        .header-compact::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(90deg, transparent 48%, rgba(200, 16, 46, 0.15) 48%, rgba(200, 16, 46, 0.15) 52%, transparent 52%),
+                linear-gradient(transparent 48%, rgba(200, 16, 46, 0.15) 48%, rgba(200, 16, 46, 0.15) 52%, transparent 52%),
+                linear-gradient(135deg, transparent 45%, rgba(1, 33, 105, 0.15) 45%, rgba(1, 33, 105, 0.15) 55%, transparent 55%),
+                linear-gradient(225deg, transparent 45%, rgba(1, 33, 105, 0.15) 45%, rgba(1, 33, 105, 0.15) 55%, transparent 55%),
+                linear-gradient(45deg, transparent 45%, rgba(255, 255, 255, 0.2) 45%, rgba(255, 255, 255, 0.2) 55%, transparent 55%),
+                linear-gradient(315deg, transparent 45%, rgba(255, 255, 255, 0.2) 45%, rgba(255, 255, 255, 0.2) 55%, transparent 55%);
+            background-size: 70px 70px;
+            opacity: 0.7; /* MUCHO MÁS VISIBLE */
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logos-horizontal {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            gap: 0.5rem;
+        }
+        
+        .logo-mobydick { 
+            height: 70px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+        
+        .logo-porter { 
+            height: 90px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+        
+        .vertical-line {
+            width: 2px;
+            height: 65px;
+            background: linear-gradient(to bottom, transparent 0%, var(--pub-red) 20%, var(--pub-red) 80%, transparent 100%);
+            margin: 0 0.5rem;
+            position: relative;
+        }
+        
+        .vertical-line::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            background: var(--pub-blue);
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 0 1px var(--pub-red);
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .info-badge {
+            background: var(--pub-blue);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            white-space: nowrap;
+            border: 1px solid rgba(255,255,255,0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .info-badge.live {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            animation: pulse 2s infinite;
+        }
+        
+        .info-badge.vote { 
+            background: var(--pub-red); 
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(40, 167, 69, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+        }
+        
+        .connected-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 0.4rem 0.8rem;
+            margin: 0.3rem auto;
+            display: inline-block;
+            border: 2px solid var(--pub-blue);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .connected-label {
+            font-size: 0.75rem;
+            color: #666;
+            margin-bottom: 0.1rem;
+        }
+        
+        .connected-count {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--pub-blue);
+        }
+        
+        .datetime-compact {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 0.3rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.3rem;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .datetime-compact .time {
+            color: var(--pub-blue);
+            font-weight: bold;
+        }
+        
+        .datetime-compact .date {
+            color: var(--pub-red);
+        }
+        
+        /* ========== CORRECCIONES DE LA PÁGINA ========== */
+        
+        /* 1. LISTA DE CANCIONES CON SCROLL (sin parpadeo) */
+        .songs-scroll-container {
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        
+        .songs-scroll-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .songs-scroll-container::-webkit-scrollbar-track {
+            background: rgba(1, 33, 105, 0.05);
+            border-radius: 3px;
+        }
+        
+        .songs-scroll-container::-webkit-scrollbar-thumb {
+            background: var(--pub-blue);
+            border-radius: 3px;
+        }
+        
+        .song-item {
+            display: flex;
+            flex-direction: column;
+            padding: 0.8rem;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.2s;
+        }
+        
+        @media (min-width: 768px) {
+            .song-item {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+        
+        .song-info {
+            flex: 1;
+            margin-bottom: 0.5rem;
+        }
+        
+        @media (min-width: 768px) {
+            .song-info {
+                margin-bottom: 0;
+                margin-right: 1rem;
+            }
+        }
+        
+        .song-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.2rem;
+        }
+        
+        .song-artist {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .song-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .votes-badge {
+            background: var(--pub-red);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: bold;
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .btn-vote {
+            background: linear-gradient(135deg, var(--pub-blue), #011954);
+            color: white;
+            border: none;
+            padding: 0.4rem 1rem;
+            font-weight: bold;
+            min-width: 90px;
+            white-space: nowrap;
+            border-radius: 20px;
+            transition: all 0.2s;
+        }
+        
+        .btn-vote:hover:not(:disabled) {
+            transform: scale(1.03);
+            box-shadow: 0 3px 8px rgba(1, 33, 105, 0.2);
+        }
+        
+        .btn-vote:disabled {
+            background: #28a745;
+            color: white;
+            cursor: not-allowed;
+        }
+        
+        /* 2. PANEL DE VOTOS COMPACTO */
+        #my-votes {
+            max-height: 150px;
+            overflow-y: auto;
+            margin-bottom: 0.5rem;
+        }
+        
+        #my-votes .vote-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 0.3rem;
+            border-left: 3px solid var(--pub-blue);
+        }
+        
+        /* 3. CARD HEADERS CON COLORES SÓLIDOS (sin degradado feo) */
+        .card-header {
+            background: var(--pub-blue) !important;
+            color: white !important;
+            border-bottom: 3px solid var(--pub-red) !important;
+            font-weight: bold;
+        }
+        
+        .card-header.bg-success {
+            background: #28a745 !important;
+            border-bottom-color: #1e7e34 !important;
+        }
+        
+        .card-header.bg-danger {
+            background: var(--pub-red) !important;
+            border-bottom-color: #a50e26 !important;
+        }
+        
+        .card-header.bg-dark {
+            background: #343a40 !important;
+            border-bottom-color: #212529 !important;
+        }
+        
+        /* 4. QR CODE FUNCIONAL */
+        .qr-container {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            border: 2px solid var(--pub-blue);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+        }
+        
+        #qrCanvas {
+            width: 100%;
+            max-width: 180px;
+            height: auto;
+            margin: 0 auto;
+            display: block;
+        }
+        
+        .btn-share {
+            background: linear-gradient(135deg, var(--pub-red), var(--pub-blue));
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            font-weight: bold;
+            border-radius: 20px;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+        
+        .btn-share:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(200, 16, 46, 0.3);
+        }
+        
+        /* 5. FOOTER MEJORADO */
+        .footer {
+            background: linear-gradient(90deg, var(--pub-blue), var(--pub-red));
+            color: white;
+            padding: 0.8rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+            text-align: center;
+            border-top: 3px solid #FFD700;
+        }
+        
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .header-compact {
+                padding: 0.7rem;
+                margin: 0.3rem auto 0.8rem auto;
+            }
+            
+            .logo-mobydick {
+                height: 60px;
+            }
+            
+            .logo-porter {
+                height: 75px;
+            }
+            
+            .vertical-line {
+                height: 55px;
+                margin: 0 0.3rem;
+            }
+            
+            .info-badge {
+                font-size: 0.75rem;
+                padding: 0.25rem 0.6rem;
+            }
+            
+            .connected-container {
+                padding: 0.3rem 0.7rem;
+            }
+            
+            .connected-count {
+                font-size: 1.1rem;
+            }
+            
+            .header-compact::before {
+                background-size: 50px 50px;
+                opacity: 0.6;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .info-row {
+                gap: 0.3rem;
+            }
+            
+            .info-badge {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.5rem;
+            }
+            
+            .datetime-compact {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-3">
+        <!-- ========== HEADER MEJORADO ========== -->
+        <div class="header-compact text-center">
+            <div class="header-content">
+                <div class="logos-horizontal">
+                    <img src="https://i.imgur.com/dc8BSdc.png" alt="MobyDick" class="logo-mobydick">
+                    <div class="vertical-line"></div>
+                    <img src="https://i.imgur.com/AUhSUci.png" alt="Porter British Pub" class="logo-porter">
+                </div>
+                
+                <div class="info-row">
+                    <div class="info-badge vote">
+                        <i class="bi bi-hand-thumbs-up"></i> VOTA
+                    </div>
+                    <div class="info-badge">
+                        <i class="bi bi-mic"></i> EN VIVO
+                    </div>
+                    <div class="info-badge live">
+                        <i class="bi bi-broadcast"></i> DIRECTO
+                    </div>
+                </div>
+                
+                <div class="connected-container">
+                    <div class="connected-label">
+                        <i class="bi bi-people"></i> PERSONAS CONECTADAS
+                    </div>
+                    <div class="connected-count" id="connected-count">24</div>
+                </div>
+                
+                <div class="datetime-compact">
+                    <i class="bi bi-clock"></i>
+                    <span class="time" id="current-time">--:--:--</span>
+                    <span>•</span>
+                    <i class="bi bi-calendar3"></i>
+                    <span class="date" id="current-date">--/--/----</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ========== CONTENIDO PRINCIPAL CORREGIDO ========== -->
+        <div class="row">
+            <!-- Columna izquierda -->
+            <div class="col-lg-8">
+                <!-- Buscador -->
+                <div class="card mb-3">
+                    <div class="card-body p-2">
+                        <div class="input-group">
+                            <span class="input-group-text" style="background: var(--pub-blue); color: white;">
+                                <i class="bi bi-search"></i>
+                            </span>
+                            <input type="text" id="search" class="form-control" 
+                                   placeholder="Buscar canción o artista...">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Lista de Canciones CON SCROLL (sin parpadeo) -->
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="bi bi-music-note-list"></i> REPERTORIO
+                        </h5>
+                        <span class="badge bg-secondary" id="total-songs">0 canciones</span>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="songs-scroll-container" id="songs-container">
+                            <div class="text-center py-4">
+                                <div class="spinner-border text-primary"></div>
+                                <p class="mt-2">Cargando canciones...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Columna derecha -->
+            <div class="col-lg-4">
+                <!-- Mis Votos -->
+                <div class="card mb-3">
+                    <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="bi bi-check-circle"></i> TUS VOTOS
+                        </h5>
+                        <span class="badge bg-light text-dark" id="vote-count">0/3</span>
+                    </div>
+                    <div class="card-body p-2">
+                        <div id="my-votes">
+                            <p class="text-muted text-center small">No has votado aún</p>
+                        </div>
+                        <button id="submit-votes" class="btn btn-success w-100 fw-bold" disabled>
+                            <i class="bi bi-send-check"></i> ENVIAR VOTOS
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Top 5 -->
+                <div class="card mb-3">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-fire"></i> TOP 5
+                        </h5>
+                    </div>
+                    <div class="card-body p-2">
+                        <div id="top-songs">
+                            <p class="text-center small text-muted">Cargando...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- QR Code FUNCIONAL -->
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-share"></i> COMPARTIR
+                        </h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <div class="qr-container">
+                            <canvas id="qrCanvas" width="180" height="180"></canvas>
+                        </div>
+                        <p class="small mb-2">Escanea para invitar a más personas</p>
+                        <button onclick="shareLink()" class="btn btn-share">
+                            <i class="bi bi-share-fill"></i> Compartir enlace
+                        </button>
+                        <div id="share-feedback" class="mt-2" style="min-height: 24px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer mt-4">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <small>
+                        © 2024 MobyDick • Porter British Pub • Ventura Puente
+                    </small>
+                </div>
+                <div class="col-md-6 text-end">
+                    <small>
+                        <i class="bi bi-wifi"></i> 
+                        <span id="real-connected" class="text-warning fw-bold">24 conectados</span>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    
+    <!-- QR Code Generator -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+
+    <script>
+        // ========== CONFIGURACIÓN FIREBASE ==========
+        const firebaseConfig = {
+            apiKey: "AIzaSyAitXyfb6Zc9GVEm0X_Hen_QOiA5Y3Aw1U",
+            authDomain: "rockrequests.firebaseapp.com",
+            projectId: "rockrequests",
+            storageBucket: "rockrequests.firebasestorage.app",
+            messagingSenderId: "1000216858616",
+            appId: "1:1000216858616:web:00bbd448eb034cba15d00d"
+        };
+
+        // ========== VARIABLES GLOBALES ==========
+        let allSongs = [];
+        let myVotes = [];
+        let db = null;
+        let songsUpdateInterval = null;
+
+        // ========== INICIALIZAR ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("🚀 Iniciando aplicación MobyDick...");
+            initializeFirebase();
+            updateCurrentTime();
+            setInterval(updateCurrentTime, 1000);
+        });
+
+        function initializeFirebase() {
+            try {
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.firestore();
+                
+                console.log("✅ Firebase inicializado");
+                
+                // Cargar votos guardados
+                const saved = localStorage.getItem('mobydick_votes');
+                if (saved) {
+                    try {
+                        myVotes = JSON.parse(saved);
+                        console.log(`📋 ${myVotes.length} votos cargados`);
+                    } catch (e) {
+                        console.error("Error cargando votos:", e);
+                        myVotes = [];
+                    }
+                }
+                
+                // Cargar canciones SOLO UNA VEZ al inicio
+                loadSongs();
+                setupEventListeners();
+                generateQRCode();
+                
+                // Escuchar cambios en tiempo real PERO SIN RECARGAR TODO
+                setupSmartListener();
+                
+            } catch (error) {
+                console.error("❌ Error Firebase:", error);
+                showError("Error de conexión. Recarga la página.");
+            }
+        }
+
+        // ========== CARGAR CANCIONES (SOLO UNA VEZ) ==========
+        function loadSongs() {
+            showLoading();
+            
+            db.collection("songs").orderBy("title").get()
+                .then((snapshot) => {
+                    allSongs = [];
+                    snapshot.forEach((doc) => {
+                        const data = doc.data();
+                        allSongs.push({
+                            id: doc.id,
+                            title: data.title || "Sin título",
+                            artist: data.artist || "Desconocido",
+                            genre: data.genre || "Rock",
+                            votes: data.votes || 0,
+                            duration: data.duration || "",
+                            year: data.year || ""
+                        });
+                    });
+                    
+                    console.log(`✅ ${allSongs.length} canciones cargadas`);
+                    
+                    if (allSongs.length === 0) {
+                        showNoSongs();
+                    } else {
+                        displaySongs(allSongs);
+                        updateTopSongs();
+                        updateTotalSongs();
+                        updateMyVotesDisplay();
+                    }
+                    
+                })
+                .catch((error) => {
+                    console.error("❌ Error cargando canciones:", error);
+                    showError("Error cargando canciones. Intenta recargar.");
+                });
+        }
+
+        // ========== LISTENER INTELIGENTE (sin parpadeo) ==========
+        function setupSmartListener() {
+            db.collection("songs").onSnapshot((snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === "modified") {
+                        const updatedSong = {
+                            id: change.doc.id,
+                            ...change.doc.data()
+                        };
+                        
+                        // Actualizar solo la canción específica
+                        updateSingleSong(updatedSong);
+                    }
+                });
+            }, (error) => {
+                console.log("Error en listener:", error);
+            });
+        }
+
+        function updateSingleSong(song) {
+            const index = allSongs.findIndex(s => s.id === song.id);
+            if (index !== -1) {
+                allSongs[index] = song;
+                
+                // Actualizar solo el elemento específico en la lista
+                const songElement = document.querySelector(`[data-song-id="${song.id}"]`);
+                if (songElement) {
+                    const votesBadge = songElement.querySelector('.votes-badge');
+                    if (votesBadge) {
+                        votesBadge.textContent = `${song.votes} ${song.votes === 1 ? 'voto' : 'votos'}`;
+                    }
+                }
+                
+                // Actualizar Top 5 si es necesario
+                updateTopSongs();
+            }
+        }
+
+        // ========== MOSTRAR CANCIONES CON SCROLL ==========
+        function displaySongs(songs) {
+            const container = document.getElementById("songs-container");
+            if (!container) return;
+            
+            if (songs.length === 0) {
+                container.innerHTML = `
+                    <div class="alert alert-info m-3">
+                        <i class="bi bi-info-circle"></i>
+                        No hay canciones que coincidan.
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = "";
+            
+            songs.forEach((song) => {
+                const isVoted = myVotes.includes(song.id);
+                const canVote = myVotes.length < 3;
+                
+                html += `
+                    <div class="song-item" data-song-id="${song.id}">
+                        <div class="song-info">
+                            <div class="song-title">${song.title}</div>
+                            <div class="song-artist">${song.artist}</div>
+                            <div class="mt-1">
+                                ${song.genre ? `<span class="badge" style="background: var(--pub-blue);">${song.genre}</span>` : ""}
+                                ${song.duration ? `<small class="text-muted ms-2"><i class="bi bi-clock"></i> ${song.duration}</small>` : ""}
+                            </div>
+                        </div>
+                        <div class="song-actions">
+                            <span class="votes-badge">${song.votes} ${song.votes === 1 ? 'voto' : 'votos'}</span>
+                            <button class="btn btn-vote" 
+                                    onclick="voteForSong('${song.id}')"
+                                    ${isVoted ? "disabled" : ""}
+                                    ${!isVoted && !canVote ? "disabled" : ""}>
+                                ${isVoted ? '<i class="bi bi-check-circle"></i> VOTADA' : '<i class="bi bi-hand-thumbs-up"></i> VOTAR'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // ========== VOTACIÓN ==========
+        window.voteForSong = function(songId) {
+            if (myVotes.length >= 3) {
+                showFeedback("❌ Máximo 3 votos por persona", "danger");
+                return;
+            }
+            
+            if (myVotes.includes(songId)) return;
+            
+            const songRef = db.collection("songs").doc(songId);
+            songRef.update({
+                votes: firebase.firestore.FieldValue.increment(1),
+                lastVoted: new Date().toISOString()
+            })
+            .then(() => {
+                myVotes.push(songId);
+                localStorage.setItem("mobydick_votes", JSON.stringify(myVotes));
+                
+                updateMyVotesDisplay();
+                
+                // Actualizar solo el botón específico
+                const buttons = document.querySelectorAll(`[onclick="voteForSong('${songId}')"]`);
+                buttons.forEach(btn => {
+                    btn.innerHTML = '<i class="bi bi-check-circle"></i> VOTADA';
+                    btn.disabled = true;
+                    btn.classList.remove('btn-vote');
+                    btn.style.background = '#28a745';
+                });
+                
+                showFeedback("✅ Voto registrado", "success");
+                
+            })
+            .catch((error) => {
+                console.error("Error votando:", error);
+                showFeedback("❌ Error al votar", "danger");
+            });
+        }
+
+        window.removeVote = function(songId) {
+            db.collection("songs").doc(songId).update({
+                votes: firebase.firestore.FieldValue.increment(-1)
+            })
+            .then(() => {
+                myVotes = myVotes.filter(id => id !== songId);
+                localStorage.setItem("mobydick_votes", JSON.stringify(myVotes));
+                
+                updateMyVotesDisplay();
+                
+                // Re-habilitar el botón de votar
+                const buttons = document.querySelectorAll(`[onclick="voteForSong('${songId}')"]`);
+                buttons.forEach(btn => {
+                    btn.innerHTML = '<i class="bi bi-hand-thumbs-up"></i> VOTAR';
+                    btn.disabled = false;
+                    btn.classList.add('btn-vote');
+                    btn.style.background = '';
+                });
+                
+                showFeedback("🗑️ Voto removido", "warning");
+                
+            })
+            .catch((error) => {
+                console.error("Error removiendo voto:", error);
+                showFeedback("❌ Error al remover voto", "danger");
+            });
+        }
+
+        // ========== ACTUALIZAR UI ==========
+        function updateMyVotesDisplay() {
+            const countElement = document.getElementById("vote-count");
+            const container = document.getElementById("my-votes");
+            const submitBtn = document.getElementById("submit-votes");
+            
+            if (countElement) {
+                countElement.textContent = `${myVotes.length}/3`;
+            }
+            
+            if (myVotes.length > 0) {
+                let html = "";
+                
+                myVotes.forEach((songId) => {
+                    const song = allSongs.find(s => s.id === songId);
+                    if (song) {
+                        html += `
+                            <div class="vote-item">
+                                <span class="fw-bold">${song.title}</span>
+                                <button class="btn btn-sm btn-outline-danger" onclick="removeVote('${songId}')">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        `;
+                    }
+                });
+                
+                if (container) container.innerHTML = html;
+                if (submitBtn) submitBtn.disabled = false;
+                
+            } else {
+                if (container) {
+                    container.innerHTML = '<p class="text-muted text-center small my-3">No has votado aún</p>';
+                }
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                }
+            }
+        }
+
+        function updateTopSongs() {
+            const container = document.getElementById("top-songs");
+            if (!container) return;
+            
+            const topSongs = [...allSongs]
+                .sort((a, b) => (b.votes || 0) - (a.votes || 0))
+                .slice(0, 5);
+            
+            if (topSongs.length === 0) {
+                container.innerHTML = '<p class="text-center small text-muted my-3">Sin votos aún</p>';
+                return;
+            }
+            
+            let html = "";
+            topSongs.forEach((song, index) => {
+                const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '🎵';
+                html += `
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div>
+                            <span class="badge bg-warning text-dark me-2">${medal}</span>
+                            <small>${song.title}</small>
+                        </div>
+                        <span class="badge" style="background: var(--pub-red); color: white;">${song.votes}</span>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function updateTotalSongs() {
+            const element = document.getElementById("total-songs");
+            if (element) {
+                element.textContent = `${allSongs.length} canción${allSongs.length !== 1 ? "es" : ""}`;
+            }
+        }
+
+        // ========== QR CODE FUNCIONAL ==========
+        function generateQRCode() {
+            try {
+                const url = window.location.href;
+                const canvas = document.getElementById("qrCanvas");
+                QRCode.toCanvas(canvas, url, {
+                    width: 180,
+                    margin: 1,
+                    color: {
+                        dark: "#012169",
+                        light: "#FFFFFF"
+                    }
+                });
+                console.log("✅ QR Code generado correctamente");
+            } catch (error) {
+                console.log("❌ Error generando QR:", error);
+                showFeedback("Error generando código QR", "warning");
+            }
+        }
+
+        window.shareLink = function() {
+            const url = window.location.href;
+            const title = "¡Vota por MobyDick en Porter British Pub!";
+            const text = "Elige las canciones que quieres escuchar. ¡Rock en vivo! 🎸";
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    text: text,
+                    url: url
+                })
+                .then(() => showFeedback("✅ ¡Enlace compartido!", "success"))
+                .catch(err => {
+                    if (err.name !== 'AbortError') {
+                        copyToClipboard(url);
+                    }
+                });
+            } else {
+                copyToClipboard(url);
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    showFeedback("✅ Enlace copiado al portapapeles", "success");
+                })
+                .catch(() => {
+                    // Fallback para navegadores antiguos
+                    const textarea = document.createElement('textarea');
+                    textarea.value = text;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    showFeedback("✅ Enlace copiado", "success");
+                });
+        }
+
+        function showFeedback(message, type) {
+            const feedback = document.getElementById("share-feedback");
+            if (!feedback) return;
+            
+            feedback.innerHTML = `
+                <div class="alert alert-${type} alert-dismissible fade show py-2" role="alert">
+                    <small>${message}</small>
+                    <button type="button" class="btn-close btn-sm" onclick="this.parentElement.remove()"></button>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                if (feedback.firstChild) {
+                    feedback.firstChild.remove();
+                }
+            }, 3000);
+        }
+
+        // ========== UTILIDADES ==========
+        function updateCurrentTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString("es-MX", {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit"
+            });
+            const element = document.getElementById("current-time");
+            if (element) element.textContent = timeStr;
+            
+            const dateStr = now.toLocaleDateString("es-MX", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric"
+            });
+            const dateElement = document.getElementById("current-date");
+            if (dateElement) dateElement.textContent = dateStr;
+        }
+
+        function setupEventListeners() {
+            // Buscador
+            const searchInput = document.getElementById("search");
+            if (searchInput) {
+                let searchTimeout;
+                
+                searchInput.addEventListener("input", function(e) {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        const term = e.target.value.toLowerCase().trim();
+                        
+                        if (term === "") {
+                            displaySongs(allSongs);
+                            return;
+                        }
+                        
+                        const filtered = allSongs.filter(song => 
+                            song.title.toLowerCase().includes(term) ||
+                            song.artist.toLowerCase().includes(term) ||
+                            (song.genre && song.genre.toLowerCase().includes(term))
+                        );
+                        
+                        displaySongs(filtered);
+                    }, 300);
+                });
+            }
+            
+            // Botón enviar votos
+            const submitBtn = document.getElementById("submit-votes");
+            if (submitBtn) {
+                submitBtn.addEventListener("click", function() {
+                    if (myVotes.length === 0) return;
+                    
+                    const btn = this;
+                    const originalText = btn.innerHTML;
+                    
+                    btn.innerHTML = '<i class="bi bi-check2-circle"></i> ¡VOTOS ENVIADOS!';
+                    btn.disabled = true;
+                    
+                    // Guardar en historial
+                    const history = JSON.parse(localStorage.getItem("mobydick_history") || "[]");
+                    const songTitles = myVotes.map(id => {
+                        const song = allSongs.find(s => s.id === id);
+                        return song ? song.title : "";
+                    }).filter(Boolean);
+                    
+                    history.push({
+                        date: new Date().toISOString(),
+                        songs: songTitles
+                    });
+                    localStorage.setItem("mobydick_history", JSON.stringify(history));
+                    
+                    // Limpiar votos
+                    myVotes = [];
+                    localStorage.removeItem("mobydick_votes");
+                    
+                    // Actualizar UI
+                    updateMyVotesDisplay();
+                    
+                    // Mensaje de éxito
+                    showFeedback("🎉 ¡Gracias por tus votos! La banda los tendrá en cuenta.", "success");
+                    
+                    // Restaurar botón después de 3 segundos
+                    setTimeout(() => {
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                    }, 3000);
+                });
+            }
+        }
+
+        function showLoading() {
+            const container = document.getElementById("songs-container");
+            if (container) {
+                container.innerHTML = `
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-primary"></div>
+                        <p class="mt-2">Cargando canciones...</p>
+                    </div>
+                `;
+            }
+        }
+
+        function showNoSongs() {
+            const container = document.getElementById("songs-container");
+            if (container) {
+                container.innerHTML = `
+                    <div class="alert alert-warning m-3">
+                        <i class="bi bi-info-circle"></i>
+                        No hay canciones en el repertorio aún.
+                    </div>
+                `;
+            }
+        }
+
+        function showError(message) {
+            const container = document.getElementById("songs-container");
+            if (container) {
+                container.innerHTML = `
+                    <div class="alert alert-danger m-3">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        ${message}
+                    </div>
+                `;
+            }
+        }
+
+    </script>
+</body>
+</html>

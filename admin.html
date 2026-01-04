@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control | MobyDick Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --admin-primary: #1a1a2e;
+            --admin-secondary: #0f3460;
+            --admin-accent: #d4af37;
+        }
+        
+        body {
+            background: #f8f9fa;
+            font-family: 'Segoe UI', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .sidebar {
+            background: linear-gradient(180deg, var(--admin-primary) 0%, var(--admin-secondary) 100%);
+            color: white;
+            min-height: 100vh;
+            position: fixed;
+            width: 280px;
+            box-shadow: 3px 0 15px rgba(0,0,0,0.2);
+            border-right: 4px solid var(--admin-accent);
+            z-index: 1000;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                min-height: auto;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid var(--admin-accent);
+            text-align: center;
+        }
+        
+        .btn-admin {
+            background: linear-gradient(135deg, var(--admin-accent), #b8941f);
+            color: var(--admin-primary);
+            font-weight: bold;
+            border: none;
+            transition: all 0.3s;
+        }
+        
+        .btn-admin:hover {
+            background: linear-gradient(135deg, #b8941f, #9c7d19);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+        
+        /* Modo Escenario */
+        .stage-mode {
+            background: linear-gradient(135deg, #1a1a2e, #0f3460);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .stage-header {
+            background: rgba(212, 175, 55, 0.9);
+            color: #1a1a2e;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            text-align: center;
+            border: 3px solid #c41e3a;
+        }
+        
+        /* Playlist - Scrollable y arrastrable */
+        .playlist-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            min-height: 500px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .playlist-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .playlist-container::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+        }
+        
+        .playlist-container::-webkit-scrollbar-thumb {
+            background: var(--admin-accent);
+            border-radius: 4px;
+        }
+        
+        .playlist-item {
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            cursor: move;
+            border-left: 5px solid var(--admin-accent);
+            transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+        
+        .playlist-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .playlist-item.played {
+            opacity: 0.6;
+            text-decoration: line-through;
+            background: rgba(255, 255, 255, 0.7);
+            border-left-color: #28a745;
+        }
+        
+        .playlist-item.dragging {
+            opacity: 0.5;
+            transform: scale(1.02);
+        }
+        
+        .song-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-stage {
+            background: linear-gradient(135deg, var(--admin-accent), #b8941f);
+            color: var(--admin-primary);
+            font-weight: bold;
+            border: none;
+        }
+        
+        .btn-mark-played {
+            background: #28a745;
+            color: white;
+            border: none;
+        }
+        
+        .btn-mark-played:hover {
+            background: #218838;
+        }
+        
+        /* Lista de canciones para agregar */
+        .quick-add-container {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .quick-add-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .quick-add-container::-webkit-scrollbar-thumb {
+            background: var(--admin-accent);
+            border-radius: 3px;
+        }
+        
+        .quick-song-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s;
+        }
+        
+        .quick-song-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(3px);
+        }
+        
+        /* Canciones en gestión */
+        .song-row {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid #dee2e6;
+            transition: all 0.3s;
+        }
+        
+        .song-row:hover {
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        /* Notificaciones */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            min-width: 300px;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="p-4 text-center">
+            <img src="https://i.imgur.com/dc8BSdc.png" alt="MobyDick" class="img-fluid mb-3" style="max-height: 80px;">
+            <h4 class="mb-0">PANEL DE CONTROL</h4>
+            <small class="text-muted">Porter British Pub</small>
+        </div>
+        
+        <hr class="bg-light mx-3">
+        
+        <nav class="nav flex-column p-3">
+            <a href="#dashboard" class="nav-link text-white mb-2 active" onclick="showSection('dashboard')">
+                <i class="bi bi-speedometer2 me-2"></i> Dashboard
+            </a>
+            <a href="#canciones" class="nav-link text-white mb-2" onclick="showSection('canciones')">
+                <i class="bi bi-music-note-list me-2"></i> Gestión de Canciones
+            </a>
+            <a href="#escenario" class="nav-link text-warning mb-2 fw-bold" onclick="showSection('escenario')">
+                <i class="bi bi-mic me-2"></i> MODO ESCENARIO
+            </a>
+            <a href="#agregar" class="nav-link text-white mb-2" onclick="showSection('agregar')">
+                <i class="bi bi-plus-circle me-2"></i> Agregar Canción
+            </a>
+            
+            <hr class="bg-light mx-3 my-3">
+            
+            <div class="mt-3">
+                <button onclick="logout()" class="btn btn-sm btn-outline-light w-100 mb-2">
+                    <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                </button>
+                <button onclick="window.open('index.html', '_blank')" class="btn btn-sm btn-outline-info w-100">
+                    <i class="bi bi-eye"></i> Ver Página Pública
+                </button>
+            </div>
+            
+            <div class="mt-4 pt-4">
+                <small class="text-muted d-block">Conectado:</small>
+                <small class="text-warning" id="user-status">Administrador</small>
+                <small class="d-block text-muted mt-2" id="song-count-display">0 canciones</small>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Dashboard -->
+        <div id="dashboard" class="section fade-in">
+            <h1 class="h3 mb-4">
+                <i class="bi bi-speedometer2 me-2"></i>Panel de Control MobyDick
+            </h1>
+
+            <!-- Estadísticas -->
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="h1 text-primary mb-2" id="total-canciones">0</div>
+                        <p class="text-muted mb-0">Canciones en repertorio</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="h1 text-success mb-2" id="total-votos">0</div>
+                        <p class="text-muted mb-0">Votos totales</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="h1 text-warning mb-2" id="en-playlist">0</div>
+                        <p class="text-muted mb-0">En playlist</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="h1 text-info mb-2" id="tocadas">0</div>
+                        <p class="text-muted mb-0">Tocadas</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Acciones rápidas -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-lightning"></i> Acciones Rápidas</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-3 col-6">
+                            <button class="btn btn-admin w-100" onclick="showSection('escenario')">
+                                <i class="bi bi-mic"></i> Ir al Escenario
+                            </button>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <button class="btn btn-outline-primary w-100" onclick="showSection('agregar')">
+                                <i class="bi bi-plus-lg"></i> Nueva Canción
+                            </button>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <button class="btn btn-outline-warning w-100" onclick="resetAllVotes()">
+                                <i class="bi bi-arrow-clockwise"></i> Reiniciar Votos
+                            </button>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <button class="btn btn-outline-success w-100" onclick="exportData()">
+                                <i class="bi bi-download"></i> Exportar Datos
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Canciones -->
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="bi bi-trophy"></i> Top 10 Canciones Más Votadas</h5>
+                    <small class="text-muted" id="last-update">Actualizando...</small>
+                </div>
+                <div class="card-body">
+                    <div id="top-10-songs">
+                        <p class="text-center">Cargando...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gestión de Canciones -->
+        <div id="canciones" class="section fade-in" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-music-note-list me-2"></i>Gestión de Canciones
+                </h1>
+                <div>
+                    <button class="btn btn-admin" onclick="showSection('agregar')">
+                        <i class="bi bi-plus-lg"></i> Agregar Canción
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row g-2">
+                        <div class="col-md-8">
+                            <input type="text" id="search-songs" class="form-control" placeholder="Buscar canción o artista...">
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-outline-secondary w-100" onclick="refreshSongs()">
+                                <i class="bi bi-arrow-clockwise"></i> Actualizar Lista
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de Canciones -->
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Todas las Canciones</h5>
+                    <span class="badge bg-secondary" id="song-count">0</span>
+                </div>
+                <div class="card-body p-0">
+                    <div id="all-songs-list" class="p-3" style="max-height: 600px; overflow-y: auto;">
+                        <p class="text-center">Cargando canciones...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODO ESCENARIO -->
+        <div id="escenario" class="section stage-mode fade-in" style="display: none;">
+            <div class="stage-header">
+                <h1 class="display-5 fw-bold">🎸 MODO ESCENARIO 🎤</h1>
+                <p class="lead mb-0">Porter British Pub - Control en vivo desde el escenario</p>
+                <small class="text-dark">Usa desde tu tableta o celular durante el show</small>
+            </div>
+
+            <div class="row">
+                <!-- Panel izquierdo: Estadísticas y agregar rápido -->
+                <div class="col-md-4">
+                    <!-- Estadísticas en vivo -->
+                    <div class="card bg-dark mb-4">
+                        <div class="card-body text-center">
+                            <h4 class="mb-3"><i class="bi bi-graph-up"></i> ESTADÍSTICAS EN VIVO</h4>
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <div class="h2 text-warning" id="live-total">0</div>
+                                    <small>Votos totales</small>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <div class="h2 text-success" id="live-played">0</div>
+                                    <small>Tocadas</small>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <div class="h2 text-info" id="live-remaining">0</div>
+                                    <small>Por tocar</small>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <div class="h2 text-danger" id="live-next">-</div>
+                                    <small>Próxima</small>
+                                </div>
+                            </div>
+                            
+                            <hr class="bg-light">
+                            
+                            <div class="d-grid gap-2">
+                                <button onclick="autoGeneratePlaylist()" class="btn btn-admin">
+                                    <i class="bi bi-magic"></i> Generar Playlist Automática
+                                </button>
+                                <button onclick="markAllAsPlayed()" class="btn btn-mark-played">
+                                    <i class="bi bi-check-all"></i> Marcar todas como tocadas
+                                </button>
+                                <button onclick="clearPlaylist()" class="btn btn-outline-light">
+                                    <i class="bi bi-trash"></i> Limpiar Playlist
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Canciones para agregar rápido -->
+                    <div class="card bg-dark">
+                        <div class="card-header">
+                            <h6 class="mb-0"><i class="bi bi-plus-circle"></i> AGREGAR CANCIONES RÁPIDAMENTE</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="quick-add-container" id="quick-add-songs">
+                                <p class="text-center">Cargando canciones...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel derecho: Playlist -->
+                <div class="col-md-8">
+                    <div class="card bg-dark">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0"><i class="bi bi-list-ol"></i> PLAYLIST DEL SHOW</h4>
+                            <small class="text-muted">Arrastra para reordenar • Haz clic en ✓ cuando termines</small>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="playlist-container" id="stage-playlist">
+                                <div class="text-center py-5">
+                                    <div class="spinner-border text-warning"></div>
+                                    <p class="mt-3">Cargando playlist...</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-dark border-top-0">
+                            <div class="d-flex justify-content-between">
+                                <small class="text-muted">Total en lista: <span id="playlist-count">0</span> canciones</small>
+                                <button onclick="savePlaylistOrder()" class="btn btn-sm btn-outline-light">
+                                    <i class="bi bi-save"></i> Guardar Orden
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Agregar/Editar Canción -->
+        <div id="agregar" class="section fade-in" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-plus-circle me-2"></i><span id="form-title">Agregar Nueva Canción</span>
+                </h1>
+                <button class="btn btn-outline-secondary" onclick="showSection('canciones')">
+                    <i class="bi bi-arrow-left"></i> Volver a la lista
+                </button>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="song-form">
+                                <input type="hidden" id="edit-song-id" value="">
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Título de la Canción *</label>
+                                        <input type="text" id="song-title" class="form-control" required 
+                                               placeholder="Ej: Sweet Child O' Mine">
+                                    </div>
+                                    
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Artista/Banda *</label>
+                                        <input type="text" id="song-artist" class="form-control" required 
+                                               placeholder="Ej: Guns N' Roses">
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Género</label>
+                                        <select id="song-genre" class="form-select">
+                                            <option value="Rock">Rock</option>
+                                            <option value="Hard Rock">Hard Rock</option>
+                                            <option value="Metal">Metal</option>
+                                            <option value="Pop Rock">Pop Rock</option>
+                                            <option value="Alternativo">Alternativo</option>
+                                            <option value="Clásico">Clásico</option>
+                                            <option value="Grunge">Grunge</option>
+                                            <option value="Blues Rock">Blues Rock</option>
+                                            <option value="Otro">Otro</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Duración (opcional)</label>
+                                        <input type="text" id="song-duration" class="form-control" 
+                                               placeholder="Ej: 5:56">
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Año (opcional)</label>
+                                    <input type="number" id="song-year" class="form-control" 
+                                           placeholder="Ej: 1987" min="1950" max="2024">
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Notas para la banda (opcional)</label>
+                                    <textarea id="song-notes" class="form-control" rows="3" 
+                                              placeholder="Afinação especial, tempo, dificultad, etc..."></textarea>
+                                </div>
+                                
+                                <div class="d-grid gap-2">
+                                    <button type="submit" id="submit-song-btn" class="btn btn-admin btn-lg">
+                                        <i class="bi bi-check-circle"></i> <span id="submit-btn-text">Agregar Canción al Repertorio</span>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary" onclick="resetForm()">
+                                        Limpiar Formulario
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <!-- Canciones recientes -->
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h6 class="mb-0"><i class="bi bi-clock-history"></i> Últimas canciones agregadas</h6>
+                        </div>
+                        <div class="card-body">
+                            <div id="recent-songs">
+                                <p class="text-muted text-center mb-0">No hay canciones recientes</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase v8.10.1 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Sortable.js para drag & drop -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
+    <script>
+        // ========== CONFIGURACIÓN ==========
+        const firebaseConfig = {
+            apiKey: "AIzaSyAitXyfb6Zc9GVEm0X_Hen_QOiA5Y3Aw1U",
+            authDomain: "rockrequests.firebaseapp.com",
+            projectId: "rockrequests",
+            storageBucket: "rockrequests.firebasestorage.app",
+            messagingSenderId: "1000216858616",
+            appId: "1:1000216858616:web:00bbd448eb034cba15d00d"
+        };
+
+        // ========== VARIABLES GLOBALES ==========
+        let db = null;
+        let allSongs = [];
+        let playlistSongs = [];
+        let currentSection = 'dashboard';
+        let sortableInstance = null;
+
+        // ========== INICIALIZAR ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("🚀 Iniciando panel de administración MobyDick...");
+            initializeFirebase();
+            setupForm();
+            checkAuth();
+            updateLastUpdateTime();
+            setInterval(updateLastUpdateTime, 60000); // Actualizar cada minuto
+        });
+
+        function initializeFirebase() {
+            try {
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.firestore();
+                console.log("✅ Firebase inicializado correctamente");
+                loadAllData();
+                setInterval(loadAllData, 10000); // Actualizar cada 10 segundos
+            } catch (error) {
+                console.error("❌ Error inicializando Firebase:", error);
+                showNotification("Error de conexión con Firebase", "danger");
+            }
+        }
+
+        function checkAuth() {
+            const auth = localStorage.getItem('mobydick_admin');
+            if (!auth) {
+                const pass = prompt("🔐 Contraseña de administración:");
+                if (pass === "MobyDick2024") {
+                    localStorage.setItem('mobydick_admin', 'true');
+                    showNotification("✅ Acceso concedido", "success");
+                } else {
+                    window.location.href = "index.html";
+                }
+            }
+        }
+
+        // ========== NAVEGACIÓN ==========
+        function showSection(sectionId) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.section').forEach(s => {
+                s.style.display = 'none';
+            });
+            
+            // Mostrar la sección seleccionada
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.style.display = 'block';
+                section.classList.add('fade-in');
+                
+                // Actualizar navegación activa
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                });
+                
+                const activeLink = document.querySelector(`[href="#${sectionId}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
+                
+                currentSection = sectionId;
+                
+                // Cargar datos específicos de la sección
+                if (sectionId === 'canciones') {
+                    loadSongsList();
+                } else if (sectionId === 'escenario') {
+                    loadStageMode();
+                } else if (sectionId === 'agregar') {
+                    resetForm();
+                }
+            }
+        }
+
+        // ========== CARGA DE DATOS ==========
+        function loadAllData() {
+            loadSongs();
+        }
+
+        function loadSongs() {
+            db.collection("songs").orderBy("title").get()
+                .then((snapshot) => {
+                    allSongs = [];
+                    snapshot.forEach((doc) => {
+                        const data = doc.data();
+                        allSongs.push({
+                            id: doc.id,
+                            title: data.title || "Sin título",
+                            artist: data.artist || "Desconocido",
+                            genre: data.genre || "Rock",
+                            votes: data.votes || 0,
+                            duration: data.duration || "",
+                            year: data.year || "",
+                            notes: data.notes || "",
+                            inPlaylist: data.inPlaylist || false,
+                            played: data.played || false,
+                            playlistOrder: data.playlistOrder || 999,
+                            addedAt: data.addedAt || new Date().toISOString()
+                        });
+                    });
+                    
+                    console.log(`📊 ${allSongs.length} canciones cargadas`);
+                    
+                    // Actualizar contador en sidebar
+                    const countDisplay = document.getElementById('song-count-display');
+                    if (countDisplay) {
+                        countDisplay.textContent = `${allSongs.length} canciones`;
+                    }
+                    
+                    // Actualizar estadísticas
+                    updateStats();
+                    updateTopSongs();
+                    
+                    // Si estamos en una sección específica, actualizar su contenido
+                    if (currentSection === 'canciones') {
+                        loadSongsList();
+                    } else if (currentSection === 'escenario') {
+                        loadStageMode();
+                    }
+                    
+                })
+                .catch((error) => {
+                    console.error("❌ Error cargando canciones:", error);
+                    showNotification("Error cargando canciones", "danger");
+                });
+        }
+
+        // ========== FORMULARIO - CORREGIDO ==========
+        function setupForm() {
+            const form = document.getElementById('song-form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    submitSong();
+                });
+            }
+        }
+
+        function submitSong() {
+            const songId = document.getElementById('edit-song-id').value;
+            const title = document.getElementById('song-title').value.trim();
+            const artist = document.getElementById('song-artist').value.trim();
+            const genre = document.getElementById('song-genre').value;
+            const duration = document.getElementById('song-duration').value.trim();
+            const year = document.getElementById('song-year').value;
+            const notes = document.getElementById('song-notes').value.trim();
+            
+            if (!title || !artist) {
+                showNotification("Título y artista son requeridos", "warning");
+                return;
+            }
+            
+            const songData = {
+                title: title,
+                artist: artist,
+                genre: genre,
+                duration: duration || null,
+                notes: notes || null,
+                updatedAt: new Date().toISOString()
+            };
+            
+            if (year) songData.year = parseInt(year);
+            
+            const btn = document.getElementById('submit-song-btn');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Procesando...';
+            }
+            
+            if (songId) {
+                // EDITAR canción existente
+                db.collection("songs").doc(songId).update(songData)
+                    .then(() => {
+                        showNotification(`✅ Canción "${title}" actualizada correctamente`, "success");
+                        resetForm();
+                        loadAllData();
+                        showSection('canciones');
+                    })
+                    .catch((error) => {
+                        console.error("Error actualizando canción:", error);
+                        showNotification("Error al actualizar canción", "danger");
+                    })
+                    .finally(() => {
+                        if (btn) {
+                            btn.disabled = false;
+                            btn.innerHTML = '<i class="bi bi-check-circle"></i> Actualizar Canción';
+                        }
+                    });
+            } else {
+                // AGREGAR nueva canción
+                songData.votes = 0;
+                songData.addedAt = new Date().toISOString();
+                songData.inPlaylist = false;
+                songData.played = false;
+                songData.playlistOrder = 999;
+                
+                db.collection("songs").add(songData)
+                    .then((docRef) => {
+                        console.log("✅ Canción agregada con ID:", docRef.id);
+                        showNotification(`✅ Canción "${title}" agregada al repertorio`, "success");
+                        resetForm();
+                        loadAllData();
+                        loadRecentSongs();
+                    })
+                    .catch((error) => {
+                        console.error("❌ Error agregando canción:", error);
+                        showNotification("Error al agregar canción", "danger");
+                    })
+                    .finally(() => {
+                        if (btn) {
+                            btn.disabled = false;
+                            btn.innerHTML = '<i class="bi bi-check-circle"></i> Agregar Canción al Repertorio';
+                        }
+                    });
+            }
+        }
+
+        function resetForm() {
+            // Solo intentar resetear si los elementos existen
+            const editId = document.getElementById('edit-song-id');
+            const formTitle = document.getElementById('form-title');
+            const submitBtnText = document.getElementById('submit-btn-text');
+            const form = document.getElementById('song-form');
+            
+            if (editId) editId.value = '';
+            if (formTitle) formTitle.textContent = 'Agregar Nueva Canción';
+            if (submitBtnText) submitBtnText.textContent = 'Agregar Canción al Repertorio';
+            if (form) form.reset();
+        }
+
+        function loadRecentSongs() {
+            const container = document.getElementById('recent-songs');
+            if (!container) return;
+            
+            const recent = [...allSongs]
+                .sort((a, b) => new Date(b.addedAt) - new Date(a.addedAt))
+                .slice(0, 5);
+            
+            if (recent.length === 0) {
+                container.innerHTML = '<p class="text-muted text-center mb-0">No hay canciones recientes</p>';
+                return;
+            }
+            
+            let html = '';
+            recent.forEach(song => {
+                const date = new Date(song.addedAt);
+                const timeStr = date.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+                
+                html += `
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div>
+                            <small class="d-block">${song.title}</small>
+                            <small class="text-muted">${song.artist}</small>
+                        </div>
+                        <small class="text-muted">${timeStr}</small>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // ========== EDITAR CANCIÓN ==========
+        function editSong(songId) {
+            const song = allSongs.find(s => s.id === songId);
+            if (!song) return;
+            
+            // Rellenar formulario
+            const editId = document.getElementById('edit-song-id');
+            const title = document.getElementById('song-title');
+            const artist = document.getElementById('song-artist');
+            const genre = document.getElementById('song-genre');
+            const duration = document.getElementById('song-duration');
+            const year = document.getElementById('song-year');
+            const notes = document.getElementById('song-notes');
+            const formTitle = document.getElementById('form-title');
+            const submitBtnText = document.getElementById('submit-btn-text');
+            
+            if (editId) editId.value = song.id;
+            if (title) title.value = song.title;
+            if (artist) artist.value = song.artist;
+            if (genre) genre.value = song.genre || 'Rock';
+            if (duration) duration.value = song.duration || '';
+            if (year) year.value = song.year || '';
+            if (notes) notes.value = song.notes || '';
+            if (formTitle) formTitle.textContent = 'Editar Canción';
+            if (submitBtnText) submitBtnText.textContent = 'Actualizar Canción';
+            
+            showSection('agregar');
+        }
+
+        // ========== ELIMINAR CANCIÓN ==========
+        function deleteSong(songId) {
+            const song = allSongs.find(s => s.id === songId);
+            if (!song) return;
+            
+            if (confirm(`¿Eliminar la canción "${song.title}"?\nEsta acción no se puede deshacer.`)) {
+                db.collection("songs").doc(songId).delete()
+                    .then(() => {
+                        showNotification(`Canción "${song.title}" eliminada`, "success");
+                        loadAllData();
+                    })
+                    .catch((error) => {
+                        console.error("Error eliminando canción:", error);
+                        showNotification("Error al eliminar canción", "danger");
+                    });
+            }
+        }
+
+        // ========== MODO ESCENARIO ==========
+        function loadStageMode() {
+            updateLiveStats();
+            loadPlaylist();
+            loadQuickAddSongs();
+            initSortable();
+        }
+
+        function loadPlaylist() {
+            playlistSongs = allSongs
+                .filter(song => song.inPlaylist)
+                .sort((a, b) => (a.playlistOrder || 999) - (b.playlistOrder || 999));
+            
+            const container = document.getElementById('stage-playlist');
+            const countElement = document.getElementById('playlist-count');
+            
+            if (!container) return;
+            
+            if (playlistSongs.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-5">
+                        <i class="bi bi-music-note-beamed display-1 text-muted"></i>
+                        <p class="mt-3">Playlist vacía</p>
+                        <p class="small text-muted">Agrega canciones desde la lista de la izquierda</p>
+                    </div>
+                `;
+                if (countElement) countElement.textContent = '0';
+                return;
+            }
+            
+            let html = '';
+            playlistSongs.forEach((song, index) => {
+                html += `
+                    <div class="playlist-item ${song.played ? 'played' : ''}" data-id="${song.id}">
+                        <div class="d-flex align-items-center">
+                            <span class="badge bg-secondary me-3" style="min-width: 30px;">${index + 1}</span>
+                            <div>
+                                <h6 class="mb-1">${song.title}</h6>
+                                <small class="text-muted">${song.artist} • ${song.votes} votos</small>
+                            </div>
+                        </div>
+                        <div class="song-actions">
+                            <button class="btn btn-sm ${song.played ? 'btn-outline-success' : 'btn-success'}" 
+                                    onclick="togglePlayed('${song.id}')"
+                                    title="${song.played ? 'Marcar como por tocar' : 'Marcar como tocada'}">
+                                <i class="bi ${song.played ? 'bi-arrow-counterclockwise' : 'bi-check'}"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="removeFromPlaylist('${song.id}')" title="Eliminar de la playlist">
+                                <i class="bi bi-x"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            if (countElement) countElement.textContent = playlistSongs.length;
+            
+            // Inicializar Sortable si no existe
+            if (!sortableInstance) {
+                initSortable();
+            }
+        }
+
+        function initSortable() {
+            const playlist = document.getElementById('stage-playlist');
+            if (!playlist || playlist.children.length === 0) return;
+            
+            // Destruir instancia anterior si existe
+            if (sortableInstance) {
+                sortableInstance.destroy();
+            }
+            
+            sortableInstance = Sortable.create(playlist, {
+                animation: 150,
+                ghostClass: 'dragging',
+                onEnd: function() {
+                    updatePlaylistOrder();
+                }
+            });
+        }
+
+        function updatePlaylistOrder() {
+            const items = document.querySelectorAll('#stage-playlist .playlist-item');
+            const batch = db.batch();
+            
+            items.forEach((item, index) => {
+                const songId = item.getAttribute('data-id');
+                const songRef = db.collection("songs").doc(songId);
+                batch.update(songRef, {
+                    playlistOrder: index,
+                    updatedAt: new Date().toISOString()
+                });
+            });
+            
+            batch.commit()
+                .then(() => {
+                    showNotification("Orden de playlist actualizado", "success");
+                })
+                .catch((error) => {
+                    console.error("Error actualizando orden:", error);
+                    showNotification("Error al actualizar orden", "danger");
+                });
+        }
+
+        function loadQuickAddSongs() {
+            const container = document.getElementById('quick-add-songs');
+            if (!container) return;
+            
+            // Mostrar todas las canciones que NO están en playlist
+            // Ordenadas por votos (las más votadas primero)
+            const availableSongs = allSongs
+                .filter(song => !song.inPlaylist)
+                .sort((a, b) => b.votes - a.votes);
+            
+            if (availableSongs.length === 0) {
+                container.innerHTML = '<p class="text-center text-muted">No hay canciones disponibles</p>';
+                return;
+            }
+            
+            let html = '';
+            availableSongs.forEach(song => {
+                html += `
+                    <div class="quick-song-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div style="flex: 1;">
+                                <strong class="d-block">${song.title}</strong>
+                                <small class="text-muted">${song.artist}</small>
+                                <div class="mt-1">
+                                    <span class="badge bg-warning text-dark">${song.votes} votos</span>
+                                    ${song.genre ? `<span class="badge bg-secondary ms-1">${song.genre}</span>` : ''}
+                                </div>
+                            </div>
+                            <button class="btn btn-sm btn-admin ms-2" onclick="addToPlaylist('${song.id}')" title="Agregar a playlist">
+                                <i class="bi bi-plus-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function addToPlaylist(songId) {
+            const song = allSongs.find(s => s.id === songId);
+            if (!song) return;
+            
+            db.collection("songs").doc(songId).update({
+                inPlaylist: true,
+                playlistOrder: playlistSongs.length,
+                addedToPlaylistAt: new Date().toISOString()
+            })
+            .then(() => {
+                showNotification(`"${song.title}" agregada a la playlist`, "success");
+                loadAllData();
+            })
+            .catch((error) => {
+                console.error("Error agregando a playlist:", error);
+                showNotification("Error al agregar a playlist", "danger");
+            });
+        }
+
+        function removeFromPlaylist(songId) {
+            const song = allSongs.find(s => s.id === songId);
+            if (!song) return;
+            
+            if (confirm(`¿Remover "${song.title}" de la playlist?`)) {
+                db.collection("songs").doc(songId).update({
+                    inPlaylist: false,
+                    playlistOrder: 999
+                })
+                .then(() => {
+                    showNotification(`"${song.title}" removida de la playlist`, "info");
+                    loadAllData();
+                })
+                .catch((error) => {
+                    console.error("Error removiendo de playlist:", error);
+                    showNotification("Error al remover de playlist", "danger");
+                });
+            }
+        }
+
+        function togglePlayed(songId) {
+            const song = allSongs.find(s => s.id === songId);
+            if (!song) return;
+            
+            const newStatus = !song.played;
+            
+            db.collection("songs").doc(songId).update({
+                played: newStatus,
+                playedAt: new Date().toISOString()
+            })
+            .then(() => {
+                showNotification(
+                    newStatus ? `"${song.title}" marcada como tocada` : `"${song.title}" marcada como por tocar`,
+                    newStatus ? "success" : "info"
+                );
+                loadAllData();
+            })
+            .catch((error) => {
+                console.error("Error actualizando estado:", error);
+                showNotification("Error al actualizar estado", "danger");
+            });
+        }
+
+        function autoGeneratePlaylist() {
+            // Tomar las 10 canciones más votadas que no estén en playlist
+            const topSongs = allSongs
+                .filter(song => !song.inPlaylist)
+                .sort((a, b) => b.votes - a.votes)
+                .slice(0, 10);
+            
+            if (topSongs.length === 0) {
+                showNotification("No hay canciones disponibles para agregar", "info");
+                return;
+            }
+            
+            const batch = db.batch();
+            let order = playlistSongs.length;
+            
+            topSongs.forEach(song => {
+                const songRef = db.collection("songs").doc(song.id);
+                batch.update(songRef, {
+                    inPlaylist: true,
+                    played: false,
+                    playlistOrder: order++,
+                    addedToPlaylistAt: new Date().toISOString()
+                });
+            });
+            
+            batch.commit()
+                .then(() => {
+                    showNotification(`Playlist generada con ${topSongs.length} canciones`, "success");
+                    loadAllData();
+                })
+                .catch((error) => {
+                    console.error("Error generando playlist:", error);
+                    showNotification("Error al generar playlist", "danger");
+                });
+        }
+
+        function markAllAsPlayed() {
+            if (playlistSongs.length === 0) {
+                showNotification("No hay canciones en la playlist", "info");
+                return;
+            }
+            
+            if (confirm("¿Marcar TODAS las canciones de la playlist como tocadas?")) {
+                const batch = db.batch();
+                
+                playlistSongs.forEach(song => {
+                    const songRef = db.collection("songs").doc(song.id);
+                    batch.update(songRef, {
+                        played: true,
+                        playedAt: new Date().toISOString()
+                    });
+                });
+                
+                batch.commit()
+                    .then(() => {
+                        showNotification("Todas las canciones marcadas como tocadas", "success");
+                        loadAllData();
+                    })
+                    .catch((error) => {
+                        console.error("Error marcando canciones:", error);
+                        showNotification("Error al marcar canciones", "danger");
+                    });
+            }
+        }
+
+        function clearPlaylist() {
+            if (playlistSongs.length === 0) {
+                showNotification("La playlist ya está vacía", "info");
+                return;
+            }
+            
+            if (confirm("¿Limpiar TODA la playlist? Esta acción removerá todas las canciones.")) {
+                const batch = db.batch();
+                
+                playlistSongs.forEach(song => {
+                    const songRef = db.collection("songs").doc(song.id);
+                    batch.update(songRef, {
+                        inPlaylist: false,
+                        playlistOrder: 999
+                    });
+                });
+                
+                batch.commit()
+                    .then(() => {
+                        showNotification("Playlist limpiada correctamente", "success");
+                        loadAllData();
+                    })
+                    .catch((error) => {
+                        console.error("Error limpiando playlist:", error);
+                        showNotification("Error al limpiar playlist", "danger");
+                    });
+            }
+        }
+
+        function savePlaylistOrder() {
+            updatePlaylistOrder();
+        }
+
+        function updateLiveStats() {
+            const playlistCount = allSongs.filter(s => s.inPlaylist).length;
+            const playedCount = allSongs.filter(s => s.played).length;
+            const totalVotes = allSongs.reduce((sum, song) => sum + song.votes, 0);
+            const nextSong = playlistSongs.find(s => !s.played);
+            
+            document.getElementById('live-total').textContent = totalVotes;
+            document.getElementById('live-played').textContent = playedCount;
+            document.getElementById('live-remaining').textContent = playlistCount - playedCount;
+            document.getElementById('live-next').textContent = nextSong ? nextSong.title.substring(0, 10) + (nextSong.title.length > 10 ? '...' : '') : '-';
+        }
+
+        // ========== ESTADÍSTICAS ==========
+        function updateStats() {
+            const totalVotes = allSongs.reduce((sum, song) => sum + song.votes, 0);
+            const inPlaylist = allSongs.filter(s => s.inPlaylist).length;
+            const played = allSongs.filter(s => s.played).length;
+            
+            document.getElementById('total-canciones').textContent = allSongs.length;
+            document.getElementById('total-votos').textContent = totalVotes;
+            document.getElementById('en-playlist').textContent = inPlaylist;
+            document.getElementById('tocadas').textContent = played;
+        }
+
+        function updateTopSongs() {
+            const container = document.getElementById('top-10-songs');
+            if (!container) return;
+            
+            const top = [...allSongs]
+                .sort((a, b) => b.votes - a.votes)
+                .slice(0, 10);
+            
+            if (top.length === 0) {
+                container.innerHTML = '<p class="text-center text-muted">No hay votos aún</p>';
+                return;
+            }
+            
+            let html = '';
+            top.forEach((song, index) => {
+                html += `
+                    <div class="song-row mb-2">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div style="flex: 1;">
+                                <span class="badge bg-primary me-2">${index + 1}</span>
+                                <strong>${song.title}</strong>
+                                <small class="d-block text-muted">${song.artist}</small>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge bg-success">${song.votes} votos</span>
+                                ${song.inPlaylist ? '<span class="badge bg-warning text-dark ms-1">En playlist</span>' : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // ========== LISTA DE CANCIONES ==========
+        function loadSongsList() {
+            const container = document.getElementById('all-songs-list');
+            const countElement = document.getElementById('song-count');
+            
+            if (!container) return;
+            
+            if (allSongs.length === 0) {
+                container.innerHTML = '<p class="text-center text-muted">No hay canciones en el repertorio</p>';
+                if (countElement) countElement.textContent = '0';
+                return;
+            }
+            
+            let html = '';
+            allSongs.forEach(song => {
+                html += `
+                    <div class="song-row mb-2">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div style="flex: 1;">
+                                <strong>${song.title}</strong>
+                                <small class="d-block text-muted">${song.artist} • ${song.genre || 'Sin género'}</small>
+                                <div class="mt-1">
+                                    <span class="badge bg-success">${song.votes} votos</span>
+                                    ${song.inPlaylist ? '<span class="badge bg-warning text-dark ms-1">En playlist</span>' : ''}
+                                    ${song.played ? '<span class="badge bg-info ms-1">Tocada</span>' : ''}
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <span class="badge bg-secondary me-2">${song.duration || '--:--'}</span>
+                                <button class="btn btn-sm btn-outline-primary me-1" onclick="editSong('${song.id}')" title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteSong('${song.id}')" title="Eliminar">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            if (countElement) countElement.textContent = allSongs.length;
+            
+            // Configurar búsqueda
+            const searchInput = document.getElementById('search-songs');
+            if (searchInput) {
+                searchInput.addEventListener('input', function(e) {
+                    const term = e.target.value.toLowerCase().trim();
+                    
+                    if (term === '') {
+                        loadSongsList();
+                        return;
+                    }
+                    
+                    const filtered = allSongs.filter(song => 
+                        song.title.toLowerCase().includes(term) ||
+                        song.artist.toLowerCase().includes(term) ||
+                        (song.genre && song.genre.toLowerCase().includes(term))
+                    );
+                    
+                    if (filtered.length === 0) {
+                        container.innerHTML = '<p class="text-center text-muted">No se encontraron canciones</p>';
+                        if (countElement) countElement.textContent = '0';
+                        return;
+                    }
+                    
+                    let filteredHtml = '';
+                    filtered.forEach(song => {
+                        filteredHtml += `
+                            <div class="song-row mb-2">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div style="flex: 1;">
+                                        <strong>${song.title}</strong>
+                                        <small class="d-block text-muted">${song.artist} • ${song.genre || 'Sin género'}</small>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <span class="badge bg-success me-2">${song.votes} votos</span>
+                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="editSong('${song.id}')">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger" onclick="deleteSong('${song.id}')">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    container.innerHTML = filteredHtml;
+                    if (countElement) countElement.textContent = filtered.length;
+                });
+            }
+        }
+
+        // ========== HERRAMIENTAS ==========
+        function refreshSongs() {
+            loadAllData();
+            showNotification("Lista de canciones actualizada", "success");
+        }
+
+        function resetAllVotes() {
+            if (allSongs.length === 0) {
+                showNotification("No hay canciones para reiniciar", "info");
+                return;
+            }
+            
+            if (confirm("¿Reiniciar TODOS los votos a cero?\nEsta acción no se puede deshacer.")) {
+                const batch = db.batch();
+                
+                allSongs.forEach(song => {
+                    const songRef = db.collection("songs").doc(song.id);
+                    batch.update(songRef, { votes: 0 });
+                });
+                
+                batch.commit()
+                    .then(() => {
+                        showNotification("Todos los votos han sido reiniciados", "success");
+                        loadAllData();
+                    })
+                    .catch((error) => {
+                        console.error("Error reiniciando votos:", error);
+                        showNotification("Error al reiniciar votos", "danger");
+                    });
+            }
+        }
+
+        function exportData() {
+            const data = {
+                exportedAt: new Date().toISOString(),
+                totalSongs: allSongs.length,
+                totalVotes: allSongs.reduce((sum, song) => sum + song.votes, 0),
+                songs: allSongs.map(song => ({
+                    title: song.title,
+                    artist: song.artist,
+                    genre: song.genre,
+                    votes: song.votes,
+                    duration: song.duration,
+                    year: song.year,
+                    inPlaylist: song.inPlaylist,
+                    played: song.played,
+                    addedAt: song.addedAt
+                }))
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `mobydick-data-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showNotification("Datos exportados correctamente", "success");
+        }
+
+        function logout() {
+            localStorage.removeItem('mobydick_admin');
+            window.location.href = "index.html";
+        }
+
+        // ========== UTILIDADES ==========
+        function showNotification(message, type = "info") {
+            // Crear elemento de notificación
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type} alert-dismissible fade show notification`;
+            notification.innerHTML = `
+                <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+                <div>${message}</div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Auto-eliminar después de 5 segundos
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        function updateLastUpdateTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('es-MX', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            const element = document.getElementById('last-update');
+            if (element) {
+                element.textContent = `Última actualización: ${timeStr}`;
+            }
+        }
+
+        // Hacer funciones globales
+        window.showSection = showSection;
+        window.logout = logout;
+        window.editSong = editSong;
+        window.deleteSong = deleteSong;
+        window.refreshSongs = refreshSongs;
+        window.resetAllVotes = resetAllVotes;
+        window.exportData = exportData;
+        window.addToPlaylist = addToPlaylist;
+        window.removeFromPlaylist = removeFromPlaylist;
+        window.togglePlayed = togglePlayed;
+        window.autoGeneratePlaylist = autoGeneratePlaylist;
+        window.markAllAsPlayed = markAllAsPlayed;
+        window.clearPlaylist = clearPlaylist;
+        window.savePlaylistOrder = savePlaylistOrder;
+        window.resetForm = resetForm;
+
+    </script>
+</body>
+</html>
