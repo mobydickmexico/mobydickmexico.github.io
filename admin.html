@@ -277,6 +277,14 @@
                 <small class="text-muted d-block">Conectado:</small>
                 <small class="text-warning" id="user-status">Administrador</small>
                 <small class="d-block text-muted mt-2" id="song-count-display">0 canciones</small>
+                <div class="mt-3 pt-3 border-top">
+                    <small class="text-muted d-block">Estadísticas en vivo:</small>
+                    <div id="connection-info" class="small text-white">
+                        <small class="d-block">Conectados: <span class="text-success">0</span></small>
+                        <small class="d-block">Total hoy: <span class="text-info">0</span></small>
+                        <small class="d-block">Último reset: <span class="text-muted">Nunca</span></small>
+                    </div>
+                </div>
             </div>
         </nav>
     </div>
@@ -344,11 +352,11 @@
                                 <i class="bi bi-download"></i> Exportar Datos
                             </button>
                         </div>
-						<div class="col-md-3 col-6">
-    <button class="btn btn-outline-warning w-100" onclick="resetConnectedCounter()">
-        <i class="bi bi-people"></i> Reiniciar Conectados
-    </button>
-</div>
+                        <div class="col-md-3 col-6">
+                            <button class="btn btn-outline-warning w-100" onclick="resetConnectedCounter()">
+                                <i class="bi bi-people"></i> Reiniciar Conectados
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -623,6 +631,7 @@
         let playlistSongs = [];
         let currentSection = 'dashboard';
         let sortableInstance = null;
+        let connectionListener = null;
 
         // ========== INICIALIZAR ==========
         document.addEventListener('DOMContentLoaded', function() {
@@ -640,6 +649,7 @@
                 db = firebase.firestore();
                 console.log("✅ Firebase inicializado correctamente");
                 loadAllData();
+                setupConnectionListener(); // Escuchar conexiones
                 setInterval(loadAllData, 10000); // Actualizar cada 10 segundos
             } catch (error) {
                 console.error("❌ Error inicializando Firebase:", error);
@@ -699,6 +709,7 @@
         // ========== CARGA DE DATOS ==========
         function loadAllData() {
             loadSongs();
+            updateConnectionStats();
         }
 
         function loadSongs() {
@@ -749,7 +760,66 @@
                 });
         }
 
-        // ========== FORMULARIO - CORREGIDO ==========
+        // ========== SISTEMA DE CONEXIONES ==========
+        function setupConnectionListener() {
+            const counterRef = db.collection('stats').doc('connections');
+            
+            connectionListener = counterRef.onSnapshot((doc) => {
+                if (doc.exists) {
+                    updateConnectionStats();
+                }
+            });
+        }
+
+        function updateConnectionStats() {
+            const counterRef = db.collection("stats").doc("connections");
+            
+            counterRef.get().then((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    const currentConnections = data.count || 0;
+                    const totalConnections = data.totalConnections || 0;
+                    const lastReset = data.lastReset ? new Date(data.lastReset).toLocaleString('es-MX') : "Nunca";
+                    
+                    // Mostrar en el sidebar
+                    const connectionInfo = document.getElementById('connection-info');
+                    if (connectionInfo) {
+                        connectionInfo.innerHTML = `
+                            <small class="d-block">Conectados ahora: <span class="text-success">${currentConnections}</span></small>
+                            <small class="d-block">Total hoy: <span class="text-info">${totalConnections}</span></small>
+                            <small class="d-block">Último reset: <span class="text-muted">${lastReset}</span></small>
+                        `;
+                    }
+                }
+            }).catch((error) => {
+                console.error("Error obteniendo estadísticas de conexión:", error);
+            });
+        }
+
+        function resetConnectedCounter() {
+            if (confirm("¿Reiniciar contador de personas conectadas a 0?\nEsta acción afectará a todos los usuarios.")) {
+                // Guardar en Firebase
+                db.collection("stats").doc("connections").set({
+                    count: 0,
+                    lastReset: new Date().toISOString(),
+                    resetBy: "admin",
+                    lastConnection: new Date().toISOString(),
+                    // Mantener el total de conexiones
+                    totalConnections: firebase.firestore.FieldValue.increment(0)
+                })
+                .then(() => {
+                    showNotification("✅ Contador de conectados reiniciado a 0", "success");
+                    // Recargar datos
+                    updateConnectionStats();
+                })
+                .catch((error) => {
+                    console.error("Error reseteando contador:", error);
+                    showNotification("❌ Error al reiniciar contador", "danger");
+                });
+            }
+        }
+
+        // ========== FORMULARIO ==========
         function setupForm() {
             const form = document.getElementById('song-form');
             if (form) {
@@ -838,23 +908,7 @@
                     });
             }
         }
-function resetConnectedCounter() {
-    if (confirm("¿Reiniciar contador de personas conectadas a 0?\nEsta acción afectará a todos los usuarios.")) {
-        // Guardar en Firebase
-        db.collection("stats").doc("connections").set({
-            count: 0,
-            lastReset: new Date().toISOString(),
-            resetBy: "admin"
-        })
-        .then(() => {
-            showNotification("✅ Contador de conectados reiniciado a 0", "success");
-        })
-        .catch((error) => {
-            console.error("Error reseteando contador:", error);
-            showNotification("❌ Error al reiniciar contador", "danger");
-        });
-    }
-}
+
         function resetForm() {
             // Solo intentar resetear si los elementos existen
             const editId = document.getElementById('edit-song-id');
@@ -1523,6 +1577,7 @@ function resetConnectedCounter() {
         window.clearPlaylist = clearPlaylist;
         window.savePlaylistOrder = savePlaylistOrder;
         window.resetForm = resetForm;
+        window.resetConnectedCounter = resetConnectedCounter;
 
     </script>
 </body>

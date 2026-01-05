@@ -624,7 +624,7 @@
                     <div class="connected-label">
                         <i class="bi bi-people"></i> PERSONAS CONECTADAS
                     </div>
-                    <div class="connected-count" id="connected-count">24</div>
+                    <div class="connected-count" id="connected-count">0</div>
                 </div>
                 
                 <div class="datetime-compact">
@@ -728,7 +728,7 @@
                 <div class="col-md-6 text-end">
                     <small>
                         <i class="bi bi-wifi"></i> 
-                        <span id="real-connected" class="text-warning fw-bold">24 conectados</span>
+                        <span id="real-connected" class="text-warning fw-bold">0 conectados</span>
                     </small>
                 </div>
             </div>
@@ -754,7 +754,7 @@
         let allSongs = [];
         let myVotes = [];
         let db = null;
-        let connectedCount = 24;
+        let connectionListener = null;
 
         // ========== INICIALIZAR ==========
         document.addEventListener('DOMContentLoaded', function() {
@@ -762,9 +762,6 @@
             initializeFirebase();
             updateCurrentTime();
             setInterval(updateCurrentTime, 1000);
-            
-            // Actualizar contador cada 5 segundos
-            setInterval(updateConnectedCounter, 5000);
         });
 
         function initializeFirebase() {
@@ -786,6 +783,9 @@
                     }
                 }
                 
+                // Iniciar sistema de conexiones
+                setupConnectionCounter();
+                
                 // Cargar canciones
                 loadSongs();
                 setupEventListeners();
@@ -799,50 +799,89 @@
             }
         }
 
-        // ========== CONTADOR DE CONECTADOS ==========
-        // ========== CONTADOR SIMPLE DE CONEXIONES ==========
-function setupConnectionCounter() {
-    const counterRef = db.collection('stats').doc('connections');
-    
-    // Cuando la página carga, sumar 1
-    counterRef.update({
-        count: firebase.firestore.FieldValue.increment(1),
-        lastUpdated: new Date().toISOString()
-    })
-    .catch((error) => {
-        // Si no existe, crearlo
-        counterRef.set({
-            count: 1,
-            lastUpdated: new Date().toISOString()
-        });
-    });
-    
-    // Escuchar cambios en tiempo real
-    counterRef.onSnapshot((doc) => {
-        if (doc.exists) {
-            const data = doc.data();
-            const count = data.count || 0;
+        // ========== CONTADOR REAL DE CONEXIONES ==========
+        function setupConnectionCounter() {
+            const counterRef = db.collection('stats').doc('connections');
             
-            // Actualizar display
-            const connectedElement = document.getElementById("connected-count");
-            const realConnectedElement = document.getElementById("real-connected");
+            // Generar un ID único para esta sesión
+            const sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('mobydick_session_id', sessionId);
             
-            if (connectedElement) connectedElement.textContent = count;
-            if (realConnectedElement) realConnectedElement.textContent = `${count} conectados`;
+            // Registrar nueva conexión
+            counterRef.update({
+                count: firebase.firestore.FieldValue.increment(1),
+                lastConnection: new Date().toISOString(),
+                sessions: firebase.firestore.FieldValue.arrayUnion(sessionId)
+            })
+            .catch((error) => {
+                // Si no existe el documento, crearlo
+                if (error.code === 'not-found') {
+                    counterRef.set({
+                        count: 1,
+                        lastConnection: new Date().toISOString(),
+                        totalConnections: 1,
+                        sessions: [sessionId],
+                        created: new Date().toISOString()
+                    });
+                }
+            });
+            
+            // Escuchar cambios en tiempo real
+            connectionListener = counterRef.onSnapshot((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    const currentCount = data.count || 0;
+                    
+                    // Actualizar en la interfaz
+                    const connectedElement = document.getElementById("connected-count");
+                    const realConnectedElement = document.getElementById("real-connected");
+                    
+                    if (connectedElement) connectedElement.textContent = currentCount;
+                    if (realConnectedElement) realConnectedElement.textContent = `${currentCount} conectados`;
+                }
+            });
+            
+            // Restar al salir
+            window.addEventListener('beforeunload', function() {
+                cleanupConnection(sessionId);
+            });
+            
+            // Manejar cierre de pestaña
+            window.addEventListener('pagehide', function() {
+                cleanupConnection(sessionId);
+            });
+            
+            // Manejar navegador en segundo plano (mobile)
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden) {
+                    // El usuario cambió de pestaña o minimizó el navegador
+                    // No restamos inmediatamente, esperamos un tiempo
+                    setTimeout(() => {
+                        if (document.hidden) {
+                            cleanupConnection(sessionId);
+                        }
+                    }, 30000); // 30 segundos
+                }
+            });
         }
-    });
-    
-    // Restar 1 cuando el usuario cierra la página
-    window.addEventListener('beforeunload', function() {
-        counterRef.update({
-            count: firebase.firestore.FieldValue.increment(-1),
-            lastUpdated: new Date().toISOString()
-        });
-    });
-}
-
-// Llamar en initializeFirebase(), después de inicializar db:
-setupConnectionCounter();
+        
+        function cleanupConnection(sessionId) {
+            const counterRef = db.collection('stats').doc('connections');
+            
+            // Remover la sesión y decrementar el contador
+            counterRef.update({
+                count: firebase.firestore.FieldValue.increment(-1),
+                sessions: firebase.firestore.FieldValue.arrayRemove(sessionId),
+                lastDisconnect: new Date().toISOString()
+            }).catch((error) => {
+                console.log("✅ Sesión cerrada (puede ignorarse)");
+            });
+            
+            // Remover listener si existe
+            if (connectionListener) {
+                connectionListener();
+            }
+        }
 
         // ========== FUNCIONES DE CANCIONES ==========
         function loadSongs() {
