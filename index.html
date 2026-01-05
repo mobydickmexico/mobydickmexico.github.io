@@ -800,30 +800,49 @@
         }
 
         // ========== CONTADOR DE CONECTADOS ==========
-        function updateConnectedCounter() {
-            const change = Math.random() > 0.4 ? 1 : Math.random() > 0.2 ? 0 : -1;
-            connectedCount = Math.max(18, Math.min(50, connectedCount + change));
+        // ========== CONTADOR SIMPLE DE CONEXIONES ==========
+function setupConnectionCounter() {
+    const counterRef = db.collection('stats').doc('connections');
+    
+    // Cuando la página carga, sumar 1
+    counterRef.update({
+        count: firebase.firestore.FieldValue.increment(1),
+        lastUpdated: new Date().toISOString()
+    })
+    .catch((error) => {
+        // Si no existe, crearlo
+        counterRef.set({
+            count: 1,
+            lastUpdated: new Date().toISOString()
+        });
+    });
+    
+    // Escuchar cambios en tiempo real
+    counterRef.onSnapshot((doc) => {
+        if (doc.exists) {
+            const data = doc.data();
+            const count = data.count || 0;
             
+            // Actualizar display
             const connectedElement = document.getElementById("connected-count");
             const realConnectedElement = document.getElementById("real-connected");
             
-            if (connectedElement) {
-                connectedElement.textContent = connectedCount;
-                
-                connectedElement.style.transition = 'all 0.3s';
-                connectedElement.style.transform = 'scale(1.1)';
-                connectedElement.style.color = change > 0 ? '#28a745' : '#C8102E';
-                
-                setTimeout(() => {
-                    connectedElement.style.transform = 'scale(1)';
-                    connectedElement.style.color = '#012169';
-                }, 300);
-            }
-            
-            if (realConnectedElement) {
-                realConnectedElement.textContent = `${connectedCount} conectados`;
-            }
+            if (connectedElement) connectedElement.textContent = count;
+            if (realConnectedElement) realConnectedElement.textContent = `${count} conectados`;
         }
+    });
+    
+    // Restar 1 cuando el usuario cierra la página
+    window.addEventListener('beforeunload', function() {
+        counterRef.update({
+            count: firebase.firestore.FieldValue.increment(-1),
+            lastUpdated: new Date().toISOString()
+        });
+    });
+}
+
+// Llamar en initializeFirebase(), después de inicializar db:
+setupConnectionCounter();
 
         // ========== FUNCIONES DE CANCIONES ==========
         function loadSongs() {
