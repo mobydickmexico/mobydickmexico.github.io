@@ -344,6 +344,11 @@
                                 <i class="bi bi-download"></i> Exportar Datos
                             </button>
                         </div>
+						<div class="col-md-3 col-6">
+    <button class="btn btn-outline-warning w-100" onclick="resetConnectedCounter()">
+        <i class="bi bi-people"></i> Reiniciar Conectados
+    </button>
+</div>
                     </div>
                 </div>
             </div>
@@ -833,7 +838,23 @@
                     });
             }
         }
-
+function resetConnectedCounter() {
+    if (confirm("¿Reiniciar contador de personas conectadas a 0?\nEsta acción afectará a todos los usuarios.")) {
+        // Guardar en Firebase
+        db.collection("stats").doc("connections").set({
+            count: 0,
+            lastReset: new Date().toISOString(),
+            resetBy: "admin"
+        })
+        .then(() => {
+            showNotification("✅ Contador de conectados reiniciado a 0", "success");
+        })
+        .catch((error) => {
+            console.error("Error reseteando contador:", error);
+            showNotification("❌ Error al reiniciar contador", "danger");
+        });
+    }
+}
         function resetForm() {
             // Solo intentar resetear si los elementos existen
             const editId = document.getElementById('edit-song-id');
