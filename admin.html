@@ -555,7 +555,8 @@
                 <div class="card-body">
                     <div class="row g-2">
                         <div class="col-md-8">
-                            <input type="text" id="search-songs" class="form-control" placeholder="Buscar canción o artista...">
+                            <input type="text" id="search-songs" class="form-control" placeholder="Buscar canción o artista..." 
+                                   onkeyup="filterSongs(this.value)" onblur="clearSearchIfEmpty(this)">
                         </div>
                         <div class="col-md-4">
                             <button class="btn btn-outline-secondary w-100" onclick="refreshSongs()">
@@ -823,7 +824,7 @@
                                     <button type="submit" id="submit-song-btn" class="btn btn-admin btn-lg">
                                         <i class="bi bi-check-circle"></i> <span id="submit-btn-text">Agregar Canción al Repertorio</span>
                                     </button>
-                                    <button type="button" class="btn btn-outline-secondary" onclick="resetForm()">
+                                    <button type="button" class="btn btn-outline-secondary" onclick="clearForm()">
                                         Limpiar Formulario
                                     </button>
                                 </div>
@@ -877,6 +878,8 @@
         let sortableInstance = null;
         let connectionListener = null;
         let messagesListener = null;
+        let filteredSongs = null; // Para mantener las canciones filtradas
+        let searchTimeout = null;
 
         // ========== INICIALIZAR ==========
         document.addEventListener('DOMContentLoaded', function() {
@@ -944,12 +947,15 @@
                 // Cargar datos específicos de la sección
                 if (sectionId === 'canciones') {
                     loadSongsList();
+                    // Limpiar búsqueda al cambiar de sección
+                    document.getElementById('search-songs').value = '';
+                    filteredSongs = null;
                 } else if (sectionId === 'escenario') {
                     loadStageMode();
                 } else if (sectionId === 'mensajes') {
                     loadMessages();
                 } else if (sectionId === 'agregar') {
-                    resetForm();
+                    clearForm(); // Usar clearForm en lugar de resetForm
                 }
             }
         }
@@ -1400,6 +1406,8 @@
             if (year) songData.year = parseInt(year);
             
             const btn = document.getElementById('submit-song-btn');
+            const originalText = btn.innerHTML;
+            
             if (btn) {
                 btn.disabled = true;
                 btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Procesando...';
@@ -1409,19 +1417,22 @@
                 // EDITAR canción existente - CORREGIDO
                 db.collection("songs").doc(songId).update(songData)
                     .then(() => {
+                        console.log(`✅ Canción "${title}" actualizada`);
                         showNotification(`✅ Canción "${title}" actualizada correctamente`, "success");
-                        resetForm();
-                        loadAllData();
-                        showSection('canciones'); // Volver a la lista después de editar
+                        
+                        // Limpiar y cambiar sección después de un breve delay
+                        setTimeout(() => {
+                            clearForm();
+                            loadAllData();
+                            showSection('canciones');
+                        }, 800);
                     })
                     .catch((error) => {
                         console.error("Error actualizando canción:", error);
-                        showNotification("Error al actualizar canción", "danger");
-                    })
-                    .finally(() => {
+                        showNotification("Error al actualizar canción: " + error.message, "danger");
                         if (btn) {
                             btn.disabled = false;
-                            btn.innerHTML = '<i class="bi bi-check-circle"></i> Actualizar Canción';
+                            btn.innerHTML = originalText;
                         }
                     });
             } else {
@@ -1436,36 +1447,73 @@
                     .then((docRef) => {
                         console.log("✅ Canción agregada con ID:", docRef.id);
                         showNotification(`✅ Canción "${title}" agregada al repertorio`, "success");
-                        resetForm();
-                        loadAllData();
-                        loadRecentSongs();
+                        
+                        // Limpiar formulario después de un breve delay
+                        setTimeout(() => {
+                            clearForm();
+                            loadAllData();
+                            loadRecentSongs();
+                        }, 800);
                     })
                     .catch((error) => {
                         console.error("❌ Error agregando canción:", error);
-                        showNotification("Error al agregar canción", "danger");
-                    })
-                    .finally(() => {
+                        showNotification("Error al agregar canción: " + error.message, "danger");
                         if (btn) {
                             btn.disabled = false;
-                            btn.innerHTML = '<i class="bi bi-check-circle"></i> Agregar Canción al Repertorio';
+                            btn.innerHTML = originalText;
                         }
                     });
             }
         }
 
-        function resetForm() {
-            // Limpiar formulario completamente
-            document.getElementById('edit-song-id').value = '';
-            document.getElementById('form-title').textContent = 'Agregar Nueva Canción';
-            document.getElementById('submit-btn-text').textContent = 'Agregar Canción al Repertorio';
+        // FUNCIÓN CLEARFORM - NUEVA Y MEJORADA
+        function clearForm() {
+            console.log("🧹 Limpiando formulario...");
             
-            // Limpiar todos los campos del formulario
+            // Guardar referencia a los elementos
+            const editId = document.getElementById('edit-song-id');
+            const formTitle = document.getElementById('form-title');
+            const submitBtnText = document.getElementById('submit-btn-text');
             const form = document.getElementById('song-form');
+            
+            // Resetear valores
+            if (editId) {
+                editId.value = '';
+                console.log("🆔 ID de edición limpiado");
+            }
+            if (formTitle) {
+                formTitle.textContent = 'Agregar Nueva Canción';
+                console.log("📝 Título del formulario restaurado");
+            }
+            if (submitBtnText) {
+                submitBtnText.textContent = 'Agregar Canción al Repertorio';
+                console.log("🔄 Texto del botón restaurado");
+            }
+            
+            // Resetear formulario completamente
             if (form) {
                 form.reset();
-                // Establecer valores por defecto
-                document.getElementById('song-genre').value = 'Rock';
+                console.log("📋 Formulario reseteado");
+                
+                // Establecer valores por defecto después del reset
+                setTimeout(() => {
+                    const genreSelect = document.getElementById('song-genre');
+                    if (genreSelect) {
+                        genreSelect.value = 'Rock';
+                        console.log("🎵 Género establecido a Rock");
+                    }
+                }, 10);
             }
+            
+            // Restaurar botón si está deshabilitado
+            const btn = document.getElementById('submit-song-btn');
+            if (btn && btn.disabled) {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-check-circle"></i> Agregar Canción al Repertorio';
+                console.log("🔼 Botón habilitado");
+            }
+            
+            console.log("✅ Formulario limpiado exitosamente");
         }
 
         function loadRecentSongs() {
@@ -1500,35 +1548,41 @@
             container.innerHTML = html;
         }
 
-        // ========== EDITAR CANCIÓN - CORREGIDO ==========
+        // ========== EDITAR CANCIÓN - CORREGIDO DEFINITIVAMENTE ==========
         function editSong(songId) {
+            console.log("📝 Intentando editar canción con ID:", songId);
+            
+            // Buscar la canción en allSongs
             const song = allSongs.find(s => s.id === songId);
+            
             if (!song) {
+                console.error("❌ Canción no encontrada con ID:", songId);
                 showNotification("No se encontró la canción", "warning");
                 return;
             }
             
-            console.log("📝 Editando canción:", song);
+            console.log("✅ Canción encontrada:", song);
             
             // Rellenar formulario con los datos actuales
             document.getElementById('edit-song-id').value = song.id;
-            document.getElementById('song-title').value = song.title;
-            document.getElementById('song-artist').value = song.artist;
+            document.getElementById('song-title').value = song.title || '';
+            document.getElementById('song-artist').value = song.artist || '';
             document.getElementById('song-genre').value = song.genre || 'Rock';
             document.getElementById('song-duration').value = song.duration || '';
             document.getElementById('song-year').value = song.year || '';
             document.getElementById('song-notes').value = song.notes || '';
             
-            // Cambiar título del formulario
+            // Cambiar título del formulario y botón
             document.getElementById('form-title').textContent = 'Editar Canción';
             document.getElementById('submit-btn-text').textContent = 'Actualizar Canción';
             
             // Ir a la sección de agregar/editar
             showSection('agregar');
             
-            // Scroll al formulario
+            // Focus en el título después de un pequeño delay
             setTimeout(() => {
                 document.getElementById('song-title').focus();
+                console.log("✅ Formulario listo para editar:", song.title);
             }, 300);
         }
 
@@ -1547,6 +1601,84 @@
                         console.error("Error eliminando canción:", error);
                         showNotification("Error al eliminar canción", "danger");
                     });
+            }
+        }
+
+        // ========== BUSCADOR MEJORADO ==========
+        function filterSongs(searchTerm) {
+            if (searchTimeout) {
+                clearTimeout(searchTimeout);
+            }
+            
+            searchTimeout = setTimeout(() => {
+                if (!searchTerm.trim()) {
+                    filteredSongs = null;
+                    loadSongsList();
+                    return;
+                }
+                
+                const term = searchTerm.toLowerCase().trim();
+                
+                filteredSongs = allSongs.filter(song => 
+                    song.title.toLowerCase().includes(term) ||
+                    song.artist.toLowerCase().includes(term) ||
+                    (song.genre && song.genre.toLowerCase().includes(term))
+                );
+                
+                displayFilteredSongs();
+            }, 300);
+        }
+
+        function displayFilteredSongs() {
+            const container = document.getElementById('all-songs-list');
+            const countElement = document.getElementById('song-count');
+            
+            if (!container) return;
+            
+            const songsToDisplay = filteredSongs || allSongs;
+            
+            if (songsToDisplay.length === 0) {
+                container.innerHTML = '<p class="text-center text-muted">No se encontraron canciones</p>';
+                if (countElement) countElement.textContent = '0';
+                return;
+            }
+            
+            let html = '';
+            songsToDisplay.forEach(song => {
+                html += `
+                    <div class="song-row mb-2">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div style="flex: 1;">
+                                <strong>${song.title}</strong>
+                                <small class="d-block text-muted">${song.artist} • ${song.genre || 'Sin género'}</small>
+                                <div class="mt-1">
+                                    <span class="badge bg-success">${song.votes} votos</span>
+                                    ${song.inPlaylist ? '<span class="badge bg-warning text-dark ms-1">En playlist</span>' : ''}
+                                    ${song.played ? '<span class="badge bg-info ms-1">Tocada</span>' : ''}
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <span class="badge bg-secondary me-2">${song.duration || '--:--'}</span>
+                                <button class="btn btn-sm btn-outline-primary me-1" onclick="editSong('${song.id}')" title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteSong('${song.id}')" title="Eliminar">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            if (countElement) countElement.textContent = songsToDisplay.length;
+        }
+
+        function clearSearchIfEmpty(input) {
+            if (!input.value.trim()) {
+                filteredSongs = null;
+                loadSongsList();
             }
         }
 
@@ -1913,23 +2045,25 @@
             container.innerHTML = html;
         }
 
-        // ========== LISTA DE CANCIONES ==========
+        // ========== LISTA DE CANCIONES - MEJORADA ==========
         function loadSongsList() {
             const container = document.getElementById('all-songs-list');
             const countElement = document.getElementById('song-count');
             
             if (!container) return;
             
-            if (allSongs.length === 0) {
+            const songsToDisplay = filteredSongs || allSongs;
+            
+            if (songsToDisplay.length === 0) {
                 container.innerHTML = '<p class="text-center text-muted">No hay canciones en el repertorio</p>';
                 if (countElement) countElement.textContent = '0';
                 return;
             }
             
             let html = '';
-            allSongs.forEach(song => {
+            songsToDisplay.forEach(song => {
                 html += `
-                    <div class="song-row mb-2">
+                    <div class="song-row mb-2" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor='white'">
                         <div class="d-flex justify-content-between align-items-center">
                             <div style="flex: 1;">
                                 <strong>${song.title}</strong>
@@ -1955,62 +2089,15 @@
             });
             
             container.innerHTML = html;
-            if (countElement) countElement.textContent = allSongs.length;
-            
-            // Configurar búsqueda
-            const searchInput = document.getElementById('search-songs');
-            if (searchInput) {
-                searchInput.addEventListener('input', function(e) {
-                    const term = e.target.value.toLowerCase().trim();
-                    
-                    if (term === '') {
-                        loadSongsList();
-                        return;
-                    }
-                    
-                    const filtered = allSongs.filter(song => 
-                        song.title.toLowerCase().includes(term) ||
-                        song.artist.toLowerCase().includes(term) ||
-                        (song.genre && song.genre.toLowerCase().includes(term))
-                    );
-                    
-                    if (filtered.length === 0) {
-                        container.innerHTML = '<p class="text-center text-muted">No se encontraron canciones</p>';
-                        if (countElement) countElement.textContent = '0';
-                        return;
-                    }
-                    
-                    let filteredHtml = '';
-                    filtered.forEach(song => {
-                        filteredHtml += `
-                            <div class="song-row mb-2">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div style="flex: 1;">
-                                        <strong>${song.title}</strong>
-                                        <small class="d-block text-muted">${song.artist} • ${song.genre || 'Sin género'}</small>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <span class="badge bg-success me-2">${song.votes} votos</span>
-                                        <button class="btn btn-sm btn-outline-primary me-1" onclick="editSong('${song.id}')">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-danger" onclick="deleteSong('${song.id}')">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    });
-                    
-                    container.innerHTML = filteredHtml;
-                    if (countElement) countElement.textContent = filtered.length;
-                });
-            }
+            if (countElement) countElement.textContent = songsToDisplay.length;
         }
 
         // ========== HERRAMIENTAS ==========
         function refreshSongs() {
+            // Limpiar búsqueda al refrescar
+            document.getElementById('search-songs').value = '';
+            filteredSongs = null;
+            
             loadAllData();
             showNotification("Lista de canciones actualizada", "success");
         }
@@ -2080,6 +2167,14 @@
 
         // ========== UTILIDADES ==========
         function showNotification(message, type = "info") {
+            // Eliminar notificaciones existentes para evitar duplicados
+            const existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(notification => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            });
+            
             // Crear elemento de notificación
             const notification = document.createElement('div');
             notification.className = `alert alert-${type} alert-dismissible fade show notification`;
@@ -2125,7 +2220,7 @@
         window.markAllAsPlayed = markAllAsPlayed;
         window.clearPlaylist = clearPlaylist;
         window.savePlaylistOrder = savePlaylistOrder;
-        window.resetForm = resetForm;
+        window.clearForm = clearForm;
         window.resetConnectedCounter = resetConnectedCounter;
         window.loadMessages = loadMessages;
         window.markAsRead = markAsRead;
@@ -2133,6 +2228,8 @@
         window.markAllAsRead = markAllAsRead;
         window.deleteAllMessages = deleteAllMessages;
         window.exportMessages = exportMessages;
+        window.filterSongs = filterSongs;
+        window.clearSearchIfEmpty = clearSearchIfEmpty;
 
     </script>
 </body>
