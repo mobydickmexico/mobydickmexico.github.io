@@ -342,6 +342,57 @@
             opacity: 0.7;
         }
         
+        /* Panel de mensajes */
+        .message-panel {
+            border-color: #17a2b8;
+            background: linear-gradient(135deg, #f8fdff, #e6f7fb);
+        }
+        
+        .message-label {
+            font-size: 0.9rem;
+            color: #495057;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .message-input {
+            width: 100%;
+            border: 2px solid #ced4da;
+            border-radius: 10px;
+            padding: 0.8rem;
+            font-size: 0.95rem;
+            resize: none;
+            min-height: 80px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        
+        .message-input:focus {
+            outline: none;
+            border-color: #17a2b8;
+            box-shadow: 0 0 0 3px rgba(23, 162, 184, 0.1);
+        }
+        
+        .char-counter {
+            font-size: 0.8rem;
+            color: #6c757d;
+            text-align: right;
+            margin-top: 0.3rem;
+        }
+        
+        .char-counter.warning {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .message-examples {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 0.5rem;
+        }
+        
         /* Buscador */
         .search-panel {
             border-color: var(--pub-blue);
@@ -677,16 +728,30 @@
                     <p class="text-muted text-center my-3">No has votado aún. Selecciona hasta 3 canciones.</p>
                 </div>
                 
+                <!-- 4. MENSAJE A LA BANDA -->
+                <div class="mt-3">
+                    <div class="message-label">
+                        <i class="bi bi-chat-text"></i> MENSAJE A LA BANDA (OPCIONAL)
+                    </div>
+                    <textarea id="user-message" class="message-input" 
+                              placeholder="Ej: ¡Feliz cumpleaños Juan! 🎉 / Saludos desde la mesa 5 / ¡Excelente show! 🤘"
+                              maxlength="120"></textarea>
+                    <div class="char-counter" id="char-counter">0/120 caracteres</div>
+                    <div class="message-examples">
+                        <small>Puedes enviar saludos, felicitaciones o mensajes especiales.</small>
+                    </div>
+                </div>
+                
                 <!-- BOTÓN ENVIAR VOTOS -->
                 <button id="submit-votes" class="btn-submit-votes" disabled>
-                    <i class="bi bi-send-check"></i> ENVIAR MIS VOTOS
+                    <i class="bi bi-send-check"></i> ENVIAR VOTOS Y MENSAJE
                 </button>
                 
                 <!-- Feedback al enviar -->
                 <div id="submit-feedback" class="feedback-container"></div>
             </div>
             
-            <!-- 4. BUSCAR CANCIONES -->
+            <!-- 5. BUSCAR CANCIONES -->
             <div class="content-panel search-panel">
                 <div class="panel-title">
                     <i class="bi bi-search"></i> BUSCAR CANCIONES
@@ -722,7 +787,7 @@
             <div class="row align-items-center">
                 <div class="col-md-6">
                     <small>
-                        © 2024 MobyDick • Porter British Pub • Ventura Puente
+                        © 2026 MobyDick • Porter British Pub • Ventura Puente
                     </small>
                 </div>
                 <div class="col-md-6 text-end">
@@ -755,13 +820,32 @@
         let myVotes = [];
         let db = null;
         let connectionListener = null;
+        let userMessage = '';
+        let deviceId = null;
 
         // ========== INICIALIZAR ==========
         document.addEventListener('DOMContentLoaded', function() {
             console.log("🚀 Iniciando aplicación MobyDick...");
+            
+            // Generar o recuperar ID de dispositivo
+            deviceId = localStorage.getItem('mobydick_device_id');
+            if (!deviceId) {
+                deviceId = 'device_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('mobydick_device_id', deviceId);
+            }
+            console.log("📱 ID de dispositivo:", deviceId);
+            
             initializeFirebase();
             updateCurrentTime();
             setInterval(updateCurrentTime, 1000);
+            
+            // Contador de caracteres para mensaje
+            const messageInput = document.getElementById('user-message');
+            if (messageInput) {
+                messageInput.addEventListener('input', function() {
+                    updateCharCounter();
+                });
+            }
         });
 
         function initializeFirebase() {
@@ -770,6 +854,9 @@
                 db = firebase.firestore();
                 
                 console.log("✅ Firebase inicializado");
+                
+                // Verificar límite de votos por dispositivo
+                checkVoteLimit();
                 
                 // Cargar votos guardados
                 const saved = localStorage.getItem('mobydick_votes');
@@ -781,6 +868,14 @@
                         console.error("Error cargando votos:", e);
                         myVotes = [];
                     }
+                }
+                
+                // Cargar mensaje guardado
+                const savedMessage = localStorage.getItem('mobydick_message');
+                if (savedMessage) {
+                    userMessage = savedMessage;
+                    document.getElementById('user-message').value = userMessage;
+                    updateCharCounter();
                 }
                 
                 // Iniciar sistema de conexiones
@@ -797,6 +892,39 @@
                 console.error("❌ Error Firebase:", error);
                 showError("Error de conexión. Recarga la página.");
             }
+        }
+
+        // ========== VERIFICAR LÍMITE DE VOTOS ==========
+        function checkVoteLimit() {
+            const today = new Date().toISOString().split('T')[0];
+            const deviceVotesKey = `mobydick_votes_${deviceId}_${today}`;
+            
+            const votesToday = localStorage.getItem(deviceVotesKey);
+            if (votesToday && parseInt(votesToday) >= 3) {
+                // Este dispositivo ya votó 3 veces hoy
+                const submitBtn = document.getElementById('submit-votes');
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="bi bi-exclamation-triangle"></i> LÍMITE ALCANZADO';
+                    submitBtn.style.background = '#dc3545';
+                }
+                
+                // Deshabilitar todos los botones de voto
+                setTimeout(() => {
+                    const voteButtons = document.querySelectorAll('.btn-vote');
+                    voteButtons.forEach(btn => {
+                        if (!btn.disabled) {
+                            btn.disabled = true;
+                            btn.innerHTML = '<i class="bi bi-exclamation-triangle"></i> LÍMITE';
+                            btn.style.background = '#6c757d';
+                        }
+                    });
+                }, 500);
+                
+                showSubmitFeedback("❌ Has alcanzado el límite de 3 votos por dispositivo/día", "warning");
+                return true;
+            }
+            return false;
         }
 
         // ========== CONTADOR REAL DE CONEXIONES ==========
@@ -850,19 +978,6 @@
             window.addEventListener('pagehide', function() {
                 cleanupConnection(sessionId);
             });
-            
-            // Manejar navegador en segundo plano (mobile)
-            document.addEventListener('visibilitychange', function() {
-                if (document.hidden) {
-                    // El usuario cambió de pestaña o minimizó el navegador
-                    // No restamos inmediatamente, esperamos un tiempo
-                    setTimeout(() => {
-                        if (document.hidden) {
-                            cleanupConnection(sessionId);
-                        }
-                    }, 30000); // 30 segundos
-                }
-            });
         }
         
         function cleanupConnection(sessionId) {
@@ -881,6 +996,29 @@
             if (connectionListener) {
                 connectionListener();
             }
+        }
+
+        // ========== CONTADOR DE CARACTERES ==========
+        function updateCharCounter() {
+            const messageInput = document.getElementById('user-message');
+            const counter = document.getElementById('char-counter');
+            
+            if (!messageInput || !counter) return;
+            
+            userMessage = messageInput.value.trim();
+            const length = userMessage.length;
+            const maxLength = 120;
+            
+            counter.textContent = `${length}/${maxLength} caracteres`;
+            
+            if (length > maxLength * 0.9) { // Más del 90%
+                counter.classList.add('warning');
+            } else {
+                counter.classList.remove('warning');
+            }
+            
+            // Guardar en localStorage temporalmente
+            localStorage.setItem('mobydick_message', userMessage);
         }
 
         // ========== FUNCIONES DE CANCIONES ==========
@@ -1000,6 +1138,11 @@
         }
 
         window.voteForSong = function(songId) {
+            // Verificar límite por dispositivo
+            if (checkVoteLimit()) {
+                return;
+            }
+            
             if (myVotes.length >= 3) {
                 showSubmitFeedback("❌ Máximo 3 votos por persona", "danger");
                 return;
@@ -1272,8 +1415,14 @@
                     const btn = this;
                     const originalText = btn.innerHTML;
                     
-                    btn.innerHTML = '<i class="bi bi-check2-circle"></i> ¡VOTOS ENVIADOS!';
+                    btn.innerHTML = '<i class="bi bi-check2-circle"></i> ¡ENVIADO!';
                     btn.disabled = true;
+                    
+                    // Registrar voto por dispositivo/día
+                    const today = new Date().toISOString().split('T')[0];
+                    const deviceVotesKey = `mobydick_votes_${deviceId}_${today}`;
+                    const votesToday = parseInt(localStorage.getItem(deviceVotesKey) || '0') + 1;
+                    localStorage.setItem(deviceVotesKey, votesToday.toString());
                     
                     // Guardar en historial
                     const history = JSON.parse(localStorage.getItem("mobydick_history") || "[]");
@@ -1282,21 +1431,48 @@
                         return song ? song.title : "";
                     }).filter(Boolean);
                     
+                    // Guardar mensaje en Firebase si existe
+                    if (userMessage.trim()) {
+                        db.collection("messages").add({
+                            message: userMessage.trim(),
+                            deviceId: deviceId,
+                            songs: songTitles,
+                            sentAt: new Date().toISOString(),
+                            ip: "user" // Podrías obtener la IP real con un servicio
+                        })
+                        .then(() => {
+                            console.log("✅ Mensaje guardado en Firebase");
+                        })
+                        .catch(error => {
+                            console.error("Error guardando mensaje:", error);
+                        });
+                    }
+                    
                     history.push({
                         date: new Date().toISOString(),
-                        songs: songTitles
+                        songs: songTitles,
+                        message: userMessage.trim()
                     });
                     localStorage.setItem("mobydick_history", JSON.stringify(history));
                     
-                    // Limpiar votos
+                    // Limpiar votos y mensaje
                     myVotes = [];
                     localStorage.removeItem("mobydick_votes");
+                    
+                    userMessage = '';
+                    document.getElementById('user-message').value = '';
+                    updateCharCounter();
+                    localStorage.removeItem('mobydick_message');
                     
                     // Actualizar UI
                     updateMyVotesDisplay();
                     
                     // Mensaje de éxito
-                    showSubmitFeedback("🎉 ¡Gracias por tus votos! La banda los tendrá en cuenta.", "success");
+                    let successMsg = "🎉 ¡Gracias por tus votos!";
+                    if (userMessage.trim()) {
+                        successMsg += " Tu mensaje fue enviado a la banda.";
+                    }
+                    showSubmitFeedback(successMsg, "success");
                     
                     // Restaurar botón después de 3 segundos
                     setTimeout(() => {

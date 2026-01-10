@@ -47,6 +47,29 @@
             }
         }
         
+        /* Optimizado para tablet portrait */
+        @media (max-width: 1200px) and (min-width: 768px) {
+            .sidebar {
+                width: 220px;
+            }
+            .main-content {
+                margin-left: 220px;
+                padding: 15px;
+            }
+            .stat-card {
+                padding: 1rem;
+            }
+            .stat-card .h1 {
+                font-size: 1.8rem;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .stat-card {
+                margin-bottom: 1rem;
+            }
+        }
+        
         .stat-card {
             background: white;
             border-radius: 10px;
@@ -55,6 +78,31 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             border-left: 5px solid var(--admin-accent);
             text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card-small {
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-card-small .h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .stat-card-small .display-6 {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        .stat-card-connected {
+            border-left-color: #20c997;
+            background: linear-gradient(135deg, #f8fff9, #e6f7ef);
         }
         
         .btn-admin {
@@ -211,6 +259,54 @@
             box-shadow: 0 3px 10px rgba(0,0,0,0.1);
         }
         
+        /* Mensajes del público */
+        .message-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 5px solid #17a2b8;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .message-time {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        
+        .message-content {
+            font-size: 0.95rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .message-songs {
+            font-size: 0.85rem;
+            color: #28a745;
+            font-weight: 500;
+        }
+        
+        .btn-delete-message {
+            background: transparent;
+            border: none;
+            color: #dc3545;
+            font-size: 0.9rem;
+            cursor: pointer;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+        
+        .btn-delete-message:hover {
+            background: #f8d7da;
+        }
+        
         /* Animaciones */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -235,6 +331,39 @@
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
+        
+        /* Mejoras visuales para tablet */
+        @media (max-width: 1200px) and (min-width: 768px) {
+            .stage-header h1 {
+                font-size: 1.8rem;
+            }
+            .stage-header .lead {
+                font-size: 1rem;
+            }
+            .playlist-container {
+                min-height: 400px;
+                max-height: 500px;
+            }
+            .quick-add-container {
+                max-height: 350px;
+            }
+        }
+        
+        /* Modo tablet portrait - escenario especial */
+        @media (max-width: 992px) {
+            .stage-mode .row {
+                flex-direction: column;
+            }
+            .stage-mode .col-md-4,
+            .stage-mode .col-md-8 {
+                width: 100%;
+                margin-bottom: 1.5rem;
+            }
+            .playlist-container {
+                min-height: 300px;
+                max-height: 400px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -257,6 +386,9 @@
             </a>
             <a href="#escenario" class="nav-link text-warning mb-2 fw-bold" onclick="showSection('escenario')">
                 <i class="bi bi-mic me-2"></i> MODO ESCENARIO
+            </a>
+            <a href="#mensajes" class="nav-link text-white mb-2" onclick="showSection('mensajes')">
+                <i class="bi bi-chat-text me-2"></i> Mensajes del Público
             </a>
             <a href="#agregar" class="nav-link text-white mb-2" onclick="showSection('agregar')">
                 <i class="bi bi-plus-circle me-2"></i> Agregar Canción
@@ -299,28 +431,53 @@
 
             <!-- Estadísticas -->
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-3 col-6">
                     <div class="stat-card">
                         <div class="h1 text-primary mb-2" id="total-canciones">0</div>
                         <p class="text-muted mb-0">Canciones en repertorio</p>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 col-6">
                     <div class="stat-card">
                         <div class="h1 text-success mb-2" id="total-votos">0</div>
                         <p class="text-muted mb-0">Votos totales</p>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 col-6">
                     <div class="stat-card">
                         <div class="h1 text-warning mb-2" id="en-playlist">0</div>
                         <p class="text-muted mb-0">En playlist</p>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 col-6">
                     <div class="stat-card">
                         <div class="h1 text-info mb-2" id="tocadas">0</div>
                         <p class="text-muted mb-0">Tocadas</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Estadísticas en tiempo real -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="stat-card stat-card-small stat-card-connected">
+                        <h4 class="mb-0"><i class="bi bi-people"></i> Conectados ahora</h4>
+                        <div class="display-6 text-success" id="connected-now">0</div>
+                        <small class="text-muted">Personas en la app</small>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card stat-card-small">
+                        <h4 class="mb-0"><i class="bi bi-chat"></i> Mensajes</h4>
+                        <div class="display-6 text-info" id="total-messages">0</div>
+                        <small class="text-muted">Del público hoy</small>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card stat-card-small">
+                        <h4 class="mb-0"><i class="bi bi-device-phone"></i> Dispositivos</h4>
+                        <div class="display-6 text-warning" id="unique-devices">0</div>
+                        <small class="text-muted">Únicos hoy</small>
                     </div>
                 </div>
             </div>
@@ -332,29 +489,34 @@
                 </div>
                 <div class="card-body">
                     <div class="row g-3">
-                        <div class="col-md-3 col-6">
+                        <div class="col-md-2 col-6">
                             <button class="btn btn-admin w-100" onclick="showSection('escenario')">
                                 <i class="bi bi-mic"></i> Ir al Escenario
                             </button>
                         </div>
-                        <div class="col-md-3 col-6">
+                        <div class="col-md-2 col-6">
                             <button class="btn btn-outline-primary w-100" onclick="showSection('agregar')">
                                 <i class="bi bi-plus-lg"></i> Nueva Canción
                             </button>
                         </div>
-                        <div class="col-md-3 col-6">
+                        <div class="col-md-2 col-6">
                             <button class="btn btn-outline-warning w-100" onclick="resetAllVotes()">
                                 <i class="bi bi-arrow-clockwise"></i> Reiniciar Votos
                             </button>
                         </div>
-                        <div class="col-md-3 col-6">
+                        <div class="col-md-2 col-6">
                             <button class="btn btn-outline-success w-100" onclick="exportData()">
                                 <i class="bi bi-download"></i> Exportar Datos
                             </button>
                         </div>
-                        <div class="col-md-3 col-6">
+                        <div class="col-md-2 col-6">
                             <button class="btn btn-outline-warning w-100" onclick="resetConnectedCounter()">
                                 <i class="bi bi-people"></i> Reiniciar Conectados
+                            </button>
+                        </div>
+                        <div class="col-md-2 col-6">
+                            <button class="btn btn-outline-info w-100" onclick="showSection('mensajes')">
+                                <i class="bi bi-chat"></i> Ver Mensajes
                             </button>
                         </div>
                     </div>
@@ -450,6 +612,14 @@
                                     <div class="h2 text-danger" id="live-next">-</div>
                                     <small>Próxima</small>
                                 </div>
+                                <div class="col-6 mb-3">
+                                    <div class="h2 text-primary" id="live-connected">0</div>
+                                    <small>Conectados</small>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <div class="h2 text-light" id="live-messages">0</div>
+                                    <small>Mensajes</small>
+                                </div>
                             </div>
                             
                             <hr class="bg-light">
@@ -504,6 +674,79 @@
                                 </button>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mensajes del Público -->
+        <div id="mensajes" class="section fade-in" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-chat-text me-2"></i>Mensajes del Público
+                </h1>
+                <div>
+                    <button class="btn btn-outline-danger" onclick="deleteAllMessages()">
+                        <i class="bi bi-trash"></i> Eliminar Todos
+                    </button>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-info-circle"></i> Información</h5>
+                            <p class="card-text">
+                                Los mensajes se envían desde la app del público junto con sus votos. 
+                                Máximo 120 caracteres. Ideal para saludos, felicitaciones o peticiones especiales.
+                            </p>
+                            <div class="d-flex align-items-center">
+                                <div class="me-3">
+                                    <div class="h4 mb-0 text-primary" id="messages-today">0</div>
+                                    <small>Hoy</small>
+                                </div>
+                                <div class="me-3">
+                                    <div class="h4 mb-0 text-success" id="messages-total">0</div>
+                                    <small>Total</small>
+                                </div>
+                                <div>
+                                    <div class="h4 mb-0 text-warning" id="messages-unread">0</div>
+                                    <small>Sin leer</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-lightning"></i> Acciones Rápidas</h5>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-outline-primary" onclick="loadMessages()">
+                                    <i class="bi bi-arrow-clockwise"></i> Actualizar Mensajes
+                                </button>
+                                <button class="btn btn-outline-success" onclick="markAllAsRead()">
+                                    <i class="bi bi-check-all"></i> Marcar Todos como Leídos
+                                </button>
+                                <button class="btn btn-outline-info" onclick="exportMessages()">
+                                    <i class="bi bi-download"></i> Exportar Mensajes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de Mensajes -->
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="bi bi-envelope"></i> Todos los Mensajes</h5>
+                    <span class="badge bg-secondary" id="messages-count">0</span>
+                </div>
+                <div class="card-body p-0">
+                    <div id="messages-list" class="p-3" style="max-height: 600px; overflow-y: auto;">
+                        <p class="text-center">Cargando mensajes...</p>
                     </div>
                 </div>
             </div>
@@ -629,9 +872,11 @@
         let db = null;
         let allSongs = [];
         let playlistSongs = [];
+        let allMessages = [];
         let currentSection = 'dashboard';
         let sortableInstance = null;
         let connectionListener = null;
+        let messagesListener = null;
 
         // ========== INICIALIZAR ==========
         document.addEventListener('DOMContentLoaded', function() {
@@ -650,6 +895,7 @@
                 console.log("✅ Firebase inicializado correctamente");
                 loadAllData();
                 setupConnectionListener(); // Escuchar conexiones
+                setupMessagesListener(); // Escuchar mensajes
                 setInterval(loadAllData, 10000); // Actualizar cada 10 segundos
             } catch (error) {
                 console.error("❌ Error inicializando Firebase:", error);
@@ -700,6 +946,8 @@
                     loadSongsList();
                 } else if (sectionId === 'escenario') {
                     loadStageMode();
+                } else if (sectionId === 'mensajes') {
+                    loadMessages();
                 } else if (sectionId === 'agregar') {
                     resetForm();
                 }
@@ -710,6 +958,7 @@
         function loadAllData() {
             loadSongs();
             updateConnectionStats();
+            updateMessageStats();
         }
 
         function loadSongs() {
@@ -781,11 +1030,17 @@
                     const totalConnections = data.totalConnections || 0;
                     const lastReset = data.lastReset ? new Date(data.lastReset).toLocaleString('es-MX') : "Nunca";
                     
+                    // Actualizar en dashboard
+                    document.getElementById('connected-now').textContent = currentConnections;
+                    
+                    // Actualizar en modo escenario
+                    document.getElementById('live-connected').textContent = currentConnections;
+                    
                     // Mostrar en el sidebar
                     const connectionInfo = document.getElementById('connection-info');
                     if (connectionInfo) {
                         connectionInfo.innerHTML = `
-                            <small class="d-block">Conectados ahora: <span class="text-success">${currentConnections}</span></small>
+                            <small class="d-block">Conectados: <span class="text-success">${currentConnections}</span></small>
                             <small class="d-block">Total hoy: <span class="text-info">${totalConnections}</span></small>
                             <small class="d-block">Último reset: <span class="text-muted">${lastReset}</span></small>
                         `;
@@ -819,7 +1074,296 @@
             }
         }
 
-        // ========== FORMULARIO ==========
+        // ========== SISTEMA DE MENSAJES ==========
+        function setupMessagesListener() {
+            messagesListener = db.collection("messages")
+                .orderBy("sentAt", "desc")
+                .limit(50)
+                .onSnapshot((snapshot) => {
+                    allMessages = [];
+                    snapshot.forEach((doc) => {
+                        const data = doc.data();
+                        allMessages.push({
+                            id: doc.id,
+                            message: data.message || "",
+                            deviceId: data.deviceId || "",
+                            songs: data.songs || [],
+                            sentAt: data.sentAt || new Date().toISOString(),
+                            read: data.read || false
+                        });
+                    });
+                    
+                    console.log(`📨 ${allMessages.length} mensajes cargados`);
+                    
+                    updateMessageStats();
+                    
+                    if (currentSection === 'mensajes') {
+                        displayMessages();
+                    }
+                });
+        }
+
+        function loadMessages() {
+            if (currentSection === 'mensajes') {
+                displayMessages();
+            }
+        }
+
+        function displayMessages() {
+            const container = document.getElementById('messages-list');
+            const countElement = document.getElementById('messages-count');
+            
+            if (!container) return;
+            
+            if (allMessages.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-5">
+                        <i class="bi bi-chat-text display-1 text-muted"></i>
+                        <p class="mt-3">No hay mensajes aún</p>
+                        <p class="small text-muted">Los mensajes aparecerán cuando el público los envíe desde la app.</p>
+                    </div>
+                `;
+                if (countElement) countElement.textContent = '0';
+                return;
+            }
+            
+            let html = '';
+            
+            // Agrupar mensajes por fecha (hoy, ayer, etc.)
+            const groupedMessages = groupMessagesByDate(allMessages);
+            
+            Object.keys(groupedMessages).forEach(date => {
+                html += `
+                    <div class="mb-3">
+                        <h6 class="text-muted mb-2"><i class="bi bi-calendar"></i> ${date}</h6>
+                `;
+                
+                groupedMessages[date].forEach(msg => {
+                    const time = new Date(msg.sentAt).toLocaleTimeString('es-MX', { 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                    });
+                    
+                    const songList = msg.songs && msg.songs.length > 0 
+                        ? `<div class="message-songs"><i class="bi bi-music-note"></i> ${msg.songs.join(', ')}</div>` 
+                        : '';
+                    
+                    const readClass = msg.read ? '' : 'fw-bold';
+                    
+                    html += `
+                        <div class="message-card">
+                            <div class="message-header">
+                                <span class="${readClass}">
+                                    <i class="bi bi-person-circle"></i> Usuario
+                                    <small class="text-muted ms-2">${msg.deviceId.substring(0, 8)}...</small>
+                                </span>
+                                <div>
+                                    <span class="message-time">${time}</span>
+                                    <button class="btn-delete-message ms-2" onclick="deleteMessage('${msg.id}')" title="Eliminar mensaje">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="message-content ${readClass}">
+                                ${msg.message}
+                            </div>
+                            ${songList}
+                            ${!msg.read ? `
+                                <div class="mt-2">
+                                    <button class="btn btn-sm btn-outline-success" onclick="markAsRead('${msg.id}')">
+                                        <i class="bi bi-check"></i> Marcar como leído
+                                    </button>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                });
+                
+                html += `</div>`;
+            });
+            
+            container.innerHTML = html;
+            if (countElement) countElement.textContent = allMessages.length;
+        }
+
+        function groupMessagesByDate(messages) {
+            const groups = {};
+            const today = new Date().toDateString();
+            const yesterday = new Date(Date.now() - 86400000).toDateString();
+            
+            messages.forEach(msg => {
+                const msgDate = new Date(msg.sentAt);
+                const dateString = msgDate.toDateString();
+                
+                let displayDate;
+                if (dateString === today) {
+                    displayDate = 'Hoy';
+                } else if (dateString === yesterday) {
+                    displayDate = 'Ayer';
+                } else {
+                    displayDate = msgDate.toLocaleDateString('es-MX', { 
+                        weekday: 'long', 
+                        day: 'numeric', 
+                        month: 'long' 
+                    });
+                }
+                
+                if (!groups[displayDate]) {
+                    groups[displayDate] = [];
+                }
+                groups[displayDate].push(msg);
+            });
+            
+            return groups;
+        }
+
+        function updateMessageStats() {
+            const today = new Date().toISOString().split('T')[0];
+            
+            const messagesToday = allMessages.filter(msg => 
+                msg.sentAt.startsWith(today)
+            ).length;
+            
+            const unreadMessages = allMessages.filter(msg => 
+                !msg.read
+            ).length;
+            
+            // Obtener dispositivos únicos de hoy
+            const todayMessages = allMessages.filter(msg => 
+                msg.sentAt.startsWith(today)
+            );
+            const uniqueDevices = [...new Set(todayMessages.map(msg => msg.deviceId))].length;
+            
+            // Actualizar dashboard
+            document.getElementById('total-messages').textContent = allMessages.length;
+            document.getElementById('messages-today').textContent = messagesToday;
+            document.getElementById('messages-total').textContent = allMessages.length;
+            document.getElementById('messages-unread').textContent = unreadMessages;
+            document.getElementById('unique-devices').textContent = uniqueDevices;
+            
+            // Actualizar modo escenario
+            document.getElementById('live-messages').textContent = unreadMessages;
+        }
+
+        function markAsRead(messageId) {
+            db.collection("messages").doc(messageId).update({
+                read: true,
+                readAt: new Date().toISOString()
+            })
+            .then(() => {
+                showNotification("✅ Mensaje marcado como leído", "success");
+            })
+            .catch((error) => {
+                console.error("Error marcando mensaje como leído:", error);
+                showNotification("❌ Error al marcar mensaje", "danger");
+            });
+        }
+
+        function markAllAsRead() {
+            if (allMessages.length === 0) {
+                showNotification("No hay mensajes para marcar como leídos", "info");
+                return;
+            }
+            
+            if (confirm("¿Marcar TODOS los mensajes como leídos?")) {
+                const batch = db.batch();
+                const unreadMessages = allMessages.filter(msg => !msg.read);
+                
+                if (unreadMessages.length === 0) {
+                    showNotification("Todos los mensajes ya están leídos", "info");
+                    return;
+                }
+                
+                unreadMessages.forEach(msg => {
+                    const msgRef = db.collection("messages").doc(msg.id);
+                    batch.update(msgRef, {
+                        read: true,
+                        readAt: new Date().toISOString()
+                    });
+                });
+                
+                batch.commit()
+                    .then(() => {
+                        showNotification(`✅ ${unreadMessages.length} mensajes marcados como leídos`, "success");
+                    })
+                    .catch((error) => {
+                        console.error("Error marcando mensajes como leídos:", error);
+                        showNotification("❌ Error al marcar mensajes", "danger");
+                    });
+            }
+        }
+
+        function deleteMessage(messageId) {
+            if (confirm("¿Eliminar este mensaje?\nEsta acción no se puede deshacer.")) {
+                db.collection("messages").doc(messageId).delete()
+                    .then(() => {
+                        showNotification("✅ Mensaje eliminado", "success");
+                    })
+                    .catch((error) => {
+                        console.error("Error eliminando mensaje:", error);
+                        showNotification("❌ Error al eliminar mensaje", "danger");
+                    });
+            }
+        }
+
+        function deleteAllMessages() {
+            if (allMessages.length === 0) {
+                showNotification("No hay mensajes para eliminar", "info");
+                return;
+            }
+            
+            if (confirm(`¿Eliminar TODOS los ${allMessages.length} mensajes?\nEsta acción no se puede deshacer.`)) {
+                const batch = db.batch();
+                
+                allMessages.forEach(msg => {
+                    const msgRef = db.collection("messages").doc(msg.id);
+                    batch.delete(msgRef);
+                });
+                
+                batch.commit()
+                    .then(() => {
+                        showNotification(`✅ ${allMessages.length} mensajes eliminados`, "success");
+                    })
+                    .catch((error) => {
+                        console.error("Error eliminando mensajes:", error);
+                        showNotification("❌ Error al eliminar mensajes", "danger");
+                    });
+            }
+        }
+
+        function exportMessages() {
+            if (allMessages.length === 0) {
+                showNotification("No hay mensajes para exportar", "info");
+                return;
+            }
+            
+            const data = {
+                exportedAt: new Date().toISOString(),
+                totalMessages: allMessages.length,
+                messages: allMessages.map(msg => ({
+                    message: msg.message,
+                    songs: msg.songs,
+                    sentAt: msg.sentAt,
+                    read: msg.read,
+                    deviceId: msg.deviceId
+                }))
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `mobydick-messages-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showNotification("Mensajes exportados correctamente", "success");
+        }
+
+        // ========== FORMULARIO - CORREGIDO ==========
         function setupForm() {
             const form = document.getElementById('song-form');
             if (form) {
@@ -862,13 +1406,13 @@
             }
             
             if (songId) {
-                // EDITAR canción existente
+                // EDITAR canción existente - CORREGIDO
                 db.collection("songs").doc(songId).update(songData)
                     .then(() => {
                         showNotification(`✅ Canción "${title}" actualizada correctamente`, "success");
                         resetForm();
                         loadAllData();
-                        showSection('canciones');
+                        showSection('canciones'); // Volver a la lista después de editar
                     })
                     .catch((error) => {
                         console.error("Error actualizando canción:", error);
@@ -910,16 +1454,18 @@
         }
 
         function resetForm() {
-            // Solo intentar resetear si los elementos existen
-            const editId = document.getElementById('edit-song-id');
-            const formTitle = document.getElementById('form-title');
-            const submitBtnText = document.getElementById('submit-btn-text');
-            const form = document.getElementById('song-form');
+            // Limpiar formulario completamente
+            document.getElementById('edit-song-id').value = '';
+            document.getElementById('form-title').textContent = 'Agregar Nueva Canción';
+            document.getElementById('submit-btn-text').textContent = 'Agregar Canción al Repertorio';
             
-            if (editId) editId.value = '';
-            if (formTitle) formTitle.textContent = 'Agregar Nueva Canción';
-            if (submitBtnText) submitBtnText.textContent = 'Agregar Canción al Repertorio';
-            if (form) form.reset();
+            // Limpiar todos los campos del formulario
+            const form = document.getElementById('song-form');
+            if (form) {
+                form.reset();
+                // Establecer valores por defecto
+                document.getElementById('song-genre').value = 'Rock';
+            }
         }
 
         function loadRecentSongs() {
@@ -954,33 +1500,36 @@
             container.innerHTML = html;
         }
 
-        // ========== EDITAR CANCIÓN ==========
+        // ========== EDITAR CANCIÓN - CORREGIDO ==========
         function editSong(songId) {
             const song = allSongs.find(s => s.id === songId);
-            if (!song) return;
+            if (!song) {
+                showNotification("No se encontró la canción", "warning");
+                return;
+            }
             
-            // Rellenar formulario
-            const editId = document.getElementById('edit-song-id');
-            const title = document.getElementById('song-title');
-            const artist = document.getElementById('song-artist');
-            const genre = document.getElementById('song-genre');
-            const duration = document.getElementById('song-duration');
-            const year = document.getElementById('song-year');
-            const notes = document.getElementById('song-notes');
-            const formTitle = document.getElementById('form-title');
-            const submitBtnText = document.getElementById('submit-btn-text');
+            console.log("📝 Editando canción:", song);
             
-            if (editId) editId.value = song.id;
-            if (title) title.value = song.title;
-            if (artist) artist.value = song.artist;
-            if (genre) genre.value = song.genre || 'Rock';
-            if (duration) duration.value = song.duration || '';
-            if (year) year.value = song.year || '';
-            if (notes) notes.value = song.notes || '';
-            if (formTitle) formTitle.textContent = 'Editar Canción';
-            if (submitBtnText) submitBtnText.textContent = 'Actualizar Canción';
+            // Rellenar formulario con los datos actuales
+            document.getElementById('edit-song-id').value = song.id;
+            document.getElementById('song-title').value = song.title;
+            document.getElementById('song-artist').value = song.artist;
+            document.getElementById('song-genre').value = song.genre || 'Rock';
+            document.getElementById('song-duration').value = song.duration || '';
+            document.getElementById('song-year').value = song.year || '';
+            document.getElementById('song-notes').value = song.notes || '';
             
+            // Cambiar título del formulario
+            document.getElementById('form-title').textContent = 'Editar Canción';
+            document.getElementById('submit-btn-text').textContent = 'Actualizar Canción';
+            
+            // Ir a la sección de agregar/editar
             showSection('agregar');
+            
+            // Scroll al formulario
+            setTimeout(() => {
+                document.getElementById('song-title').focus();
+            }, 300);
         }
 
         // ========== ELIMINAR CANCIÓN ==========
@@ -1578,6 +2127,12 @@
         window.savePlaylistOrder = savePlaylistOrder;
         window.resetForm = resetForm;
         window.resetConnectedCounter = resetConnectedCounter;
+        window.loadMessages = loadMessages;
+        window.markAsRead = markAsRead;
+        window.deleteMessage = deleteMessage;
+        window.markAllAsRead = markAllAsRead;
+        window.deleteAllMessages = deleteAllMessages;
+        window.exportMessages = exportMessages;
 
     </script>
 </body>
