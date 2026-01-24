@@ -20,170 +20,25 @@
             padding-bottom: 1rem;
         }
         
-        /* ========== HEADER ========== */
-        .header-compact {
-            background: white;
-            border-radius: 12px;
-            padding: 0.8rem;
-            margin: 0 auto 1rem auto;
+        /* ========== HEADER SIMPLIFICADO ========== */
+        .header-simple {
             max-width: 800px;
-            border: 3px solid var(--pub-blue);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            position: relative;
-            overflow: hidden;
+            margin: 0 auto 1.5rem auto;
+            text-align: center;
         }
         
-        .header-compact::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: 
-                linear-gradient(90deg, transparent 48%, rgba(200, 16, 46, 0.15) 48%, rgba(200, 16, 46, 0.15) 52%, transparent 52%),
-                linear-gradient(transparent 48%, rgba(200, 16, 46, 0.15) 48%, rgba(200, 16, 46, 0.15) 52%, transparent 52%),
-                linear-gradient(135deg, transparent 45%, rgba(1, 33, 105, 0.15) 45%, rgba(1, 33, 105, 0.15) 55%, transparent 55%),
-                linear-gradient(225deg, transparent 45%, rgba(1, 33, 105, 0.15) 45%, rgba(1, 33, 105, 0.15) 55%, transparent 55%),
-                linear-gradient(45deg, transparent 45%, rgba(255, 255, 255, 0.2) 45%, rgba(255, 255, 255, 0.2) 55%, transparent 55%),
-                linear-gradient(315deg, transparent 45%, rgba(255, 255, 255, 0.2) 45%, rgba(255, 255, 255, 0.2) 55%, transparent 55%);
-            background-size: 70px 70px;
-            opacity: 0.7;
-            z-index: 0;
-            pointer-events: none;
-        }
-        
-        .header-content {
-            position: relative;
-            z-index: 2;
-        }
-        
-        .logos-horizontal {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 0.5rem;
-            gap: 0.5rem;
-        }
-        
-        .logo-mobydick { 
-            height: 70px;
-            width: auto;
+        .header-image {
+            width: 100%;
+            max-height: 180px;
             object-fit: contain;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-        }
-        
-        .logo-porter { 
-            height: 90px;
-            width: auto;
-            object-fit: contain;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-        }
-        
-        .vertical-line {
-            width: 2px;
-            height: 65px;
-            background: linear-gradient(to bottom, transparent 0%, var(--pub-red) 20%, var(--pub-red) 80%, transparent 100%);
-            margin: 0 0.5rem;
-            position: relative;
-        }
-        
-        .vertical-line::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 10px;
-            height: 10px;
-            background: var(--pub-blue);
-            border-radius: 50%;
-            border: 2px solid white;
-            box-shadow: 0 0 0 1px var(--pub-red);
-        }
-        
-        .info-row {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            margin: 0.5rem 0;
-            flex-wrap: wrap;
-        }
-        
-        .info-badge {
-            background: var(--pub-blue);
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            white-space: nowrap;
-            border: 1px solid rgba(255,255,255,0.3);
-            position: relative;
-            z-index: 1;
-        }
-        
-        .info-badge.live {
-            background: linear-gradient(135deg, #28a745, #20c997);
-            animation: pulse 2s infinite;
-        }
-        
-        .info-badge.vote { 
-            background: var(--pub-red); 
-        }
-        
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.4); }
-            70% { box-shadow: 0 0 0 6px rgba(40, 167, 69, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
-        }
-        
-        .connected-container {
-            background: rgba(255, 255, 255, 0.95);
             border-radius: 10px;
-            padding: 0.4rem 0.8rem;
-            margin: 0.3rem auto;
-            display: inline-block;
-            border: 2px solid var(--pub-blue);
-            box-shadow: 0 3px 6px rgba(0,0,0,0.05);
-            position: relative;
-            z-index: 1;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         
-        .connected-label {
-            font-size: 0.75rem;
-            color: #666;
-            margin-bottom: 0.1rem;
-        }
-        
-        .connected-count {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--pub-blue);
-        }
-        
-        .datetime-compact {
-            font-size: 0.8rem;
-            color: #666;
-            margin-top: 0.3rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 0.3rem;
-            flex-wrap: wrap;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .datetime-compact .time {
-            color: var(--pub-blue);
-            font-weight: bold;
-        }
-        
-        .datetime-compact .date {
-            color: var(--pub-red);
+        @media (max-width: 768px) {
+            .header-image {
+                max-height: 120px;
+            }
         }
         
         /* ========== CONTENIDO EN COLUMNA ÚNICA ========== */
@@ -434,6 +289,32 @@
             background: #5a6268;
         }
         
+        /* ========== SUGERENCIAS ========== */
+        .suggestions-panel {
+            border-color: var(--pub-red);
+            background: linear-gradient(135deg, #fff5f5, #ffe6e6);
+        }
+        
+        .btn-suggestion {
+            background: linear-gradient(135deg, var(--pub-red), #a80d14);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-weight: bold;
+            border-radius: 8px;
+            width: 100%;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-suggestion:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(194, 11, 23, 0.3);
+        }
+        
         /* ========== LISTA DE CANCIONES ========== */
         .songs-header {
             background: var(--pub-blue);
@@ -577,35 +458,8 @@
         
         /* Responsive */
         @media (max-width: 768px) {
-            .header-compact {
-                padding: 0.7rem;
+            .header-simple {
                 margin: 0.3rem auto 0.8rem auto;
-            }
-            
-            .logo-mobydick {
-                height: 60px;
-            }
-            
-            .logo-porter {
-                height: 75px;
-            }
-            
-            .vertical-line {
-                height: 55px;
-                margin: 0 0.3rem;
-            }
-            
-            .info-badge {
-                font-size: 0.75rem;
-                padding: 0.25rem 0.6rem;
-            }
-            
-            .connected-container {
-                padding: 0.3rem 0.7rem;
-            }
-            
-            .connected-count {
-                font-size: 1.1rem;
             }
             
             .content-panel {
@@ -624,19 +478,6 @@
         }
         
         @media (max-width: 480px) {
-            .info-row {
-                gap: 0.3rem;
-            }
-            
-            .info-badge {
-                font-size: 0.7rem;
-                padding: 0.2rem 0.5rem;
-            }
-            
-            .datetime-compact {
-                font-size: 0.75rem;
-            }
-            
             .votes-title {
                 font-size: 1rem;
             }
@@ -650,42 +491,9 @@
 </head>
 <body>
     <div class="container py-3">
-        <!-- ========== HEADER ========== -->
-        <div class="header-compact text-center">
-            <div class="header-content">
-                <div class="logos-horizontal">
-                    <img src="https://imgur.com/Iv7h42E.png" alt="MobyDick" class="logo-mobydick">
-                    <div class="vertical-line"></div>
-                    <img src="https://imgur.com/ceWt4ZL.png" alt="Porter British Pub" class="logo-porter">
-                </div>
-                
-                <div class="info-row">
-                    <div class="info-badge vote">
-                        <i class="bi bi-hand-thumbs-up"></i> VOTA
-                    </div>
-                    <div class="info-badge">
-                        <i class="bi bi-mic"></i> EN VIVO
-                    </div>
-                    <div class="info-badge live">
-                        <i class="bi bi-broadcast"></i> DIRECTO
-                    </div>
-                </div>
-                
-                <div class="connected-container">
-                    <div class="connected-label">
-                        <i class="bi bi-people"></i> PERSONAS CONECTADAS
-                    </div>
-                    <div class="connected-count" id="connected-count">0</div>
-                </div>
-                
-                <div class="datetime-compact">
-                    <i class="bi bi-clock"></i>
-                    <span class="time" id="current-time">--:--:--</span>
-                    <span>•</span>
-                    <i class="bi bi-calendar3"></i>
-                    <span class="date" id="current-date">--/--/----</span>
-                </div>
-            </div>
+        <!-- ========== HEADER SIMPLIFICADO ========== -->
+        <div class="header-simple">
+            <img src="https://i.imgur.com/VkfPhHI.png" alt="MobyDick @ Porter British Pub" class="header-image">
         </div>
         
         <!-- ========== CONTENIDO EN COLUMNA ÚNICA ========== -->
@@ -715,7 +523,7 @@
                 <div id="share-feedback" class="feedback-container"></div>
             </div>
             
-            <!-- 3. TUS VOTOS -->
+            <!-- 3. TUS VOTOS Y MENSAJE -->
             <div class="content-panel votes-panel">
                 <div class="votes-header">
                     <div class="votes-title">
@@ -728,7 +536,7 @@
                     <p class="text-muted text-center my-3">No has votado aún. Selecciona hasta 3 canciones.</p>
                 </div>
                 
-                <!-- 4. MENSAJE A LA BANDA -->
+                <!-- MENSAJE A LA BANDA -->
                 <div class="mt-3">
                     <div class="message-label">
                         <i class="bi bi-chat-text"></i> MENSAJE A LA BANDA (OPCIONAL)
@@ -751,7 +559,7 @@
                 <div id="submit-feedback" class="feedback-container"></div>
             </div>
             
-            <!-- 5. BUSCAR CANCIONES -->
+            <!-- 4. BUSCAR CANCIONES -->
             <div class="content-panel search-panel">
                 <div class="panel-title">
                     <i class="bi bi-search"></i> BUSCAR CANCIONES
@@ -765,9 +573,38 @@
                 </div>
             </div>
             
+            <!-- 5. SUGERIR CANCIONES NUEVAS -->
+            <div class="content-panel suggestions-panel">
+                <div class="panel-title">
+                    <i class="bi bi-lightbulb"></i> SUGERIR CANCIONES NUEVAS
+                </div>
+                <p class="small text-muted mb-3">
+                    ¿Quieres que la banda toque una canción que no está en la lista? ¡Sugiérela aquí!
+                </p>
+                
+                <form id="suggestion-form">
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-6">
+                            <input type="text" id="suggestion-title" class="form-control" 
+                                   placeholder="Título de la canción" required>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" id="suggestion-artist" class="form-control" 
+                                   placeholder="Artista o banda" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-suggestion">
+                        <i class="bi bi-send"></i> ENVIAR SUGERENCIA
+                    </button>
+                </form>
+                
+                <div id="suggestion-feedback" class="feedback-container mt-3"></div>
+            </div>
+            
         </div>
         
-        <!-- ========== LISTA DE CANCIONES (AL FINAL) ========== -->
+        <!-- ========== LISTA DE CANCIONES ========== -->
         <div class="songs-header">
             <h5 class="mb-0">
                 <i class="bi bi-music-note-list"></i> REPERTORIO DE CANCIONES
@@ -787,13 +624,13 @@
             <div class="row align-items-center">
                 <div class="col-md-6">
                     <small>
-                        © 2026 MobyDick • Porter British Pub • Ventura Puente
+                        © 2024 MobyDick • Porter British Pub • Ventura Puente
                     </small>
                 </div>
                 <div class="col-md-6 text-end">
                     <small>
-                        <i class="bi bi-wifi"></i> 
-                        <span id="real-connected" class="text-warning fw-bold">0 conectados</span>
+                        <i class="bi bi-people"></i> 
+                        <span id="connected-count" class="text-warning fw-bold">0 conectados</span>
                     </small>
                 </div>
             </div>
@@ -836,14 +673,21 @@
             console.log("📱 ID de dispositivo:", deviceId);
             
             initializeFirebase();
-            updateCurrentTime();
-            setInterval(updateCurrentTime, 1000);
             
             // Contador de caracteres para mensaje
             const messageInput = document.getElementById('user-message');
             if (messageInput) {
                 messageInput.addEventListener('input', function() {
                     updateCharCounter();
+                });
+            }
+            
+            // Formulario de sugerencias
+            const suggestionForm = document.getElementById('suggestion-form');
+            if (suggestionForm) {
+                suggestionForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    submitSuggestion();
                 });
             }
         });
@@ -962,10 +806,8 @@
                     
                     // Actualizar en la interfaz
                     const connectedElement = document.getElementById("connected-count");
-                    const realConnectedElement = document.getElementById("real-connected");
                     
-                    if (connectedElement) connectedElement.textContent = currentCount;
-                    if (realConnectedElement) realConnectedElement.textContent = `${currentCount} conectados`;
+                    if (connectedElement) connectedElement.textContent = `${currentCount} conectados`;
                 }
             });
             
@@ -1203,6 +1045,67 @@
             });
         }
 
+        // ========== SUGERENCIAS ==========
+        function submitSuggestion() {
+            const title = document.getElementById('suggestion-title').value.trim();
+            const artist = document.getElementById('suggestion-artist').value.trim();
+            
+            if (!title || !artist) {
+                showSuggestionFeedback("Por favor completa ambos campos", "warning");
+                return;
+            }
+            
+            if (title.length > 100 || artist.length > 100) {
+                showSuggestionFeedback("Máximo 100 caracteres por campo", "warning");
+                return;
+            }
+            
+            // Crear objeto de sugerencia
+            const suggestion = {
+                title: title,
+                artist: artist,
+                deviceId: deviceId,
+                createdAt: new Date().toISOString(),
+                type: "suggestion",
+                status: "pending"
+            };
+            
+            // Guardar en Firebase con expiración (24 horas)
+            db.collection("temporary_data").add({
+                ...suggestion,
+                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24 horas
+            })
+            .then(() => {
+                // Limpiar formulario
+                document.getElementById('suggestion-title').value = '';
+                document.getElementById('suggestion-artist').value = '';
+                
+                showSuggestionFeedback("✅ Sugerencia enviada a la banda", "success");
+            })
+            .catch((error) => {
+                console.error("Error enviando sugerencia:", error);
+                showSuggestionFeedback("❌ Error al enviar sugerencia", "danger");
+            });
+        }
+        
+        function showSuggestionFeedback(message, type) {
+            const feedback = document.getElementById("suggestion-feedback");
+            if (!feedback) return;
+            
+            feedback.innerHTML = `
+                <div class="alert alert-${type} alert-dismissible fade show py-2" role="alert">
+                    <small>${message}</small>
+                    <button type="button" class="btn-close btn-sm" onclick="this.parentElement.remove()"></button>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                if (feedback.firstChild) {
+                    feedback.firstChild.remove();
+                }
+            }, 3000);
+        }
+
         // ========== ACTUALIZAR UI ==========
         function updateMyVotesDisplay() {
             const countElement = document.getElementById("vote-count");
@@ -1359,26 +1262,7 @@
             }, 3000);
         }
 
-        // ========== UTILIDADES ==========
-        function updateCurrentTime() {
-            const now = new Date();
-            const timeStr = now.toLocaleTimeString("es-MX", {
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit"
-            });
-            const element = document.getElementById("current-time");
-            if (element) element.textContent = timeStr;
-            
-            const dateStr = now.toLocaleDateString("es-MX", {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric"
-            });
-            const dateElement = document.getElementById("current-date");
-            if (dateElement) dateElement.textContent = dateStr;
-        }
-
+        // ========== ENVIAR VOTOS Y MENSAJES ==========
         function setupEventListeners() {
             // Buscador
             const searchInput = document.getElementById("search");
@@ -1424,21 +1308,22 @@
                     const votesToday = parseInt(localStorage.getItem(deviceVotesKey) || '0') + 1;
                     localStorage.setItem(deviceVotesKey, votesToday.toString());
                     
-                    // Guardar en historial
-                    const history = JSON.parse(localStorage.getItem("mobydick_history") || "[]");
-                    const songTitles = myVotes.map(id => {
-                        const song = allSongs.find(s => s.id === id);
-                        return song ? song.title : "";
-                    }).filter(Boolean);
-                    
                     // Guardar mensaje en Firebase si existe
                     if (userMessage.trim()) {
-                        db.collection("messages").add({
+                        const songTitles = myVotes.map(id => {
+                            const song = allSongs.find(s => s.id === id);
+                            return song ? song.title : "";
+                        }).filter(Boolean);
+                        
+                        // Guardar en colección temporal
+                        db.collection("temporary_data").add({
+                            type: "message",
                             message: userMessage.trim(),
                             deviceId: deviceId,
                             songs: songTitles,
-                            sentAt: new Date().toISOString(),
-                            ip: "user" // Podrías obtener la IP real con un servicio
+                            createdAt: new Date().toISOString(),
+                            expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 24 horas
+                            status: "unread"
                         })
                         .then(() => {
                             console.log("✅ Mensaje guardado en Firebase");
@@ -1447,6 +1332,13 @@
                             console.error("Error guardando mensaje:", error);
                         });
                     }
+                    
+                    // Guardar en historial local
+                    const history = JSON.parse(localStorage.getItem("mobydick_history") || "[]");
+                    const songTitles = myVotes.map(id => {
+                        const song = allSongs.find(s => s.id === id);
+                        return song ? song.title : "";
+                    }).filter(Boolean);
                     
                     history.push({
                         date: new Date().toISOString(),
