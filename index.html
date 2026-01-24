@@ -20,80 +20,21 @@
             padding-bottom: 1rem;
         }
         
-        /* ========== HEADER MEJORADO ========== */
-        .header-container {
+        /* ========== HEADER GRANDE PARA MÓVIL ========== */
+        .header-simple {
             width: 100%;
-            max-width: 100%;
-            margin: 0 auto 1rem auto;
-            padding: 0;
-            background: white;
-            border-bottom: 3px solid var(--pub-blue);
-            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
-            position: relative;
+            margin: 0 auto 1.5rem auto;
+            max-width: 800px;
+            border-radius: 12px;
             overflow: hidden;
-        }
-        
-        .header-image-wrapper {
-            width: 100%;
-            height: 180px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px 0;
-            background: white;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
         }
         
         .header-image {
-            width: auto;
-            height: 160px;
-            max-width: 95%;
+            width: 100%;
+            height: auto;
+            display: block;
             object-fit: contain;
-            object-position: center;
-        }
-        
-        /* Optimización para móvil */
-        @media (max-width: 768px) {
-            .header-image-wrapper {
-                height: 140px;
-                padding: 8px 0;
-            }
-            
-            .header-image {
-                height: 125px;
-                max-width: 98%;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .header-image-wrapper {
-                height: 120px;
-                padding: 5px 0;
-            }
-            
-            .header-image {
-                height: 110px;
-                max-width: 100%;
-            }
-        }
-        
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .header-image-wrapper {
-                height: 160px;
-            }
-            
-            .header-image {
-                height: 150px;
-            }
-        }
-        
-        @media (min-width: 1025px) {
-            .header-image-wrapper {
-                height: 200px;
-            }
-            
-            .header-image {
-                height: 180px;
-            }
         }
         
         /* ========== CONTENIDO EN COLUMNA ÚNICA ========== */
@@ -467,7 +408,7 @@
             cursor: not-allowed;
         }
         
-        /* ========== SUGERENCIAS (AL FINAL) ========== */
+        /* ========== SUGERENCIAS (AHORA AL FINAL) ========== */
         .suggestions-panel {
             border-color: var(--pub-red);
             background: linear-gradient(135deg, #fff5f5, #ffe6e6);
@@ -553,6 +494,10 @@
         }
         
         @media (max-width: 480px) {
+            .header-full img {
+                max-height: 100px;
+            }
+            
             .votes-title {
                 font-size: 1rem;
             }
@@ -588,18 +533,20 @@
             .content-column {
                 max-width: 95%;
             }
+            
+            .header-full img {
+                max-height: 150px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- ========== HEADER MEJORADO ========== -->
-    <div class="header-container">
-        <div class="header-image-wrapper">
+    <!-- ========== HEADER GRANDE ========== -->
+    <div class="container py-3">
+        <!-- ========== HEADER SIMPLIFICADO ========== -->
+        <div class="header-simple">
             <img src="https://i.imgur.com/VkfPhHI.png" alt="MobyDick @ Porter British Pub" class="header-image">
         </div>
-    </div>
-    
-    <div class="container py-1">
         <!-- ========== CONTENIDO EN COLUMNA ÚNICA ========== -->
         <div class="content-column">
             
@@ -694,7 +641,7 @@
             </div>
         </div>
         
-        <!-- ========== SUGERIR CANCIONES NUEVAS (AL FINAL) ========== -->
+        <!-- ========== SUGERIR CANCIONES NUEVAS (AHORA AL FINAL) ========== -->
         <div class="suggestions-panel">
             <div class="panel-title">
                 <i class="bi bi-lightbulb"></i> SUGERIR CANCIONES NUEVAS
@@ -728,7 +675,7 @@
             <div class="row align-items-center">
                 <div class="col-md-6">
                     <small>
-                        © 2024 MobyDick • Porter British Pub • Ventura Puente
+                        © 2026 MobyDick • Porter British Pub • Ventura Puente
                     </small>
                 </div>
                 <div class="col-md-6 text-end">
