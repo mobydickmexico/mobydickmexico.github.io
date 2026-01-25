@@ -1049,8 +1049,10 @@
                     loadStageMode();
                 } else if (sectionId === 'mensajes') {
                     loadMessages();
+                    updateMessageStats(); // Forzar actualización cuando se muestra
                 } else if (sectionId === 'sugerencias') {
                     loadSuggestions();
+                    updateSuggestionStats(); // Forzar actualización cuando se muestra
                 } else if (sectionId === 'agregar') {
                     clearForm();
                 }
@@ -1061,8 +1063,13 @@
         function loadAllData() {
             loadSongs();
             updateConnectionStats();
-            updateMessageStats();
-            updateSuggestionStats();
+            // Solo actualizar estas estadísticas si los elementos existen
+            if (document.getElementById('total-messages')) {
+                updateMessageStats();
+            }
+            if (document.getElementById('total-suggestions')) {
+                updateSuggestionStats();
+            }
         }
 
         function loadSongs() {
@@ -1194,15 +1201,20 @@
                     });
                     
                     console.log(`📨 ${allMessages.length} mensajes cargados`);
-                    updateMessageStats();
                     
+                    // Solo actualizar UI si la sección está visible
                     if (currentSection === 'mensajes') {
+                        updateMessageStats();
                         displayMessages();
+                    } else if (document.getElementById('total-messages')) {
+                        // Solo actualizar los contadores que existen
+                        updateMessageStats();
                     }
                 });
         }
 
         function loadMessages() {
+            updateMessageStats();
             if (currentSection === 'mensajes') {
                 displayMessages();
             }
@@ -1325,17 +1337,21 @@
                 !msg.read
             ).length;
             
-            const todayMessages = allMessages.filter(msg => 
-                msg.sentAt.startsWith(today)
-            );
-            const uniqueDevices = [...new Set(todayMessages.map(msg => msg.deviceId))].length;
+            // Actualizar solo elementos que existen
+            const updateIfExists = (id, value) => {
+                const element = document.getElementById(id);
+                if (element) element.textContent = value;
+            };
             
-            document.getElementById('total-messages').textContent = allMessages.length;
-            document.getElementById('messages-today').textContent = messagesToday;
-            document.getElementById('messages-total').textContent = allMessages.length;
-            document.getElementById('messages-unread').textContent = unreadMessages;
-            document.getElementById('live-messages').textContent = unreadMessages;
-            document.getElementById('unique-devices').textContent = uniqueDevices;
+            updateIfExists('total-messages', allMessages.length);
+            updateIfExists('live-messages', unreadMessages);
+            
+            // Solo actualizar si estamos en la sección de mensajes
+            if (currentSection === 'mensajes') {
+                updateIfExists('messages-today', messagesToday);
+                updateIfExists('messages-total', allMessages.length);
+                updateIfExists('messages-unread', unreadMessages);
+            }
         }
 
         function markAsRead(messageId) {
@@ -1483,15 +1499,20 @@
                     });
                     
                     console.log(`💡 ${allSuggestions.length} sugerencias cargadas`);
-                    updateSuggestionStats();
                     
+                    // Solo actualizar UI si la sección está visible
                     if (currentSection === 'sugerencias') {
+                        updateSuggestionStats();
                         displaySuggestions();
+                    } else if (document.getElementById('total-suggestions')) {
+                        // Solo actualizar los contadores que existen
+                        updateSuggestionStats();
                     }
                 });
         }
 
         function loadSuggestions() {
+            updateSuggestionStats();
             if (currentSection === 'sugerencias') {
                 displaySuggestions();
             }
@@ -1621,10 +1642,20 @@
                 suggestion.status === 'pending'
             ).length;
             
-            document.getElementById('suggestions-today').textContent = suggestionsToday;
-            document.getElementById('suggestions-total').textContent = allSuggestions.length;
-            document.getElementById('suggestions-pending').textContent = pendingSuggestions;
-            document.getElementById('total-suggestions').textContent = pendingSuggestions;
+            // Actualizar solo elementos que existen
+            const updateIfExists = (id, value) => {
+                const element = document.getElementById(id);
+                if (element) element.textContent = value;
+            };
+            
+            updateIfExists('total-suggestions', pendingSuggestions);
+            
+            // Solo actualizar si estamos en la sección de sugerencias
+            if (currentSection === 'sugerencias') {
+                updateIfExists('suggestions-today', suggestionsToday);
+                updateIfExists('suggestions-total', allSuggestions.length);
+                updateIfExists('suggestions-pending', pendingSuggestions);
+            }
         }
 
         function markSuggestionAsViewed(suggestionId) {
@@ -2374,14 +2405,14 @@
                 });
                 
                 batch.commit()
-                    .then(() => {
-                        showNotification("Playlist limpiada correctamente", "success");
-                        loadAllData();
-                    })
-                    .catch((error) => {
-                        console.error("Error limpiando playlist:", error);
-                        showNotification("Error al limpiar playlist", "danger");
-                    });
+                .then(() => {
+                    showNotification("Playlist limpiada correctamente", "success");
+                    loadAllData();
+                })
+                .catch((error) => {
+                    console.error("Error limpiando playlist:", error);
+                    showNotification("Error al limpiar playlist", "danger");
+                });
             }
         }
 
