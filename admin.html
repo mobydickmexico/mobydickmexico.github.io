@@ -1196,16 +1196,15 @@
         function setupMessagesListener() {
             console.log("🔄 Configurando listener de mensajes...");
             
+            // QUERY MODIFICADA: Sin .orderBy() para evitar índices compuestos
             messagesListener = db.collection("temporary_data")
                 .where("type", "==", "message")
-                .orderBy("createdAt", "desc")
                 .onSnapshot((snapshot) => {
                     console.log("📨 Snapshot de mensajes recibido:", snapshot.size, "documentos");
                     
                     allMessages = [];
                     snapshot.forEach((doc) => {
                         const data = doc.data();
-                        console.log("📝 Datos del mensaje:", data);
                         
                         // Verificar si el documento tiene expiresAt
                         if (data.expiresAt) {
@@ -1239,7 +1238,10 @@
                         }
                     });
                     
-                    console.log(`📨 ${allMessages.length} mensajes cargados`);
+                    // ORDENAR LOCALMENTE después de cargar (más eficiente)
+                    allMessages.sort((a, b) => new Date(b.sentAt) - new Date(a.sentAt));
+                    
+                    console.log(`📨 ${allMessages.length} mensajes cargados y ordenados`);
                     
                     // Actualizar estadísticas siempre
                     updateMessageStats();
@@ -1517,16 +1519,15 @@
         function setupSuggestionsListener() {
             console.log("🔄 Configurando listener de sugerencias...");
             
+            // QUERY MODIFICADA: Sin .orderBy() para evitar índices compuestos
             suggestionsListener = db.collection("temporary_data")
                 .where("type", "==", "suggestion")
-                .orderBy("createdAt", "desc")
                 .onSnapshot((snapshot) => {
                     console.log("💡 Snapshot de sugerencias recibido:", snapshot.size, "documentos");
                     
                     allSuggestions = [];
                     snapshot.forEach((doc) => {
                         const data = doc.data();
-                        console.log("📝 Datos de sugerencia:", data);
                         
                         // Verificar si el documento tiene expiresAt
                         if (data.expiresAt) {
@@ -1562,7 +1563,10 @@
                         }
                     });
                     
-                    console.log(`💡 ${allSuggestions.length} sugerencias cargadas`);
+                    // ORDENAR LOCALMENTE después de cargar (más eficiente)
+                    allSuggestions.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                    
+                    console.log(`💡 ${allSuggestions.length} sugerencias cargadas y ordenadas`);
                     
                     // Actualizar estadísticas siempre
                     updateSuggestionStats();
