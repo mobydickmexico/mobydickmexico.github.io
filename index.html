@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>¡Pide tu Canción! | MobyDick @ Porter British Pub</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link rel="preload" as="image" href="images/header.webp">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <style>
         :root {
             --pub-red: #C20B17;
@@ -545,7 +546,8 @@
     <div class="container py-3">
         <!-- ========== HEADER SIMPLIFICADO ========== -->
         <div class="header-simple">
-            <img src="https://imgur.com/kne5kC6.jpg" alt="MobyDick @ Porter British Pub" class="header-image">
+            <img src="images/header.webp" alt="MobyDick @ Porter British Pub" class="header-image" fetchpriority="high"
+     decoding="async">
         </div>
         <!-- ========== CONTENIDO EN COLUMNA ÚNICA ========== -->
         <div class="content-column">
