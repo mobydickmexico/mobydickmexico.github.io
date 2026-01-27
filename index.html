@@ -563,42 +563,47 @@
         </div>
         <!-- ========== CONTENIDO EN COLUMNA ÚNICA ========== -->
         <div class="content-column">
-            
-            <!-- 1. TOP 5 MÁS VOTADAS -->
-            <div class="content-panel top5-panel">
+                                  
+            <!-- 4. BUSCAR CANCIONES -->
+            <div class="content-panel search-panel">
                 <div class="panel-title">
-                    <i class="bi bi-fire"></i> TOP 5 MÁS VOTADAS
+                    <i class="bi bi-search"></i> BUSCAR CANCIONES
                 </div>
-                <div id="top-songs">
-                    <p class="text-center small text-muted">Cargando...</p>
+                <div class="search-input-group">
+                    <input type="text" id="search" class="search-input" 
+                           placeholder="Escribe el nombre de la canción o artista...">
+                    <button class="btn-clear-search" onclick="clearSearch()" title="Limpiar búsqueda">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
                 </div>
             </div>
             
-            <!-- 2. COMPARTIR CON AMIGOS -->
-            <div class="content-panel share-panel">
-                <div class="panel-title">
-                    <i class="bi bi-share"></i> COMPARTIR CON AMIGOS
-                </div>
-                <p class="small text-muted mb-2">
-                    Invita a más personas para que voten por sus canciones favoritas.
-                </p>
-                <button onclick="shareLink()" class="btn btn-share">
-                    <i class="bi bi-share-fill"></i> Compartir enlace
-                </button>
-                <div id="share-feedback" class="feedback-container"></div>
+        </div>          
+            <!-- ========== LISTA DE CANCIONES ========== -->
+        <div class="songs-header">
+            <h5 class="mb-0">
+                <i class="bi bi-music-note-list"></i> REPERTORIO
+            </h5>
+            <span class="badge bg-light text-dark" id="total-songs">0 canciones</span>
+        </div>
+        
+        <div class="songs-scroll-container" id="songs-container">
+            <div class="text-center py-4">
+                <div class="spinner-border text-primary"></div>
+                <p class="mt-2">Cargando canciones...</p>
             </div>
-            
-            <!-- 3. TUS VOTOS Y MENSAJE -->
+        </div>
+			<!-- 3. TUS VOTOS Y MENSAJE -->
             <div class="content-panel votes-panel">
                 <div class="votes-header">
                     <div class="votes-title">
-                        <i class="bi bi-check-circle"></i> TUS VOTOS
+                        <i class="bi bi-check-circle"></i> TUS PETICIONES
                     </div>
                     <span class="votes-counter" id="vote-count">0/3</span>
                 </div>
                 
                 <div id="my-votes-list">
-                    <p class="text-muted text-center my-3">No has votado aún. Selecciona hasta 3 canciones.</p>
+                    <p class="text-muted text-center my-3">Selecciona hasta 3 canciones.</p>
                 </div>
                 
                 <!-- MENSAJE A LA BANDA -->
@@ -617,45 +622,29 @@
                 
                 <!-- BOTÓN ENVIAR VOTOS -->
                 <button id="submit-votes" class="btn-submit-votes" disabled>
-                    <i class="bi bi-send-check"></i> ENVIAR VOTOS Y MENSAJE
+                    <i class="bi bi-send-check"></i> ENVIAR PETICIONES Y MENSAJE
                 </button>
                 
                 <!-- Feedback al enviar -->
                 <div id="submit-feedback" class="feedback-container"></div>
             </div>
-            
-            <!-- 4. BUSCAR CANCIONES -->
-            <div class="content-panel search-panel">
+			
+				<!-- 2. COMPARTIR CON AMIGOS -->
+                <div class="content-panel share-panel mt-4">
                 <div class="panel-title">
-                    <i class="bi bi-search"></i> BUSCAR CANCIONES
+                    <i class="bi bi-share"></i> COMPARTIR CON AMIGOS
                 </div>
-                <div class="search-input-group">
-                    <input type="text" id="search" class="search-input" 
-                           placeholder="Escribe el nombre de la canción o artista...">
-                    <button class="btn-clear-search" onclick="clearSearch()" title="Limpiar búsqueda">
-                        <i class="bi bi-x-lg"></i>
-                    </button>
-                </div>
+                <p class="small text-muted mb-2">
+                    Invita a más personas para que voten por sus canciones favoritas.
+                </p>
+                <button onclick="shareLink()" class="btn btn-share">
+                    <i class="bi bi-share-fill"></i> Compartir enlace
+                </button>
+                <div id="share-feedback" class="feedback-container"></div>
             </div>
-            
-        </div>
-        
-        <!-- ========== LISTA DE CANCIONES ========== -->
-        <div class="songs-header">
-            <h5 class="mb-0">
-                <i class="bi bi-music-note-list"></i> REPERTORIO DE CANCIONES
-            </h5>
-            <span class="badge bg-light text-dark" id="total-songs">0 canciones</span>
-        </div>
-        
-        <div class="songs-scroll-container" id="songs-container">
-            <div class="text-center py-4">
-                <div class="spinner-border text-primary"></div>
-                <p class="mt-2">Cargando canciones...</p>
-            </div>
-        </div>
-        
-        <!-- ========== SUGERIR CANCIONES NUEVAS (AHORA AL FINAL) ========== -->
+			              
+               
+                <!-- ========== SUGERIR CANCIONES NUEVAS (AHORA AL FINAL) ========== -->
         <div class="suggestions-panel">
             <div class="panel-title">
                 <i class="bi bi-lightbulb"></i> SUGERIR CANCIONES NUEVAS
@@ -1203,7 +1192,7 @@
                 
             } else {
                 if (container) {
-                    container.innerHTML = '<p class="text-muted text-center my-3">No has votado aún. Selecciona hasta 3 canciones.</p>';
+                    container.innerHTML = '<p class="text-muted text-center my-3">Selecciona hasta 3 canciones.</p>';
                 }
                 if (submitBtn) {
                     submitBtn.disabled = true;
@@ -1244,7 +1233,7 @@
         function updateTotalSongs() {
             const element = document.getElementById("total-songs");
             if (element) {
-                element.textContent = `${allSongs.length} canción${allSongs.length !== 1 ? "es" : ""}`;
+                element.textContent = `${allSongs.length} cancion${allSongs.length !== 1 ? "es" : ""}`;
             }
         }
 
