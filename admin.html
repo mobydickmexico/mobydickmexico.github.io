@@ -294,6 +294,7 @@
             align-items: center;
             border-left: 4px solid var(--dj-blue);
             transition: all 0.2s;
+            cursor: move;
         }
         
         .song-item:hover {
@@ -590,6 +591,31 @@
             to { transform: translateX(0); opacity: 1; }
         }
         
+        /* Botón de pantalla completa flotante */
+        .fullscreen-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, var(--admin-accent), #cc0044);
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 9999;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .fullscreen-btn:hover {
+            transform: scale(1.1);
+        }
+        
         /* ========== RESPONSIVE ========== */
         @media (max-width: 1200px) {
             .nav-btn {
@@ -622,6 +648,14 @@
             .live-stats {
                 grid-template-columns: repeat(2, 1fr);
             }
+            
+            .fullscreen-btn {
+                bottom: 15px;
+                right: 15px;
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
         }
         
         @media (max-width: 576px) {
@@ -640,6 +674,14 @@
             .action-btn {
                 min-width: 100px;
                 padding: 8px 12px;
+            }
+            
+            .fullscreen-btn {
+                bottom: 10px;
+                right: 10px;
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
             }
         }
     </style>
@@ -778,53 +820,58 @@
         </section>
 
         <!-- ➕ AGREGAR CANCIONES -->
-<section id="add-section" class="content-section">
-    <h2 class="section-title">AGREGAR CANCIÓN AL REPERTORIO</h2>
-    
-    <div class="form-container">
-        <form id="song-form">
-            <input type="hidden" id="edit-song-id" value="">
+        <section id="add-section" class="content-section">
+            <h2 class="section-title">AGREGAR CANCIÓN AL REPERTORIO</h2>
             
-            <div class="form-group">
-                <label class="form-label">TÍTULO DE LA CANCIÓN *</label>
-                <input type="text" id="song-title" class="form-input" 
-                       placeholder="Ej: Sweet Child O' Mine" required>
+            <div class="form-container">
+                <form id="song-form">
+                    <input type="hidden" id="edit-song-id" value="">
+                    
+                    <div class="form-group">
+                        <label class="form-label">TÍTULO DE LA CANCIÓN *</label>
+                        <input type="text" id="song-title" class="form-input" 
+                               placeholder="Ej: Sweet Child O' Mine" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">ARTISTA/BANDA *</label>
+                        <input type="text" id="song-artist" class="form-input" 
+                               placeholder="Ej: Guns N' Roses" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">GÉNERO</label>
+                        <select id="song-genre" class="form-input">
+                            <option value="Rock">Rock</option>
+                            <option value="Hard Rock">Hard Rock</option>
+                            <option value="Metal">Metal</option>
+                            <option value="Pop Rock">Pop Rock</option>
+                            <option value="Alternativo">Alternativo</option>
+                            <option value="Clásico">Clásico</option>
+                            <option value="Grunge">Grunge</option>
+                            <option value="Blues Rock">Blues Rock</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">
+                        <i class="bi bi-check-circle"></i> AGREGAR CANCIÓN AL REPERTORIO
+                    </button>
+                </form>
             </div>
             
-            <div class="form-group">
-                <label class="form-label">ARTISTA/BANDA *</label>
-                <input type="text" id="song-artist" class="form-input" 
-                       placeholder="Ej: Guns N' Roses" required>
+            <!-- Lista para eliminar canciones -->
+            <h3 class="section-title" style="margin-top: 40px;">ELIMINAR CANCIONES</h3>
+            <div class="delete-list" id="delete-songs-list">
+                <!-- Canciones para eliminar -->
             </div>
-            
-            <div class="form-group">
-                <label class="form-label">GÉNERO</label>
-                <select id="song-genre" class="form-input">
-                    <option value="Rock">Rock</option>
-                    <option value="Hard Rock">Hard Rock</option>
-                    <option value="Metal">Metal</option>
-                    <option value="Pop Rock">Pop Rock</option>
-                    <option value="Alternativo">Alternativo</option>
-                    <option value="Clásico">Clásico</option>
-                    <option value="Grunge">Grunge</option>
-                    <option value="Blues Rock">Blues Rock</option>
-                    <option value="Otro">Otro</option>
-                </select>
-            </div>
-            
-            <button type="submit" class="submit-btn">
-                <i class="bi bi-check-circle"></i> AGREGAR CANCIÓN AL REPERTORIO
-            </button>
-        </form>
-    </div>
-    
-    <!-- Lista para eliminar canciones -->
-    <h3 class="section-title" style="margin-top: 40px;">ELIMINAR CANCIONES</h3>
-    <div class="delete-list" id="delete-songs-list">
-        <!-- Canciones para eliminar -->
-    </div>
-</section>
+        </section>
     </main>
+
+    <!-- Botón de pantalla completa -->
+    <button class="fullscreen-btn" id="fullscreen-btn" onclick="toggleFullscreen()">
+        <i class="bi bi-fullscreen"></i>
+    </button>
 
     <script>
         // ========== CONFIGURACIÓN DE FIREBASE (NO MODIFICAR) ==========
@@ -850,6 +897,7 @@
         let suggestionsListener = null;
         let filteredSongs = null;
         let searchTimeout = null;
+        let isFullscreen = false;
 
         // ========== INICIALIZAR ==========
         document.addEventListener('DOMContentLoaded', function() {
@@ -858,15 +906,27 @@
             // Configurar navegación
             setupNavigation();
             
+            // Configurar formulario
+            setupForm();
+            
             // Inicializar Firebase
             initializeFirebase();
             
             // Verificar autenticación
             checkAuth();
             
+            // Configurar pantalla completa
+            setupFullscreen();
+            
+            // Configurar detectores de pantalla completa
+            setupFullscreenDetectors();
+            
             // Actualizar hora
             updateLastUpdateTime();
             setInterval(updateLastUpdateTime, 60000);
+            
+            // Escuchar cambios en tiempo real
+            setupSmartListener();
         });
 
         // ========== NAVEGACIÓN ==========
@@ -920,6 +980,72 @@
             }
         }
 
+        // ========== PANTALLA COMPLETA ==========
+        function setupFullscreen() {
+            // Intentar pantalla completa automática en dispositivos móviles
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                setTimeout(() => {
+                    requestFullscreen();
+                }, 1500); // Esperar 1.5 segundos para que cargue todo
+            }
+            
+            // Actualizar icono del botón
+            updateFullscreenButton();
+        }
+
+        function setupFullscreenDetectors() {
+            // Detectar cambios en el estado de pantalla completa
+            document.addEventListener('fullscreenchange', updateFullscreenButton);
+            document.addEventListener('webkitfullscreenchange', updateFullscreenButton);
+            document.addEventListener('mozfullscreenchange', updateFullscreenButton);
+            document.addEventListener('MSFullscreenChange', updateFullscreenButton);
+        }
+
+        function updateFullscreenButton() {
+            const isFullscreenNow = !!(document.fullscreenElement || 
+                                       document.webkitFullscreenElement || 
+                                       document.mozFullScreenElement || 
+                                       document.msFullscreenElement);
+            
+            isFullscreen = isFullscreenNow;
+            const btn = document.getElementById('fullscreen-btn');
+            if (btn) {
+                btn.innerHTML = isFullscreenNow ? 
+                    '<i class="bi bi-fullscreen-exit"></i>' : 
+                    '<i class="bi bi-fullscreen"></i>';
+            }
+        }
+
+        function requestFullscreen() {
+            try {
+                const element = document.documentElement;
+                
+                if (element.requestFullscreen) {
+                    element.requestFullscreen();
+                } else if (element.webkitRequestFullscreen) { /* Safari */
+                    element.webkitRequestFullscreen();
+                } else if (element.msRequestFullscreen) { /* IE11 */
+                    element.msRequestFullscreen();
+                }
+            } catch (error) {
+                console.log("Pantalla completa no disponible o rechazada");
+            }
+        }
+
+        function toggleFullscreen() {
+            if (!isFullscreen) {
+                requestFullscreen();
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) { /* Safari */
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { /* IE11 */
+                    document.msExitFullscreen();
+                }
+            }
+        }
+
         // ========== INICIALIZAR FIREBASE ==========
         function initializeFirebase() {
             try {
@@ -960,65 +1086,120 @@
             }
         }
 
+        // ========== FORMULARIO ==========
+        function setupForm() {
+            const form = document.getElementById('song-form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    submitSong();
+                });
+            }
+        }
+
         // ========== CARGA DE DATOS ==========
         function loadAllData() {
-    loadSongs();
-    updateConnectionStats();
-}
+            loadSongs();
+            updateConnectionStats();
+        }
 
-        // Y en la función loadSongs(), cuando cargas las canciones
-function loadSongs() {
-    db.collection("songs").orderBy("title").get()
-        .then((snapshot) => {
-            allSongs = [];
-            snapshot.forEach((doc) => {
-                const data = doc.data();
-                allSongs.push({
-                    id: doc.id,
-                    title: data.title || "Sin título",
-                    artist: data.artist || "Desconocido",
-                    genre: data.genre || "Rock",
-                    votes: data.votes || 0,
-                    // NOTA: ya no cargamos duration, year, notes
-                    inPlaylist: data.inPlaylist || false,
-                    played: data.played || false,
-                    playlistOrder: data.playlistOrder || 999,
-                    addedAt: data.addedAt || new Date().toISOString()
+        function loadSongs() {
+            // IMPORTANTE: Cargar SIN ordenar por título para mantener el orden de playlist
+            db.collection("songs").get()
+                .then((snapshot) => {
+                    const songsFromDB = [];
+                    snapshot.forEach((doc) => {
+                        const data = doc.data();
+                        songsFromDB.push({
+                            id: doc.id,
+                            title: data.title || "Sin título",
+                            artist: data.artist || "Desconocido",
+                            genre: data.genre || "Rock",
+                            votes: data.votes || 0,
+                            inPlaylist: data.inPlaylist || false,
+                            played: data.played || false,
+                            playlistOrder: data.playlistOrder || 999,
+                            addedAt: data.addedAt || new Date().toISOString()
+                        });
+                    });
+                    
+                    console.log(`📊 ${songsFromDB.length} canciones cargadas`);
+                    
+                    // Actualizar allSongs manteniendo referencias si es posible
+                    allSongs = songsFromDB;
+                    
+                    // Actualizar playlistSongs manteniendo el orden correcto
+                    if (playlistSongs.length > 0) {
+                        // Reconstruir playlist manteniendo el orden actual
+                        const newPlaylist = [];
+                        playlistSongs.forEach(oldSong => {
+                            const updatedSong = allSongs.find(s => s.id === oldSong.id);
+                            if (updatedSong) {
+                                newPlaylist.push(updatedSong);
+                            }
+                        });
+                        playlistSongs = newPlaylist;
+                    } else {
+                        // Primera carga: obtener canciones en playlist
+                        playlistSongs = allSongs
+                            .filter(song => song.inPlaylist)
+                            .sort((a, b) => (a.playlistOrder || 999) - (b.playlistOrder || 999));
+                    }
+                    
+                    updateStats();
+                    updateTopSongs();
+                    
+                    if (currentSection === 'stage') {
+                        loadStageMode();
+                    } else if (currentSection === 'top10') {
+                        updateTop10List();
+                    } else if (currentSection === 'add') {
+                        loadDeleteList();
+                    }
+                    
+                })
+                .catch((error) => {
+                    console.error("❌ Error cargando canciones:", error);
+                    showNotification("Error cargando canciones", "danger");
                 });
-            });
-            
-            console.log(`📊 ${allSongs.length} canciones cargadas`);
-            
-            // Actualizar playlist manteniendo el orden actual si existe
-            if (playlistSongs.length > 0) {
-                // Mantener el orden existente
-                const newPlaylistSongs = [];
-                playlistSongs.forEach(existingSong => {
-                    const updatedSong = allSongs.find(s => s.id === existingSong.id);
-                    if (updatedSong) {
-                        newPlaylistSongs.push(updatedSong);
+        }
+
+        function setupSmartListener() {
+            // Solo escuchar cambios específicos, no recargar todo
+            db.collection("songs").onSnapshot((snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === "modified") {
+                        const updatedSong = {
+                            id: change.doc.id,
+                            ...change.doc.data()
+                        };
+                        
+                        // Actualizar en allSongs
+                        const index = allSongs.findIndex(s => s.id === updatedSong.id);
+                        if (index !== -1) {
+                            allSongs[index] = {
+                                ...allSongs[index],
+                                ...updatedSong
+                            };
+                        }
+                        
+                        // Actualizar en playlistSongs si está allí
+                        const playlistIndex = playlistSongs.findIndex(s => s.id === updatedSong.id);
+                        if (playlistIndex !== -1) {
+                            playlistSongs[playlistIndex] = {
+                                ...playlistSongs[playlistIndex],
+                                ...updatedSong
+                            };
+                        }
+                        
+                        // Actualizar UI si está en la sección correspondiente
+                        if (currentSection === 'stage') {
+                            updateLiveStats();
+                        }
                     }
                 });
-                playlistSongs = newPlaylistSongs;
-            }
-            
-            updateStats();
-            updateTopSongs();
-            
-            if (currentSection === 'stage') {
-                loadStageMode();
-            } else if (currentSection === 'top10') {
-                updateTop10List();
-            } else if (currentSection === 'add') {
-                loadDeleteList();
-            }
-            
-        })
-        .catch((error) => {
-            console.error("❌ Error cargando canciones:", error);
-            showNotification("Error cargando canciones", "danger");
-        });
-}
+            });
+        }
 
         // ========== LISTENER DE CONEXIONES ==========
         function setupConnectionListener() {
@@ -1297,8 +1478,8 @@ function loadSongs() {
         }
 
         function updateLiveStats() {
-            const playlistCount = allSongs.filter(s => s.inPlaylist).length;
-            const playedCount = allSongs.filter(s => s.played).length;
+            const playlistCount = playlistSongs.length;
+            const playedCount = playlistSongs.filter(s => s.played).length;
             const totalVotes = allSongs.reduce((sum, song) => sum + song.votes, 0);
             const nextSong = playlistSongs.find(s => !s.played);
             
@@ -1309,13 +1490,12 @@ function loadSongs() {
         }
 
         function loadPlaylist() {
-            playlistSongs = allSongs
-                .filter(song => song.inPlaylist)
-                .sort((a, b) => (a.playlistOrder || 999) - (b.playlistOrder || 999));
-            
             const container = document.getElementById('playlist-list');
             
             if (!container) return;
+            
+            // Ordenar por playlistOrder
+            playlistSongs.sort((a, b) => (a.playlistOrder || 999) - (b.playlistOrder || 999));
             
             if (playlistSongs.length === 0) {
                 container.innerHTML = `
@@ -1412,6 +1592,38 @@ function loadSongs() {
             });
         }
 
+        // ========== ACTUALIZAR ORDEN DE PLAYLIST ==========
+        function updatePlaylistOrder() {
+            const items = document.querySelectorAll('#playlist-list .song-item');
+            const batch = db.batch();
+            
+            items.forEach((item, index) => {
+                const songId = item.getAttribute('data-id');
+                const songRef = db.collection("songs").doc(songId);
+                batch.update(songRef, {
+                    playlistOrder: index,
+                    updatedAt: new Date().toISOString()
+                });
+                
+                // Actualizar localmente también
+                const songIndex = playlistSongs.findIndex(s => s.id === songId);
+                if (songIndex !== -1) {
+                    playlistSongs[songIndex].playlistOrder = index;
+                }
+            });
+            
+            batch.commit()
+                .then(() => {
+                    showNotification("✅ Orden de playlist actualizado", "success");
+                    // Reordenar localmente
+                    playlistSongs.sort((a, b) => (a.playlistOrder || 999) - (b.playlistOrder || 999));
+                })
+                .catch((error) => {
+                    console.error("Error actualizando orden:", error);
+                    showNotification("❌ Error al actualizar orden", "danger");
+                });
+        }
+
         // ========== TOP 10 ==========
         function updateTop10List() {
             const container = document.getElementById('top10-list');
@@ -1478,92 +1690,85 @@ function loadSongs() {
             container.innerHTML = html;
         }
 
-        // ========== FORMULARIO ==========
-        document.getElementById('song-form')?.addEventListener('submit', function(e) {
-            e.preventDefault();
-            submitSong();
-        });
-
         function submitSong() {
-    const songId = document.getElementById('edit-song-id').value;
-    const title = document.getElementById('song-title').value.trim();
-    const artist = document.getElementById('song-artist').value.trim();
-    const genre = document.getElementById('song-genre').value;
-    
-    if (!title || !artist) {
-        showNotification("Título y artista son requeridos", "warning");
-        return;
-    }
-    
-    const songData = {
-        title: title,
-        artist: artist,
-        genre: genre,
-        updatedAt: new Date().toISOString()
-    };
-    
-    const btn = document.querySelector('#song-form .submit-btn');
-    const originalText = btn.innerHTML;
-    
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Procesando...';
-    
-    if (songId) {
-        db.collection("songs").doc(songId).update(songData)
-            .then(() => {
-                showNotification(`✅ Canción "${title}" actualizada`, "success");
+            const songId = document.getElementById('edit-song-id').value;
+            const title = document.getElementById('song-title').value.trim();
+            const artist = document.getElementById('song-artist').value.trim();
+            const genre = document.getElementById('song-genre').value;
+            
+            if (!title || !artist) {
+                showNotification("Título y artista son requeridos", "warning");
+                return;
+            }
+            
+            const songData = {
+                title: title,
+                artist: artist,
+                genre: genre,
+                updatedAt: new Date().toISOString()
+            };
+            
+            const btn = document.querySelector('#song-form .submit-btn');
+            const originalText = btn.innerHTML;
+            
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Procesando...';
+            
+            if (songId) {
+                db.collection("songs").doc(songId).update(songData)
+                    .then(() => {
+                        showNotification(`✅ Canción "${title}" actualizada`, "success");
+                        
+                        setTimeout(() => {
+                            clearForm();
+                            loadAllData();
+                        }, 800);
+                    })
+                    .catch((error) => {
+                        console.error("Error actualizando canción:", error);
+                        showNotification("Error al actualizar canción", "danger");
+                        btn.disabled = false;
+                        btn.innerHTML = originalText;
+                    });
+            } else {
+                songData.votes = 0;
+                songData.addedAt = new Date().toISOString();
+                songData.inPlaylist = false;
+                songData.played = false;
+                songData.playlistOrder = 999;
                 
-                setTimeout(() => {
-                    clearForm();
-                    loadAllData();
-                }, 800);
-            })
-            .catch((error) => {
-                console.error("Error actualizando canción:", error);
-                showNotification("Error al actualizar canción", "danger");
-                btn.disabled = false;
-                btn.innerHTML = originalText;
-            });
-    } else {
-        songData.votes = 0;
-        songData.addedAt = new Date().toISOString();
-        songData.inPlaylist = false;
-        songData.played = false;
-        songData.playlistOrder = 999;
-        
-        db.collection("songs").add(songData)
-            .then(() => {
-                showNotification(`✅ Canción "${title}" agregada`, "success");
-                
-                setTimeout(() => {
-                    clearForm();
-                    loadAllData();
-                }, 800);
-            })
-            .catch((error) => {
-                console.error("❌ Error agregando canción:", error);
-                showNotification("Error al agregar canción", "danger");
-                btn.disabled = false;
-                btn.innerHTML = originalText;
-            });
-    }
-}
+                db.collection("songs").add(songData)
+                    .then(() => {
+                        showNotification(`✅ Canción "${title}" agregada`, "success");
+                        
+                        setTimeout(() => {
+                            clearForm();
+                            loadAllData();
+                        }, 800);
+                    })
+                    .catch((error) => {
+                        console.error("❌ Error agregando canción:", error);
+                        showNotification("Error al agregar canción", "danger");
+                        btn.disabled = false;
+                        btn.innerHTML = originalText;
+                    });
+            }
+        }
 
-function clearForm() {
-    document.getElementById('edit-song-id').value = '';
-    document.getElementById('song-title').value = '';
-    document.getElementById('song-artist').value = '';
-    document.getElementById('song-genre').value = 'Rock';
-    
-    const btn = document.querySelector('#song-form .submit-btn');
-    if (btn) {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="bi bi-check-circle"></i> AGREGAR CANCIÓN AL REPERTORIO';
-    }
-}
+        function clearForm() {
+            document.getElementById('edit-song-id').value = '';
+            document.getElementById('song-title').value = '';
+            document.getElementById('song-artist').value = '';
+            document.getElementById('song-genre').value = 'Rock';
+            
+            const btn = document.querySelector('#song-form .submit-btn');
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-check-circle"></i> AGREGAR CANCIÓN AL REPERTORIO';
+            }
+        }
 
         // ========== FUNCIONES DE ACCIÓN ==========
-        // Función para resetear contador de conectados
         window.resetConnectedCounter = function() {
             if (confirm("¿Reiniciar contador de personas conectadas a 0?")) {
                 db.collection("stats").doc("connections").set({
@@ -1584,7 +1789,6 @@ function clearForm() {
             }
         };
 
-        // Función para resetear votos
         window.resetAllVotes = function() {
             if (allSongs.length === 0) {
                 showNotification("No hay canciones para reiniciar", "info");
@@ -1611,20 +1815,24 @@ function clearForm() {
             }
         };
 
-        // Función para agregar a playlist
         window.addToPlaylist = function(songId) {
             const song = allSongs.find(s => s.id === songId);
             if (!song) return;
             
             if (!playlistSongs.find(s => s.id === songId)) {
+                const newOrder = playlistSongs.length;
+                
                 db.collection("songs").doc(songId).update({
                     inPlaylist: true,
-                    playlistOrder: playlistSongs.length,
+                    playlistOrder: newOrder,
                     addedToPlaylistAt: new Date().toISOString()
                 })
                 .then(() => {
+                    song.inPlaylist = true;
+                    song.playlistOrder = newOrder;
+                    playlistSongs.push(song);
                     showNotification(`✅ "${song.title}" agregada a la playlist`, "success");
-                    loadAllData();
+                    loadStageMode();
                 })
                 .catch((error) => {
                     console.error("Error agregando a playlist:", error);
@@ -1633,7 +1841,6 @@ function clearForm() {
             }
         };
 
-        // Función para remover de playlist
         window.removeFromPlaylist = function(songId) {
             const song = allSongs.find(s => s.id === songId);
             if (!song) return;
@@ -1644,8 +1851,11 @@ function clearForm() {
                     playlistOrder: 999
                 })
                 .then(() => {
+                    song.inPlaylist = false;
+                    song.playlistOrder = 999;
+                    playlistSongs = playlistSongs.filter(s => s.id !== songId);
                     showNotification(`✅ "${song.title}" removida de la playlist`, "info");
-                    loadAllData();
+                    loadStageMode();
                 })
                 .catch((error) => {
                     console.error("Error removiendo de playlist:", error);
@@ -1654,7 +1864,6 @@ function clearForm() {
             }
         };
 
-        // Función para marcar como tocada
         window.togglePlayed = function(songId) {
             const song = allSongs.find(s => s.id === songId);
             if (!song) return;
@@ -1666,11 +1875,31 @@ function clearForm() {
                 playedAt: new Date().toISOString()
             })
             .then(() => {
+                song.played = newStatus;
                 showNotification(
                     newStatus ? `✅ "${song.title}" marcada como tocada` : `🔄 "${song.title}" marcada como por tocar`,
                     newStatus ? "success" : "info"
                 );
-                loadAllData();
+                updateLiveStats();
+                
+                // Actualizar la UI de la canción específica
+                const songElement = document.querySelector(`#playlist-list .song-item[data-id="${songId}"]`);
+                if (songElement) {
+                    if (newStatus) {
+                        songElement.classList.add('played-song');
+                        const btn = songElement.querySelector('.played-btn');
+                        if (btn) {
+                            btn.innerHTML = '<i class="bi bi-arrow-counterclockwise"></i>';
+                        }
+                    } else {
+                        songElement.classList.remove('played-song');
+                        const btn = songElement.querySelector('.action-btn:not(.remove-btn)');
+                        if (btn) {
+                            btn.innerHTML = '<i class="bi bi-check"></i>';
+                            btn.classList.add('played-btn');
+                        }
+                    }
+                }
             })
             .catch((error) => {
                 console.error("Error actualizando estado:", error);
@@ -1678,47 +1907,6 @@ function clearForm() {
             });
         };
 
-        // ========== FUNCIÓN PARA ACTUALIZAR ORDEN DE PLAYLIST (CORREGIDA) ==========
-function updatePlaylistOrder() {
-    const items = document.querySelectorAll('#playlist-list .song-item');
-    const batch = db.batch();
-    
-    items.forEach((item, index) => {
-        const songId = item.getAttribute('data-id');
-        const songRef = db.collection("songs").doc(songId);
-        batch.update(songRef, {
-            playlistOrder: index,
-            updatedAt: new Date().toISOString()
-        });
-    });
-    
-    batch.commit()
-        .then(() => {
-            showNotification("✅ Orden de playlist actualizado", "success");
-            // En lugar de recargar todo, solo actualizamos el orden localmente
-            updateLocalPlaylistOrder();
-        })
-        .catch((error) => {
-            console.error("Error actualizando orden:", error);
-            showNotification("❌ Error al actualizar orden", "danger");
-        });
-}
-
-function updateLocalPlaylistOrder() {
-    const items = document.querySelectorAll('#playlist-list .song-item');
-    playlistSongs = [];
-    
-    items.forEach((item, index) => {
-        const songId = item.getAttribute('data-id');
-        const song = allSongs.find(s => s.id === songId);
-        if (song) {
-            song.playlistOrder = index;
-            playlistSongs.push(song);
-        }
-    });
-}
-
-        // Función para generar playlist automática
         window.autoGeneratePlaylist = function() {
             const topSongs = allSongs
                 .filter(song => !song.inPlaylist)
@@ -1741,12 +1929,16 @@ function updateLocalPlaylistOrder() {
                     playlistOrder: order++,
                     addedToPlaylistAt: new Date().toISOString()
                 });
+                
+                song.inPlaylist = true;
+                song.playlistOrder = order - 1;
+                playlistSongs.push(song);
             });
             
             batch.commit()
                 .then(() => {
                     showNotification(`✅ Playlist generada con ${topSongs.length} canciones`, "success");
-                    loadAllData();
+                    loadStageMode();
                 })
                 .catch((error) => {
                     console.error("Error generando playlist:", error);
@@ -1754,7 +1946,6 @@ function updateLocalPlaylistOrder() {
                 });
         };
 
-        // Función para marcar todas como tocadas
         window.markAllAsPlayed = function() {
             if (playlistSongs.length === 0) {
                 showNotification("No hay canciones en la playlist", "info");
@@ -1770,12 +1961,13 @@ function updateLocalPlaylistOrder() {
                         played: true,
                         playedAt: new Date().toISOString()
                     });
+                    song.played = true;
                 });
                 
                 batch.commit()
                     .then(() => {
                         showNotification("✅ Todas las canciones marcadas como tocadas", "success");
-                        loadAllData();
+                        loadStageMode();
                     })
                     .catch((error) => {
                         console.error("Error marcando canciones:", error);
@@ -1784,7 +1976,6 @@ function updateLocalPlaylistOrder() {
             }
         };
 
-        // Función para limpiar playlist
         window.clearPlaylist = function() {
             if (playlistSongs.length === 0) {
                 showNotification("La playlist ya está vacía", "info");
@@ -1800,12 +1991,15 @@ function updateLocalPlaylistOrder() {
                         inPlaylist: false,
                         playlistOrder: 999
                     });
+                    song.inPlaylist = false;
+                    song.playlistOrder = 999;
                 });
                 
                 batch.commit()
                 .then(() => {
+                    playlistSongs = [];
                     showNotification("✅ Playlist limpiada", "success");
-                    loadAllData();
+                    loadStageMode();
                 })
                 .catch((error) => {
                     console.error("Error limpiando playlist:", error);
@@ -1814,7 +2008,6 @@ function updateLocalPlaylistOrder() {
             }
         };
 
-        // Función para eliminar canción
         window.deleteSong = function(songId) {
             const song = allSongs.find(s => s.id === songId);
             if (!song) return;
@@ -1822,6 +2015,8 @@ function updateLocalPlaylistOrder() {
             if (confirm(`¿Eliminar la canción "${song.title}"?`)) {
                 db.collection("songs").doc(songId).delete()
                     .then(() => {
+                        allSongs = allSongs.filter(s => s.id !== songId);
+                        playlistSongs = playlistSongs.filter(s => s.id !== songId);
                         showNotification(`✅ Canción "${song.title}" eliminada`, "success");
                         loadAllData();
                     })
@@ -1832,7 +2027,6 @@ function updateLocalPlaylistOrder() {
             }
         };
 
-        // Función para marcar mensaje como leído
         window.markAsRead = function(messageId) {
             db.collection("temporary_data").doc(messageId).update({
                 status: "read",
@@ -1847,7 +2041,6 @@ function updateLocalPlaylistOrder() {
             });
         };
 
-        // Función para marcar todos los mensajes como leídos
         window.markAllAsRead = function() {
             if (allMessages.length === 0) {
                 showNotification("No hay mensajes para marcar como leídos", "info");
@@ -1882,12 +2075,16 @@ function updateLocalPlaylistOrder() {
             }
         };
 
-        // Función para eliminar mensaje
         window.deleteMessage = function(messageId) {
             if (confirm("¿Eliminar este mensaje?")) {
                 db.collection("temporary_data").doc(messageId).delete()
                     .then(() => {
+                        allMessages = allMessages.filter(m => m.id !== messageId);
                         showNotification("✅ Mensaje eliminado", "success");
+                        if (currentSection === 'messages') {
+                            displayMessages();
+                        }
+                        updateMessageStats();
                     })
                     .catch((error) => {
                         console.error("Error eliminando mensaje:", error);
@@ -1896,7 +2093,6 @@ function updateLocalPlaylistOrder() {
             }
         };
 
-        // Función para eliminar todos los mensajes
         window.deleteAllMessages = function() {
             if (allMessages.length === 0) {
                 showNotification("No hay mensajes para eliminar", "info");
@@ -1913,7 +2109,12 @@ function updateLocalPlaylistOrder() {
                 
                 batch.commit()
                     .then(() => {
+                        allMessages = [];
                         showNotification(`✅ ${allMessages.length} mensajes eliminados`, "success");
+                        if (currentSection === 'messages') {
+                            displayMessages();
+                        }
+                        updateMessageStats();
                     })
                     .catch((error) => {
                         console.error("Error eliminando mensajes:", error);
@@ -1922,14 +2123,22 @@ function updateLocalPlaylistOrder() {
             }
         };
 
-        // Función para marcar sugerencia como vista
         window.markSuggestionAsViewed = function(suggestionId) {
             db.collection("temporary_data").doc(suggestionId).update({
                 status: "viewed",
                 viewedAt: new Date().toISOString()
             })
             .then(() => {
+                const suggestion = allSuggestions.find(s => s.id === suggestionId);
+                if (suggestion) {
+                    suggestion.status = "viewed";
+                    suggestion.viewedAt = new Date().toISOString();
+                }
                 showNotification("✅ Sugerencia marcada como vista", "success");
+                if (currentSection === 'suggestions') {
+                    displaySuggestions();
+                }
+                updateSuggestionStats();
             })
             .catch((error) => {
                 console.error("Error marcando sugerencia:", error);
@@ -1937,7 +2146,6 @@ function updateLocalPlaylistOrder() {
             });
         };
 
-        // Función para marcar todas las sugerencias como vistas
         window.markAllAsViewed = function() {
             if (allSuggestions.length === 0) {
                 showNotification("No hay sugerencias para marcar como vistas", "info");
@@ -1959,11 +2167,17 @@ function updateLocalPlaylistOrder() {
                         status: "viewed",
                         viewedAt: new Date().toISOString()
                     });
+                    suggestion.status = "viewed";
+                    suggestion.viewedAt = new Date().toISOString();
                 });
                 
                 batch.commit()
                     .then(() => {
                         showNotification(`✅ ${pendingSuggestions.length} sugerencias marcadas como vistas`, "success");
+                        if (currentSection === 'suggestions') {
+                            displaySuggestions();
+                        }
+                        updateSuggestionStats();
                     })
                     .catch((error) => {
                         console.error("Error marcando sugerencias:", error);
@@ -1972,12 +2186,16 @@ function updateLocalPlaylistOrder() {
             }
         };
 
-        // Función para eliminar sugerencia
         window.deleteSuggestion = function(suggestionId) {
             if (confirm("¿Eliminar esta sugerencia?")) {
                 db.collection("temporary_data").doc(suggestionId).delete()
                     .then(() => {
+                        allSuggestions = allSuggestions.filter(s => s.id !== suggestionId);
                         showNotification("✅ Sugerencia eliminada", "success");
+                        if (currentSection === 'suggestions') {
+                            displaySuggestions();
+                        }
+                        updateSuggestionStats();
                     })
                     .catch((error) => {
                         console.error("Error eliminando sugerencia:", error);
@@ -1986,7 +2204,6 @@ function updateLocalPlaylistOrder() {
             }
         };
 
-        // Función para eliminar todas las sugerencias
         window.deleteAllSuggestions = function() {
             if (allSuggestions.length === 0) {
                 showNotification("No hay sugerencias para eliminar", "info");
@@ -2003,7 +2220,12 @@ function updateLocalPlaylistOrder() {
                 
                 batch.commit()
                     .then(() => {
+                        allSuggestions = [];
                         showNotification(`✅ ${allSuggestions.length} sugerencias eliminadas`, "success");
+                        if (currentSection === 'suggestions') {
+                            displaySuggestions();
+                        }
+                        updateSuggestionStats();
                     })
                     .catch((error) => {
                         console.error("Error eliminando sugerencias:", error);
@@ -2012,7 +2234,6 @@ function updateLocalPlaylistOrder() {
             }
         };
 
-        // Función para exportar datos
         window.exportData = function() {
             const data = {
                 exportedAt: new Date().toISOString(),
@@ -2023,8 +2244,6 @@ function updateLocalPlaylistOrder() {
                     artist: song.artist,
                     genre: song.genre,
                     votes: song.votes,
-                    duration: song.duration,
-                    year: song.year,
                     inPlaylist: song.inPlaylist,
                     played: song.played,
                     addedAt: song.addedAt
@@ -2045,7 +2264,6 @@ function updateLocalPlaylistOrder() {
             showNotification("✅ Datos exportados correctamente", "success");
         };
 
-        // Función para logout
         window.logout = function() {
             localStorage.removeItem('mobydick_admin');
             window.location.href = "index.html";
@@ -2053,11 +2271,7 @@ function updateLocalPlaylistOrder() {
 
         // ========== UTILIDADES ==========
         function updateStats() {
-            const totalVotes = allSongs.reduce((sum, song) => sum + song.votes, 0);
-            const inPlaylist = allSongs.filter(s => s.inPlaylist).length;
-            const played = allSongs.filter(s => s.played).length;
-            
-            // Si necesitas mostrar estas estadísticas en algún lugar, puedes agregar elementos HTML
+            // Si necesitas mostrar estadísticas en algún lugar
         }
 
         function updateTopSongs() {
@@ -2133,81 +2347,5 @@ function updateLocalPlaylistOrder() {
         };
 
     </script>
-	<!-- Script para modo pantalla completa -->
-<script>
-    // ========== MODO PANTALLA COMPLETA AUTOMÁTICO ==========
-    document.addEventListener('DOMContentLoaded', function() {
-        // Solo intentar pantalla completa en dispositivos móviles/tablets
-        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-            setTimeout(() => {
-                try {
-                    // Intentar entrar en pantalla completa
-                    if (document.documentElement.requestFullscreen) {
-                        document.documentElement.requestFullscreen();
-                    } else if (document.documentElement.webkitRequestFullscreen) { /* Safari */
-                        document.documentElement.webkitRequestFullscreen();
-                    } else if (document.documentElement.msRequestFullscreen) { /* IE11 */
-                        document.documentElement.msRequestFullscreen();
-                    }
-                } catch (error) {
-                    console.log("Pantalla completa no disponible o rechazada por el usuario");
-                }
-            }, 1000); // Esperar 1 segundo para que cargue la página
-        }
-        
-        // También agregar botón manual para pantalla completa
-        const fullscreenBtn = document.createElement('button');
-        fullscreenBtn.innerHTML = '<i class="bi bi-fullscreen"></i>';
-        fullscreenBtn.style.cssText = `
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(145deg, var(--admin-accent), #cc0044);
-            color: white;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            z-index: 9999;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        `;
-        fullscreenBtn.onclick = toggleFullscreen;
-        document.body.appendChild(fullscreenBtn);
-    });
-    
-    function toggleFullscreen() {
-        if (!document.fullscreenElement &&    // standard
-            !document.webkitFullscreenElement && /* safari */
-            !document.msFullscreenElement) { /* ie11 */
-            if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen();
-            } else if (document.documentElement.webkitRequestFullscreen) { /* safari */
-                document.documentElement.webkitRequestFullscreen();
-            } else if (document.documentElement.msRequestFullscreen) { /* ie11 */
-                document.documentElement.msRequestFullscreen();
-            }
-        } else {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.webkitExitFullscreen) { /* safari */
-                document.webkitExitFullscreen();
-            } else if (document.msExitFullscreen) { /* ie11 */
-                document.msExitFullscreen();
-            }
-        }
-    }
-    
-    // También permitir pantalla completa con doble toque en móviles
-    document.addEventListener('dblclick', function() {
-        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-            toggleFullscreen();
-        }
-    });
-</script>
 </body>
 </html>
