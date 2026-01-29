@@ -782,6 +782,10 @@
                         <button class="action-btn remove-btn" onclick="clearPlaylist()">
                             <i class="bi bi-trash"></i> LIMPIAR PLAYLIST
                         </button>
+                        <!-- NUEVO BOTÓN DE RESET COMPLETO DEL ESCENARIO -->
+                        <button class="action-btn" onclick="resetCompleteStage()" style="background: linear-gradient(145deg, #ff9500, #ff5e00);">
+                            <i class="bi bi-fire"></i> RESET ESCENARIO
+                        </button>
                     </div>
                 </div>
             </div>
@@ -898,6 +902,8 @@
         let filteredSongs = null;
         let searchTimeout = null;
         let isFullscreen = false;
+        let songsListener = null; // Listener específico para canciones
+        let isUpdatingOrder = false; // Bandera para evitar ciclo infinito
 
         // ========== INICIALIZAR ==========
         document.addEventListener('DOMContentLoaded', function() {
@@ -924,9 +930,6 @@
             // Actualizar hora
             updateLastUpdateTime();
             setInterval(updateLastUpdateTime, 60000);
-            
-            // Escuchar cambios en tiempo real
-            setupSmartListener();
         });
 
         // ========== NAVEGACIÓN ==========
@@ -1058,14 +1061,14 @@
                 setupMessagesListener();
                 setupSuggestionsListener();
                 
-                // Cargar datos iniciales
+                // Cargar datos iniciales (SOLO UNA VEZ)
                 loadAllData();
                 
                 // Configurar auto-limpieza
                 setupTemporaryDataCleanup();
                 
-                // Actualizar datos cada 10 segundos
-                setInterval(loadAllData, 10000);
+                // NO usar setInterval para recargar todo - en su lugar usar listeners específicos
+                setupSongsListener();
                 
             } catch (error) {
                 console.error("❌ Error inicializando Firebase:", error);
@@ -1097,14 +1100,83 @@
             }
         }
 
-        // ========== CARGA DE DATOS ==========
+        // ========== LISTENER ESPECÍFICO PARA CANCIONES ==========
+        function setupSongsListener() {
+            // Detener listener anterior si existe
+            if (songsListener) {
+                songsListener();
+            }
+            
+            // Listener SOLO para actualizaciones de votos y estado
+            songsListener = db.collection("songs").onSnapshot((snapshot) => {
+                if (isUpdatingOrder) {
+                    // Si estamos actualizando el orden, ignorar este snapshot
+                    return;
+                }
+                
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === "modified") {
+                        const updatedData = change.doc.data();
+                        const songId = change.doc.id;
+                        
+                        // Encontrar la canción en allSongs
+                        const songIndex = allSongs.findIndex(s => s.id === songId);
+                        if (songIndex !== -1) {
+                            // Actualizar SOLO votos y estado, NO el orden
+                            allSongs[songIndex].votes = updatedData.votes || 0;
+                            allSongs[songIndex].played = updatedData.played || false;
+                            allSongs[songIndex].inPlaylist = updatedData.inPlaylist || false;
+                            
+                            // Si estamos en modo escenario, actualizar la UI
+                            if (currentSection === 'stage') {
+                                updateLiveStats();
+                                updateSongInUI(songId, allSongs[songIndex]);
+                            }
+                        }
+                    }
+                });
+            }, (error) => {
+                console.error("Error en listener de canciones:", error);
+            });
+        }
+
+        function updateSongInUI(songId, songData) {
+            if (!songData) return;
+            
+            // Actualizar en playlist si está visible
+            const playlistItem = document.querySelector(`#playlist-list .song-item[data-id="${songId}"]`);
+            if (playlistItem) {
+                const votesBadge = playlistItem.querySelector('.song-votes');
+                if (votesBadge) {
+                    votesBadge.textContent = songData.votes;
+                }
+                
+                // Actualizar estado de "tocada"
+                if (songData.played) {
+                    playlistItem.classList.add('played-song');
+                } else {
+                    playlistItem.classList.remove('played-song');
+                }
+            }
+            
+            // Actualizar en repertorio si está visible
+            const repertoireItem = document.querySelector(`#repertoire-list .song-item[data-id="${songId}"]`);
+            if (repertoireItem) {
+                const votesBadge = repertoireItem.querySelector('.song-votes');
+                if (votesBadge) {
+                    votesBadge.textContent = songData.votes;
+                }
+            }
+        }
+
+        // ========== CARGA INICIAL DE DATOS ==========
         function loadAllData() {
             loadSongs();
             updateConnectionStats();
         }
 
         function loadSongs() {
-            // IMPORTANTE: Cargar SIN ordenar por título para mantener el orden de playlist
+            // Cargar canciones SIN orderBy para mantener orden flexible
             db.collection("songs").get()
                 .then((snapshot) => {
                     const songsFromDB = [];
@@ -1125,30 +1197,17 @@
                     
                     console.log(`📊 ${songsFromDB.length} canciones cargadas`);
                     
-                    // Actualizar allSongs manteniendo referencias si es posible
+                    // Reemplazar todas las canciones
                     allSongs = songsFromDB;
                     
-                    // Actualizar playlistSongs manteniendo el orden correcto
-                    if (playlistSongs.length > 0) {
-                        // Reconstruir playlist manteniendo el orden actual
-                        const newPlaylist = [];
-                        playlistSongs.forEach(oldSong => {
-                            const updatedSong = allSongs.find(s => s.id === oldSong.id);
-                            if (updatedSong) {
-                                newPlaylist.push(updatedSong);
-                            }
-                        });
-                        playlistSongs = newPlaylist;
-                    } else {
-                        // Primera carga: obtener canciones en playlist
-                        playlistSongs = allSongs
-                            .filter(song => song.inPlaylist)
-                            .sort((a, b) => (a.playlistOrder || 999) - (b.playlistOrder || 999));
-                    }
+                    // Actualizar playlistSongs manteniendo el orden de playlistOrder
+                    playlistSongs = allSongs
+                        .filter(song => song.inPlaylist)
+                        .sort((a, b) => (a.playlistOrder || 999) - (b.playlistOrder || 999));
                     
                     updateStats();
-                    updateTopSongs();
                     
+                    // Cargar sección actual si es necesario
                     if (currentSection === 'stage') {
                         loadStageMode();
                     } else if (currentSection === 'top10') {
@@ -1162,43 +1221,6 @@
                     console.error("❌ Error cargando canciones:", error);
                     showNotification("Error cargando canciones", "danger");
                 });
-        }
-
-        function setupSmartListener() {
-            // Solo escuchar cambios específicos, no recargar todo
-            db.collection("songs").onSnapshot((snapshot) => {
-                snapshot.docChanges().forEach((change) => {
-                    if (change.type === "modified") {
-                        const updatedSong = {
-                            id: change.doc.id,
-                            ...change.doc.data()
-                        };
-                        
-                        // Actualizar en allSongs
-                        const index = allSongs.findIndex(s => s.id === updatedSong.id);
-                        if (index !== -1) {
-                            allSongs[index] = {
-                                ...allSongs[index],
-                                ...updatedSong
-                            };
-                        }
-                        
-                        // Actualizar en playlistSongs si está allí
-                        const playlistIndex = playlistSongs.findIndex(s => s.id === updatedSong.id);
-                        if (playlistIndex !== -1) {
-                            playlistSongs[playlistIndex] = {
-                                ...playlistSongs[playlistIndex],
-                                ...updatedSong
-                            };
-                        }
-                        
-                        // Actualizar UI si está en la sección correspondiente
-                        if (currentSection === 'stage') {
-                            updateLiveStats();
-                        }
-                    }
-                });
-            });
         }
 
         // ========== LISTENER DE CONEXIONES ==========
@@ -1541,39 +1563,40 @@
         }
 
         function loadRepertoire() {
-            const container = document.getElementById('repertoire-list');
-            
-            if (!container) return;
-            
-            const availableSongs = allSongs
-                .filter(song => !song.inPlaylist)
-                .sort((a, b) => b.votes - a.votes);
-            
-            if (availableSongs.length === 0) {
-                container.innerHTML = '<p class="text-center text-muted">No hay canciones disponibles</p>';
-                return;
-            }
-            
-            let html = '';
-            availableSongs.forEach(song => {
-                html += `
-                    <div class="song-item" data-id="${song.id}">
-                        <div class="song-info">
-                            <div class="song-title">${song.title}</div>
-                            <div class="song-artist">${song.artist}</div>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <span class="song-votes">${song.votes}</span>
-                            <button class="action-btn add-btn" onclick="addToPlaylist('${song.id}')" style="padding: 8px 15px; margin-left: 10px;">
-                                <i class="bi bi-plus-lg"></i> Agregar
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-        }
+    const container = document.getElementById('repertoire-list');
+    
+    if (!container) return;
+    
+    // CANCIONES DISPONIBLES ORDENADAS ALFABÉTICAMENTE
+    const availableSongs = allSongs
+        .filter(song => !song.inPlaylist)
+        .sort((a, b) => a.title.localeCompare(b.title)); // A-Z por título
+    
+    if (availableSongs.length === 0) {
+        container.innerHTML = '<p class="text-center text-muted">No hay canciones disponibles</p>';
+        return;
+    }
+    
+    let html = '';
+    availableSongs.forEach(song => {
+        html += `
+            <div class="song-item" data-id="${song.id}">
+                <div class="song-info">
+                    <div class="song-title">${song.title}</div>
+                    <div class="song-artist">${song.artist}</div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <span class="song-votes">${song.votes}</span>
+                    <button class="action-btn add-btn" onclick="addToPlaylist('${song.id}')" style="padding: 8px 15px; margin-left: 10px;">
+                        <i class="bi bi-plus-lg"></i> Agregar
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+}
 
         function initSortable() {
             const playlist = document.getElementById('playlist-list');
@@ -1586,41 +1609,77 @@
             sortableInstance = Sortable.create(playlist, {
                 animation: 150,
                 ghostClass: 'dragging',
+                onStart: function() {
+                    // Al empezar a arrastrar, desactivar temporalmente el listener
+                    if (songsListener) {
+                        songsListener();
+                    }
+                },
                 onEnd: function() {
+                    // Al terminar de arrastrar, actualizar orden
                     updatePlaylistOrder();
+                    
+                    // Reactivar el listener después de un breve delay
+                    setTimeout(() => {
+                        setupSongsListener();
+                    }, 1000);
                 }
             });
         }
 
-        // ========== ACTUALIZAR ORDEN DE PLAYLIST ==========
+        // ========== ACTUALIZAR ORDEN DE PLAYLIST (SOLUCIÓN DEFINITIVA) ==========
         function updatePlaylistOrder() {
             const items = document.querySelectorAll('#playlist-list .song-item');
             const batch = db.batch();
             
+            // Marcar que estamos actualizando el orden
+            isUpdatingOrder = true;
+            
+            // Actualizar localmente primero
+            const newPlaylistOrder = [];
+            
             items.forEach((item, index) => {
                 const songId = item.getAttribute('data-id');
-                const songRef = db.collection("songs").doc(songId);
-                batch.update(songRef, {
-                    playlistOrder: index,
-                    updatedAt: new Date().toISOString()
-                });
+                const song = allSongs.find(s => s.id === songId);
                 
-                // Actualizar localmente también
-                const songIndex = playlistSongs.findIndex(s => s.id === songId);
-                if (songIndex !== -1) {
-                    playlistSongs[songIndex].playlistOrder = index;
+                if (song) {
+                    // Actualizar orden local
+                    song.playlistOrder = index;
+                    
+                    // Agregar a nuevo orden
+                    newPlaylistOrder.push({
+                        ...song,
+                        playlistOrder: index
+                    });
+                    
+                    // Actualizar en Firestore
+                    const songRef = db.collection("songs").doc(songId);
+                    batch.update(songRef, {
+                        playlistOrder: index,
+                        updatedAt: new Date().toISOString()
+                    });
                 }
             });
             
+            // Actualizar playlistSongs localmente
+            playlistSongs = newPlaylistOrder.sort((a, b) => a.playlistOrder - b.playlistOrder);
+            
+            // Ejecutar batch
             batch.commit()
                 .then(() => {
                     showNotification("✅ Orden de playlist actualizado", "success");
-                    // Reordenar localmente
-                    playlistSongs.sort((a, b) => (a.playlistOrder || 999) - (b.playlistOrder || 999));
+                    
+                    // Restaurar flag después de un delay
+                    setTimeout(() => {
+                        isUpdatingOrder = false;
+                    }, 2000);
                 })
                 .catch((error) => {
                     console.error("Error actualizando orden:", error);
                     showNotification("❌ Error al actualizar orden", "danger");
+                    
+                    // Restaurar flag incluso si hay error
+                    isUpdatingOrder = false;
                 });
         }
 
@@ -1805,8 +1864,16 @@
                 
                 batch.commit()
                     .then(() => {
+                        // Actualizar localmente
+                        allSongs.forEach(song => song.votes = 0);
+                        playlistSongs.forEach(song => song.votes = 0);
+                        
                         showNotification("✅ Todos los votos reiniciados", "success");
-                        loadAllData();
+                        
+                        // Recargar UI si estamos en escenario
+                        if (currentSection === 'stage') {
+                            loadStageMode();
+                        }
                     })
                     .catch((error) => {
                         console.error("Error reiniciando votos:", error);
@@ -1842,70 +1909,80 @@
         };
 
         window.removeFromPlaylist = function(songId) {
-            const song = allSongs.find(s => s.id === songId);
-            if (!song) return;
-            
-            if (confirm(`¿Remover "${song.title}" de la playlist?`)) {
-                db.collection("songs").doc(songId).update({
-                    inPlaylist: false,
-                    playlistOrder: 999
-                })
-                .then(() => {
-                    song.inPlaylist = false;
-                    song.playlistOrder = 999;
-                    playlistSongs = playlistSongs.filter(s => s.id !== songId);
-                    showNotification(`✅ "${song.title}" removida de la playlist`, "info");
-                    loadStageMode();
-                })
-                .catch((error) => {
-                    console.error("Error removiendo de playlist:", error);
-                    showNotification("❌ Error al remover de playlist", "danger");
-                });
-            }
-        };
+    const song = allSongs.find(s => s.id === songId);
+    if (!song) return;
+    
+    if (confirm(`¿Remover "${song.title}" de la playlist?`)) {
+        db.collection("songs").doc(songId).update({
+            inPlaylist: false,
+            playlistOrder: 999,
+            played: false // <-- AGREGAR ESTA LÍNEA
+        })
+        .then(() => {
+            song.inPlaylist = false;
+            song.playlistOrder = 999;
+            song.played = false; // <-- AGREGAR ESTA LÍNEA
+            playlistSongs = playlistSongs.filter(s => s.id !== songId);
+            showNotification(`✅ "${song.title}" removida de la playlist`, "info");
+            loadStageMode();
+        })
+        .catch((error) => {
+            console.error("Error removiendo de playlist:", error);
+            showNotification("❌ Error al remover de playlist", "danger");
+        });
+    }
+};
 
         window.togglePlayed = function(songId) {
-            const song = allSongs.find(s => s.id === songId);
-            if (!song) return;
-            
-            const newStatus = !song.played;
-            
-            db.collection("songs").doc(songId).update({
-                played: newStatus,
-                playedAt: new Date().toISOString()
-            })
-            .then(() => {
-                song.played = newStatus;
-                showNotification(
-                    newStatus ? `✅ "${song.title}" marcada como tocada` : `🔄 "${song.title}" marcada como por tocar`,
-                    newStatus ? "success" : "info"
-                );
-                updateLiveStats();
-                
-                // Actualizar la UI de la canción específica
-                const songElement = document.querySelector(`#playlist-list .song-item[data-id="${songId}"]`);
-                if (songElement) {
-                    if (newStatus) {
-                        songElement.classList.add('played-song');
-                        const btn = songElement.querySelector('.played-btn');
-                        if (btn) {
-                            btn.innerHTML = '<i class="bi bi-arrow-counterclockwise"></i>';
-                        }
-                    } else {
-                        songElement.classList.remove('played-song');
-                        const btn = songElement.querySelector('.action-btn:not(.remove-btn)');
-                        if (btn) {
-                            btn.innerHTML = '<i class="bi bi-check"></i>';
-                            btn.classList.add('played-btn');
-                        }
-                    }
+    const song = allSongs.find(s => s.id === songId);
+    if (!song) return;
+    
+    const newStatus = !song.played;
+    
+    db.collection("songs").doc(songId).update({
+        played: newStatus,
+        playedAt: newStatus ? new Date().toISOString() : null // <-- Solo si se marca como tocada
+    })
+    .then(() => {
+        song.played = newStatus;
+        
+        // Actualizar en playlistSongs si está allí
+        const playlistIndex = playlistSongs.findIndex(s => s.id === songId);
+        if (playlistIndex !== -1) {
+            playlistSongs[playlistIndex].played = newStatus;
+        }
+        
+        showNotification(
+            newStatus ? `✅ "${song.title}" marcada como tocada` : `🔄 "${song.title}" marcada como por tocar`,
+            newStatus ? "success" : "info"
+        );
+        
+        updateLiveStats();
+        
+        // Actualizar la UI de la canción específica
+        const songElement = document.querySelector(`#playlist-list .song-item[data-id="${songId}"]`);
+        if (songElement) {
+            if (newStatus) {
+                songElement.classList.add('played-song');
+                const btn = songElement.querySelector('.played-btn');
+                if (btn) {
+                    btn.innerHTML = '<i class="bi bi-arrow-counterclockwise"></i>';
                 }
-            })
-            .catch((error) => {
-                console.error("Error actualizando estado:", error);
-                showNotification("❌ Error al actualizar estado", "danger");
-            });
-        };
+            } else {
+                songElement.classList.remove('played-song');
+                const btn = songElement.querySelector('.action-btn:not(.remove-btn)');
+                if (btn) {
+                    btn.innerHTML = '<i class="bi bi-check"></i>';
+                    btn.classList.add('played-btn');
+                }
+            }
+        }
+    })
+    .catch((error) => {
+        console.error("Error actualizando estado:", error);
+        showNotification("❌ Error al actualizar estado", "danger");
+    });
+};
 
         window.autoGeneratePlaylist = function() {
             const topSongs = allSongs
@@ -1977,34 +2054,91 @@
         };
 
         window.clearPlaylist = function() {
-            if (playlistSongs.length === 0) {
-                showNotification("La playlist ya está vacía", "info");
+    if (playlistSongs.length === 0) {
+        showNotification("La playlist ya está vacía", "info");
+        return;
+    }
+    
+    if (confirm("¿Limpiar TODA la playlist?\nTodas las canciones se marcarán como 'no tocadas'.")) {
+        const batch = db.batch();
+        
+        playlistSongs.forEach(song => {
+            const songRef = db.collection("songs").doc(song.id);
+            batch.update(songRef, {
+                inPlaylist: false,
+                playlistOrder: 999,
+                played: false // <-- AGREGAR ESTA LÍNEA
+            });
+            song.inPlaylist = false;
+            song.playlistOrder = 999;
+            song.played = false; // <-- AGREGAR ESTA LÍNEA
+        });
+        
+        batch.commit()
+        .then(() => {
+            playlistSongs = [];
+            showNotification("✅ Playlist limpiada - Todas las canciones listas para nuevo show", "success");
+            loadStageMode();
+        })
+        .catch((error) => {
+            console.error("Error limpiando playlist:", error);
+            showNotification("❌ Error al limpiar playlist", "danger");
+        });
+    }
+};
+
+        // ========== NUEVA FUNCIÓN: RESET COMPLETO DEL ESCENARIO ==========
+        window.resetCompleteStage = function() {
+            if (allSongs.length === 0) {
+                showNotification("No hay canciones para resetear", "info");
                 return;
             }
             
-            if (confirm("¿Limpiar TODA la playlist?")) {
+            if (confirm("⚠️ ¿RESET COMPLETO DEL ESCENARIO?\n\nEsto hará:\n1. Quitar TODAS las canciones de la playlist\n2. Marcar TODAS como NO tocadas\n3. Reiniciar TODOS los votos a 0\n\n¿Estás seguro?")) {
                 const batch = db.batch();
+                let processed = 0;
                 
-                playlistSongs.forEach(song => {
+                // Resetear TODAS las canciones
+                allSongs.forEach(song => {
                     const songRef = db.collection("songs").doc(song.id);
                     batch.update(songRef, {
                         inPlaylist: false,
-                        playlistOrder: 999
+                        playlistOrder: 999,
+                        played: false,
+                        votes: 0,
+                        updatedAt: new Date().toISOString(),
+                        // Guardar fecha del reset para referencia
+                        lastResetAt: new Date().toISOString()
                     });
-                    song.inPlaylist = false;
-                    song.playlistOrder = 999;
+                    processed++;
                 });
                 
                 batch.commit()
-                .then(() => {
-                    playlistSongs = [];
-                    showNotification("✅ Playlist limpiada", "success");
-                    loadStageMode();
-                })
-                .catch((error) => {
-                    console.error("Error limpiando playlist:", error);
-                    showNotification("❌ Error al limpiar playlist", "danger");
-                });
+                    .then(() => {
+                        // Actualizar datos locales
+                        allSongs.forEach(song => {
+                            song.inPlaylist = false;
+                            song.playlistOrder = 999;
+                            song.played = false;
+                            song.votes = 0;
+                        });
+                        
+                        playlistSongs = [];
+                        
+                        showNotification(`✅ Escenario reseteado! ${processed} canciones actualizadas`, "success");
+                        
+                        // Recargar la UI completa
+                        setTimeout(() => {
+                            loadAllData();
+                            if (currentSection === 'stage') {
+                                loadStageMode();
+                            }
+                        }, 1000);
+                    })
+                    .catch((error) => {
+                        console.error("Error reseteando escenario:", error);
+                        showNotification("❌ Error al resetear escenario", "danger");
+                    });
             }
         };
 
