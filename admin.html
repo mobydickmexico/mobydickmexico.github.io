@@ -237,6 +237,11 @@
             .stage-layout {
                 flex-direction: column;
                 height: auto;
+                gap: 20px;
+            }
+            
+            .stage-column {
+                min-height: 40vh;
             }
         }
         
@@ -260,30 +265,32 @@
             border-bottom: 1px solid #333;
         }
         
-        /* Listas de canciones con scroll */
+        /* Listas de canciones con scroll - MEJORADO PARA TÁCTIL */
         .song-list-container {
             flex: 1;
             overflow-y: auto;
             padding-right: 10px;
             margin-bottom: 15px;
+            -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
+            touch-action: pan-y; /* Permitir solo scroll vertical en táctil */
         }
         
         /* Estilo para scrollbar */
         .song-list-container::-webkit-scrollbar {
-            width: 8px;
+            width: 10px; /* Más ancho para táctil */
         }
         
         .song-list-container::-webkit-scrollbar-track {
             background: rgba(255,255,255,0.05);
-            border-radius: 4px;
+            border-radius: 5px;
         }
         
         .song-list-container::-webkit-scrollbar-thumb {
             background: var(--admin-accent);
-            border-radius: 4px;
+            border-radius: 5px;
         }
         
-        /* Items de canción */
+        /* Items de canción - MEJORADO PARA TÁCTIL */
         .song-item {
             background: linear-gradient(90deg, #222, #2a2a2a);
             border-radius: 10px;
@@ -294,16 +301,20 @@
             align-items: center;
             border-left: 4px solid var(--dj-blue);
             transition: all 0.2s;
-            cursor: move;
+            cursor: default; /* Cambiado de 'move' a 'default' */
+            user-select: none; /* Evitar selección de texto */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
         }
         
         .song-item:hover {
             background: linear-gradient(90deg, #2a2a2a, #333);
-            transform: translateX(3px);
         }
         
         .song-info {
             flex: 1;
+            padding-right: 10px;
         }
         
         .song-title {
@@ -321,12 +332,32 @@
         .song-votes {
             background: var(--admin-accent);
             color: white;
-            padding: 6px 15px;
+            padding: 6px 12px;
             border-radius: 15px;
             font-weight: bold;
-            min-width: 60px;
+            min-width: 50px;
             text-align: center;
             margin-right: 10px;
+            flex-shrink: 0;
+        }
+        
+        /* LED PARPADEANTE para canción en vivo */
+        .live-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ff3366;
+            margin-right: 10px;
+            animation: livePulse 1s infinite;
+            box-shadow: 0 0 10px #ff3366;
+            flex-shrink: 0;
+        }
+        
+        @keyframes livePulse {
+            0% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.1); }
+            100% { opacity: 0.3; transform: scale(0.8); }
         }
         
         /* Botones de acción grandes */
@@ -364,17 +395,40 @@
             color: white;
         }
         
-        .move-btn {
+        /* Botón para reordenar (solo visible cuando se necesita) */
+        .reorder-btn {
             background: linear-gradient(145deg, #af52de, #8e44ad);
             color: white;
             min-width: 60px;
+            display: none; /* Oculto por defecto, se muestra con clase CSS */
         }
         
-        /* Canción actual (próxima por tocar) */
+        /* Canción actual (EN VIVO - con LED parpadeante) */
         .current-song {
             border-left: 4px solid var(--dj-green) !important;
             background: linear-gradient(90deg, #1a2a1a, #223322) !important;
             box-shadow: 0 0 15px rgba(76, 217, 100, 0.3);
+            position: relative;
+        }
+        
+        /* LED dentro de la canción actual */
+        .current-song::before {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ff3366;
+            animation: livePulse 1s infinite;
+            box-shadow: 0 0 10px #ff3366;
+        }
+        
+        /* Ajustar contenido para el LED */
+        .current-song .song-info {
+            margin-left: 20px;
         }
         
         /* Canción ya tocada */
@@ -384,7 +438,7 @@
             background: linear-gradient(90deg, #333, #3a3a3a) !important;
         }
         
-        /* Controles de playlist */
+        /* Controles de playlist - SIMPLIFICADOS */
         .playlist-controls {
             display: flex;
             gap: 10px;
@@ -393,32 +447,19 @@
             justify-content: center;
         }
         
-        /* Estadísticas en vivo en escenario */
-        .live-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .stat-card {
-            background: #222;
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
-            border: 1px solid #333;
-        }
-        
-        .stat-value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--dj-yellow);
-            margin-bottom: 5px;
-        }
-        
-        .stat-label {
-            font-size: 0.9rem;
-            color: #aaa;
+        /* Botón de MODE (para alternar entre scroll y reordenar) */
+        .mode-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #444;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            z-index: 10;
         }
         
         /* ========== MENSAJES DEL PÚBLICO ========== */
@@ -645,8 +686,10 @@
                 gap: 15px;
             }
             
-            .live-stats {
-                grid-template-columns: repeat(2, 1fr);
+            .action-btn {
+                min-width: 100px;
+                padding: 8px 12px;
+                font-size: 0.9rem;
             }
             
             .fullscreen-btn {
@@ -667,13 +710,10 @@
                 min-width: calc(50% - 10px);
             }
             
-            .live-stats {
-                grid-template-columns: 1fr;
-            }
-            
             .action-btn {
-                min-width: 100px;
-                padding: 8px 12px;
+                min-width: 90px;
+                padding: 6px 10px;
+                font-size: 0.85rem;
             }
             
             .fullscreen-btn {
@@ -683,6 +723,27 @@
                 height: 40px;
                 font-size: 1.2rem;
             }
+        }
+        
+        /* Clase para modo reordenar */
+        .reorder-mode .song-item {
+            cursor: move !important;
+            touch-action: none; /* Deshabilitar scroll para drag & drop */
+        }
+        
+        .reorder-mode .song-list-container {
+            touch-action: none; /* Deshabilitar scroll en modo reordenar */
+        }
+        
+        /* Indicador visual de que está en modo reordenar */
+        .reorder-mode-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--dj-purple);
+            margin-left: 5px;
+            animation: pulse 1s infinite;
         }
     </style>
 </head>
@@ -720,76 +781,48 @@
         </section>
 
         <!-- 🎤 ESCENARIO (LA SECCIÓN MÁS IMPORTANTE) -->
-        <section id="stage-section" class="content-section">
-            <h2 class="section-title">ESCENARIO - CONTROL DE SHOW</h2>
-            
-            <!-- Estadísticas en vivo -->
-            <div class="live-stats">
-                <div class="stat-card">
-                    <div class="stat-value" id="live-total">0</div>
-                    <div class="stat-label">VOTOS TOTALES</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="live-played">0</div>
-                    <div class="stat-label">TOCADAS</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="live-remaining">0</div>
-                    <div class="stat-label">POR TOCAR</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="live-connected">0</div>
-                    <div class="stat-label">CONECTADOS</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="live-messages">0</div>
-                    <div class="stat-label">MENSAJES</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="live-next">-</div>
-                    <div class="stat-label">PRÓXIMA</div>
-                </div>
+<section id="stage-section" class="content-section">
+    <!-- TÍTULO SIMPLIFICADO -->
+    <h2 class="section-title" style="margin-bottom: 15px;">ESCENARIO</h2>
+    
+    <!-- Layout de 2 columnas -->
+    <div class="stage-layout">
+        <!-- COLUMNA IZQUIERDA: REPERTORIO COMPLETO -->
+        <div class="stage-column">
+            <h3 class="column-title">REPERTORIO DISPONIBLE</h3>
+            <div class="song-list-container" id="repertoire-list">
+                <!-- Canciones del repertorio -->
             </div>
-
-            <!-- Layout de 2 columnas -->
-            <div class="stage-layout">
-                <!-- COLUMNA IZQUIERDA: REPERTORIO COMPLETO -->
-                <div class="stage-column">
-                    <h3 class="column-title">REPERTORIO DISPONIBLE</h3>
-                    <div class="song-list-container" id="repertoire-list">
-                        <!-- Canciones del repertorio -->
-                    </div>
-                    <div class="playlist-controls">
-                        <button class="action-btn add-btn" onclick="autoGeneratePlaylist()">
-                            <i class="bi bi-magic"></i> GENERAR PLAYLIST
-                        </button>
-                        <button class="action-btn" onclick="resetAllVotes()">
-                            <i class="bi bi-arrow-clockwise"></i> REINICIAR VOTOS
-                        </button>
-                    </div>
-                </div>
-
-                <!-- COLUMNA DERECHA: PLAYLIST DE LA NOCHE -->
-                <div class="stage-column">
-                    <h3 class="column-title">PLAYLIST DE HOY</h3>
-                    <div class="song-list-container" id="playlist-list">
-                        <!-- Playlist ordenable -->
-                    </div>
-                    <div class="playlist-controls">
-                        <button class="action-btn played-btn" onclick="markAllAsPlayed()">
-                            <i class="bi bi-check-all"></i> MARCAR TODAS COMO TOCADAS
-                        </button>
-                        <button class="action-btn remove-btn" onclick="clearPlaylist()">
-                            <i class="bi bi-trash"></i> LIMPIAR PLAYLIST
-                        </button>
-                        <!-- NUEVO BOTÓN DE RESET COMPLETO DEL ESCENARIO -->
-                        <button class="action-btn" onclick="resetCompleteStage()" style="background: linear-gradient(145deg, #ff9500, #ff5e00);">
-                            <i class="bi bi-fire"></i> RESET ESCENARIO
-                        </button>
-                    </div>
-                </div>
+            <div class="playlist-controls">
+                <button class="action-btn add-btn" onclick="autoGeneratePlaylist()">
+                    <i class="bi bi-magic"></i> GENERAR PLAYLIST
+                </button>
+                <button class="action-btn" onclick="resetAllVotes()">
+                    <i class="bi bi-arrow-clockwise"></i> REINICIAR VOTOS
+                </button>
             </div>
-        </section>
+        </div>
+
+        <!-- COLUMNA DERECHA: PLAYLIST DE LA NOCHE -->
+        <div class="stage-column">
+            <h3 class="column-title">PLAYLIST DE HOY</h3>
+            <div class="song-list-container" id="playlist-list">
+                <!-- Playlist ordenable -->
+            </div>
+            <div class="playlist-controls">
+                <!-- BOTÓN PARA REORDENAR -->
+                <button class="action-btn" id="mode-toggle" onclick="toggleReorderMode()" style="background: linear-gradient(145deg, #af52de, #8e44ad);">
+                    <i class="bi bi-arrow-down-up"></i> REORDENAR
+                </button>
+                
+                <!-- BOTÓN PARA LIMPIAR PLAYLIST -->
+                <button class="action-btn remove-btn" onclick="clearPlaylist()">
+                    <i class="bi bi-trash"></i> LIMPIAR PLAYLIST
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
 
         <!-- 💬 MENSAJES DEL PÚBLICO -->
         <section id="messages-section" class="content-section">
@@ -902,8 +935,9 @@
         let filteredSongs = null;
         let searchTimeout = null;
         let isFullscreen = false;
-        let songsListener = null; // Listener específico para canciones
-        let isUpdatingOrder = false; // Bandera para evitar ciclo infinito
+        let songsListener = null;
+        let isUpdatingOrder = false;
+        let isReorderMode = false; // Nuevo: controlar modo reordenar
 
         // ========== INICIALIZAR ==========
         document.addEventListener('DOMContentLoaded', function() {
@@ -1049,6 +1083,36 @@
             }
         }
 
+        // ========== FUNCIÓN PARA ALTERNAR MODO REORDENAR ==========
+        window.toggleReorderMode = function() {
+    const playlistContainer = document.getElementById('playlist-list');
+    const modeToggle = document.getElementById('mode-toggle');
+    
+    isReorderMode = !isReorderMode;
+    
+    if (isReorderMode) {
+        // Activar modo reordenar
+        playlistContainer.classList.add('reorder-mode');
+        modeToggle.innerHTML = '<i class="bi bi-list"></i> SCROLL';
+        modeToggle.style.background = 'linear-gradient(145deg, #444, #333)';
+        initSortable(); // Activar Sortable.js
+        showNotification("Modo REORDENAR activado. Arrastra las canciones para cambiar el orden.", "info");
+    } else {
+        // Desactivar modo reordenar
+        playlistContainer.classList.remove('reorder-mode');
+        modeToggle.innerHTML = '<i class="bi bi-arrow-down-up"></i> REORDENAR';
+        modeToggle.style.background = 'linear-gradient(145deg, #af52de, #8e44ad)';
+        
+        // Destruir Sortable.js
+        if (sortableInstance) {
+            sortableInstance.destroy();
+            sortableInstance = null;
+        }
+        
+        showNotification("Modo SCROLL activado. Desliza para ver la lista.", "info");
+    }
+};
+
         // ========== INICIALIZAR FIREBASE ==========
         function initializeFirebase() {
             try {
@@ -1129,7 +1193,6 @@
                             
                             // Si estamos en modo escenario, actualizar la UI
                             if (currentSection === 'stage') {
-                                updateLiveStats();
                                 updateSongInUI(songId, allSongs[songIndex]);
                             }
                         }
@@ -1151,11 +1214,20 @@
                     votesBadge.textContent = songData.votes;
                 }
                 
-                // Actualizar estado de "tocada"
+                // Actualizar estado de "tocada" y "current"
                 if (songData.played) {
                     playlistItem.classList.add('played-song');
+                    playlistItem.classList.remove('current-song');
                 } else {
                     playlistItem.classList.remove('played-song');
+                    
+                    // Marcar como current si es la primera no tocada
+                    const firstUnplayed = playlistSongs.find(s => !s.played);
+                    if (firstUnplayed && firstUnplayed.id === songId) {
+                        playlistItem.classList.add('current-song');
+                    } else {
+                        playlistItem.classList.remove('current-song');
+                    }
                 }
             }
             
@@ -1205,8 +1277,6 @@
                         .filter(song => song.inPlaylist)
                         .sort((a, b) => (a.playlistOrder || 999) - (b.playlistOrder || 999));
                     
-                    updateStats();
-                    
                     // Cargar sección actual si es necesario
                     if (currentSection === 'stage') {
                         loadStageMode();
@@ -1229,24 +1299,13 @@
             
             connectionListener = counterRef.onSnapshot((doc) => {
                 if (doc.exists) {
-                    updateConnectionStats();
+                    // Solo mantener la referencia, no mostrar estadísticas
                 }
             });
         }
 
         function updateConnectionStats() {
-            const counterRef = db.collection("stats").doc("connections");
-            
-            counterRef.get().then((doc) => {
-                if (doc.exists) {
-                    const data = doc.data();
-                    const currentConnections = data.count || 0;
-                    
-                    document.getElementById('live-connected').textContent = currentConnections;
-                }
-            }).catch((error) => {
-                console.error("Error obteniendo estadísticas de conexión:", error);
-            });
+            // Esta función ya no se usa, pero la mantenemos por compatibilidad
         }
 
         // ========== LISTENER DE MENSAJES ==========
@@ -1368,10 +1427,8 @@
         function updateMessageStats() {
             const unread = allMessages.filter(m => !m.read).length;
             const indicator = document.getElementById('messages-indicator');
-            const liveMessages = document.getElementById('live-messages');
             
             indicator.style.display = unread > 0 ? 'inline-block' : 'none';
-            if (liveMessages) liveMessages.textContent = unread;
         }
 
         // ========== LISTENER DE SUGERENCIAS ==========
@@ -1493,23 +1550,29 @@
 
         // ========== MODO ESCENARIO ==========
         function loadStageMode() {
-            updateLiveStats();
-            loadPlaylist();
-            loadRepertoire();
-            initSortable();
-        }
-
-        function updateLiveStats() {
-            const playlistCount = playlistSongs.length;
-            const playedCount = playlistSongs.filter(s => s.played).length;
-            const totalVotes = allSongs.reduce((sum, song) => sum + song.votes, 0);
-            const nextSong = playlistSongs.find(s => !s.played);
-            
-            document.getElementById('live-total').textContent = totalVotes;
-            document.getElementById('live-played').textContent = playedCount;
-            document.getElementById('live-remaining').textContent = playlistCount - playedCount;
-            document.getElementById('live-next').textContent = nextSong ? nextSong.title.substring(0, 12) + (nextSong.title.length > 12 ? '...' : '') : '-';
-        }
+    loadPlaylist();
+    loadRepertoire();
+    
+    // Por defecto, NO activar Sortable.js (solo scroll)
+    isReorderMode = false;
+    const playlistContainer = document.getElementById('playlist-list');
+    const modeToggle = document.getElementById('mode-toggle');
+    
+    if (playlistContainer) {
+        playlistContainer.classList.remove('reorder-mode');
+    }
+    
+    if (modeToggle) {
+        modeToggle.innerHTML = '<i class="bi bi-arrow-down-up"></i> REORDENAR';
+        modeToggle.style.background = 'linear-gradient(145deg, #af52de, #8e44ad)';
+    }
+    
+    // Destruir Sortable si existe
+    if (sortableInstance) {
+        sortableInstance.destroy();
+        sortableInstance = null;
+    }
+}
 
         function loadPlaylist() {
             const container = document.getElementById('playlist-list');
@@ -1530,9 +1593,12 @@
                 return;
             }
             
+            // Encontrar la primera canción no tocada (EN VIVO)
+            const currentSongIndex = playlistSongs.findIndex(song => !song.played);
+            
             let html = '';
             playlistSongs.forEach((song, index) => {
-                const isCurrent = !song.played && !playlistSongs.slice(0, index).some(s => !s.played);
+                const isCurrent = index === currentSongIndex;
                 
                 html += `
                     <div class="song-item ${song.played ? 'played-song' : ''} ${isCurrent ? 'current-song' : ''}" data-id="${song.id}">
@@ -1556,47 +1622,43 @@
             });
             
             container.innerHTML = html;
-            
-            if (!sortableInstance && playlistSongs.length > 0) {
-                initSortable();
-            }
         }
 
         function loadRepertoire() {
-    const container = document.getElementById('repertoire-list');
-    
-    if (!container) return;
-    
-    // CANCIONES DISPONIBLES ORDENADAS ALFABÉTICAMENTE
-    const availableSongs = allSongs
-        .filter(song => !song.inPlaylist)
-        .sort((a, b) => a.title.localeCompare(b.title)); // A-Z por título
-    
-    if (availableSongs.length === 0) {
-        container.innerHTML = '<p class="text-center text-muted">No hay canciones disponibles</p>';
-        return;
-    }
-    
-    let html = '';
-    availableSongs.forEach(song => {
-        html += `
-            <div class="song-item" data-id="${song.id}">
-                <div class="song-info">
-                    <div class="song-title">${song.title}</div>
-                    <div class="song-artist">${song.artist}</div>
-                </div>
-                <div class="d-flex align-items-center">
-                    <span class="song-votes">${song.votes}</span>
-                    <button class="action-btn add-btn" onclick="addToPlaylist('${song.id}')" style="padding: 8px 15px; margin-left: 10px;">
-                        <i class="bi bi-plus-lg"></i> Agregar
-                    </button>
-                </div>
-            </div>
-        `;
-    });
-    
-    container.innerHTML = html;
-}
+            const container = document.getElementById('repertoire-list');
+            
+            if (!container) return;
+            
+            // CANCIONES DISPONIBLES ORDENADAS ALFABÉTICAMENTE
+            const availableSongs = allSongs
+                .filter(song => !song.inPlaylist)
+                .sort((a, b) => a.title.localeCompare(b.title)); // A-Z por título
+            
+            if (availableSongs.length === 0) {
+                container.innerHTML = '<p class="text-center text-muted">No hay canciones disponibles</p>';
+                return;
+            }
+            
+            let html = '';
+            availableSongs.forEach(song => {
+                html += `
+                    <div class="song-item" data-id="${song.id}">
+                        <div class="song-info">
+                            <div class="song-title">${song.title}</div>
+                            <div class="song-artist">${song.artist}</div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="song-votes">${song.votes}</span>
+                            <button class="action-btn add-btn" onclick="addToPlaylist('${song.id}')" style="padding: 8px 15px; margin-left: 10px;">
+                                <i class="bi bi-plus-lg"></i> Agregar
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
 
         function initSortable() {
             const playlist = document.getElementById('playlist-list');
@@ -1609,6 +1671,7 @@
             sortableInstance = Sortable.create(playlist, {
                 animation: 150,
                 ghostClass: 'dragging',
+                filter: '.played-song', // No permitir arrastrar canciones ya tocadas
                 onStart: function() {
                     // Al empezar a arrastrar, desactivar temporalmente el listener
                     if (songsListener) {
@@ -1629,7 +1692,7 @@
 
         // ========== ACTUALIZAR ORDEN DE PLAYLIST (SOLUCIÓN DEFINITIVA) ==========
         function updatePlaylistOrder() {
-            const items = document.querySelectorAll('#playlist-list .song-item');
+            const items = document.querySelectorAll('#playlist-list .song-item:not(.played-song)');
             const batch = db.batch();
             
             // Marcar que estamos actualizando el orden
@@ -1839,7 +1902,6 @@
                 })
                 .then(() => {
                     showNotification("✅ Contador de conectados reiniciado", "success");
-                    updateConnectionStats();
                 })
                 .catch((error) => {
                     console.error("Error reseteando contador:", error);
@@ -1909,80 +1971,89 @@
         };
 
         window.removeFromPlaylist = function(songId) {
-    const song = allSongs.find(s => s.id === songId);
-    if (!song) return;
-    
-    if (confirm(`¿Remover "${song.title}" de la playlist?`)) {
-        db.collection("songs").doc(songId).update({
-            inPlaylist: false,
-            playlistOrder: 999,
-            played: false // <-- AGREGAR ESTA LÍNEA
-        })
-        .then(() => {
-            song.inPlaylist = false;
-            song.playlistOrder = 999;
-            song.played = false; // <-- AGREGAR ESTA LÍNEA
-            playlistSongs = playlistSongs.filter(s => s.id !== songId);
-            showNotification(`✅ "${song.title}" removida de la playlist`, "info");
-            loadStageMode();
-        })
-        .catch((error) => {
-            console.error("Error removiendo de playlist:", error);
-            showNotification("❌ Error al remover de playlist", "danger");
-        });
-    }
-};
+            const song = allSongs.find(s => s.id === songId);
+            if (!song) return;
+            
+            if (confirm(`¿Remover "${song.title}" de la playlist?`)) {
+                db.collection("songs").doc(songId).update({
+                    inPlaylist: false,
+                    playlistOrder: 999,
+                    played: false
+                })
+                .then(() => {
+                    song.inPlaylist = false;
+                    song.playlistOrder = 999;
+                    song.played = false;
+                    playlistSongs = playlistSongs.filter(s => s.id !== songId);
+                    showNotification(`✅ "${song.title}" removida de la playlist`, "info");
+                    loadStageMode();
+                })
+                .catch((error) => {
+                    console.error("Error removiendo de playlist:", error);
+                    showNotification("❌ Error al remover de playlist", "danger");
+                });
+            }
+        };
 
         window.togglePlayed = function(songId) {
-    const song = allSongs.find(s => s.id === songId);
-    if (!song) return;
-    
-    const newStatus = !song.played;
-    
-    db.collection("songs").doc(songId).update({
-        played: newStatus,
-        playedAt: newStatus ? new Date().toISOString() : null // <-- Solo si se marca como tocada
-    })
-    .then(() => {
-        song.played = newStatus;
-        
-        // Actualizar en playlistSongs si está allí
-        const playlistIndex = playlistSongs.findIndex(s => s.id === songId);
-        if (playlistIndex !== -1) {
-            playlistSongs[playlistIndex].played = newStatus;
-        }
-        
-        showNotification(
-            newStatus ? `✅ "${song.title}" marcada como tocada` : `🔄 "${song.title}" marcada como por tocar`,
-            newStatus ? "success" : "info"
-        );
-        
-        updateLiveStats();
-        
-        // Actualizar la UI de la canción específica
-        const songElement = document.querySelector(`#playlist-list .song-item[data-id="${songId}"]`);
-        if (songElement) {
-            if (newStatus) {
-                songElement.classList.add('played-song');
-                const btn = songElement.querySelector('.played-btn');
-                if (btn) {
-                    btn.innerHTML = '<i class="bi bi-arrow-counterclockwise"></i>';
+            const song = allSongs.find(s => s.id === songId);
+            if (!song) return;
+            
+            const newStatus = !song.played;
+            
+            db.collection("songs").doc(songId).update({
+                played: newStatus,
+                playedAt: newStatus ? new Date().toISOString() : null
+            })
+            .then(() => {
+                song.played = newStatus;
+                
+                // Actualizar en playlistSongs si está allí
+                const playlistIndex = playlistSongs.findIndex(s => s.id === songId);
+                if (playlistIndex !== -1) {
+                    playlistSongs[playlistIndex].played = newStatus;
                 }
-            } else {
-                songElement.classList.remove('played-song');
-                const btn = songElement.querySelector('.action-btn:not(.remove-btn)');
-                if (btn) {
-                    btn.innerHTML = '<i class="bi bi-check"></i>';
-                    btn.classList.add('played-btn');
+                
+                showNotification(
+                    newStatus ? `✅ "${song.title}" marcada como tocada` : `🔄 "${song.title}" marcada como por tocar`,
+                    newStatus ? "success" : "info"
+                );
+                
+                // Actualizar la UI de la canción específica
+                const songElement = document.querySelector(`#playlist-list .song-item[data-id="${songId}"]`);
+                if (songElement) {
+                    if (newStatus) {
+                        songElement.classList.add('played-song');
+                        songElement.classList.remove('current-song');
+                        const btn = songElement.querySelector('.played-btn');
+                        if (btn) {
+                            btn.innerHTML = '<i class="bi bi-arrow-counterclockwise"></i>';
+                        }
+                    } else {
+                        songElement.classList.remove('played-song');
+                        
+                        // Verificar si ahora es la canción en vivo
+                        const firstUnplayed = playlistSongs.find(s => !s.played);
+                        if (firstUnplayed && firstUnplayed.id === songId) {
+                            songElement.classList.add('current-song');
+                        }
+                        
+                        const btn = songElement.querySelector('.action-btn:not(.remove-btn)');
+                        if (btn) {
+                            btn.innerHTML = '<i class="bi bi-check"></i>';
+                            btn.classList.add('played-btn');
+                        }
+                    }
                 }
-            }
-        }
-    })
-    .catch((error) => {
-        console.error("Error actualizando estado:", error);
-        showNotification("❌ Error al actualizar estado", "danger");
-    });
-};
+                
+                // Recargar playlist para actualizar LED de canción en vivo
+                loadPlaylist();
+            })
+            .catch((error) => {
+                console.error("Error actualizando estado:", error);
+                showNotification("❌ Error al actualizar estado", "danger");
+            });
+        };
 
         window.autoGeneratePlaylist = function() {
             const topSongs = allSongs
@@ -2023,122 +2094,37 @@
                 });
         };
 
-        window.markAllAsPlayed = function() {
+        window.clearPlaylist = function() {
             if (playlistSongs.length === 0) {
-                showNotification("No hay canciones en la playlist", "info");
+                showNotification("La playlist ya está vacía", "info");
                 return;
             }
             
-            if (confirm("¿Marcar TODAS las canciones de la playlist como tocadas?")) {
+            if (confirm("¿Limpiar TODA la playlist?\nTodas las canciones se marcarán como 'no tocadas'.")) {
                 const batch = db.batch();
                 
                 playlistSongs.forEach(song => {
                     const songRef = db.collection("songs").doc(song.id);
                     batch.update(songRef, {
-                        played: true,
-                        playedAt: new Date().toISOString()
-                    });
-                    song.played = true;
-                });
-                
-                batch.commit()
-                    .then(() => {
-                        showNotification("✅ Todas las canciones marcadas como tocadas", "success");
-                        loadStageMode();
-                    })
-                    .catch((error) => {
-                        console.error("Error marcando canciones:", error);
-                        showNotification("❌ Error al marcar canciones", "danger");
-                    });
-            }
-        };
-
-        window.clearPlaylist = function() {
-    if (playlistSongs.length === 0) {
-        showNotification("La playlist ya está vacía", "info");
-        return;
-    }
-    
-    if (confirm("¿Limpiar TODA la playlist?\nTodas las canciones se marcarán como 'no tocadas'.")) {
-        const batch = db.batch();
-        
-        playlistSongs.forEach(song => {
-            const songRef = db.collection("songs").doc(song.id);
-            batch.update(songRef, {
-                inPlaylist: false,
-                playlistOrder: 999,
-                played: false // <-- AGREGAR ESTA LÍNEA
-            });
-            song.inPlaylist = false;
-            song.playlistOrder = 999;
-            song.played = false; // <-- AGREGAR ESTA LÍNEA
-        });
-        
-        batch.commit()
-        .then(() => {
-            playlistSongs = [];
-            showNotification("✅ Playlist limpiada - Todas las canciones listas para nuevo show", "success");
-            loadStageMode();
-        })
-        .catch((error) => {
-            console.error("Error limpiando playlist:", error);
-            showNotification("❌ Error al limpiar playlist", "danger");
-        });
-    }
-};
-
-        // ========== NUEVA FUNCIÓN: RESET COMPLETO DEL ESCENARIO ==========
-        window.resetCompleteStage = function() {
-            if (allSongs.length === 0) {
-                showNotification("No hay canciones para resetear", "info");
-                return;
-            }
-            
-            if (confirm("⚠️ ¿RESET COMPLETO DEL ESCENARIO?\n\nEsto hará:\n1. Quitar TODAS las canciones de la playlist\n2. Marcar TODAS como NO tocadas\n3. Reiniciar TODOS los votos a 0\n\n¿Estás seguro?")) {
-                const batch = db.batch();
-                let processed = 0;
-                
-                // Resetear TODAS las canciones
-                allSongs.forEach(song => {
-                    const songRef = db.collection("songs").doc(song.id);
-                    batch.update(songRef, {
                         inPlaylist: false,
                         playlistOrder: 999,
-                        played: false,
-                        votes: 0,
-                        updatedAt: new Date().toISOString(),
-                        // Guardar fecha del reset para referencia
-                        lastResetAt: new Date().toISOString()
+                        played: false
                     });
-                    processed++;
+                    song.inPlaylist = false;
+                    song.playlistOrder = 999;
+                    song.played = false;
                 });
                 
                 batch.commit()
-                    .then(() => {
-                        // Actualizar datos locales
-                        allSongs.forEach(song => {
-                            song.inPlaylist = false;
-                            song.playlistOrder = 999;
-                            song.played = false;
-                            song.votes = 0;
-                        });
-                        
-                        playlistSongs = [];
-                        
-                        showNotification(`✅ Escenario reseteado! ${processed} canciones actualizadas`, "success");
-                        
-                        // Recargar la UI completa
-                        setTimeout(() => {
-                            loadAllData();
-                            if (currentSection === 'stage') {
-                                loadStageMode();
-                            }
-                        }, 1000);
-                    })
-                    .catch((error) => {
-                        console.error("Error reseteando escenario:", error);
-                        showNotification("❌ Error al resetear escenario", "danger");
-                    });
+                .then(() => {
+                    playlistSongs = [];
+                    showNotification("✅ Playlist limpiada - Todas las canciones listas para nuevo show", "success");
+                    loadStageMode();
+                })
+                .catch((error) => {
+                    console.error("Error limpiando playlist:", error);
+                    showNotification("❌ Error al limpiar playlist", "danger");
+                });
             }
         };
 
