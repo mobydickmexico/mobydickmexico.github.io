@@ -462,55 +462,131 @@
             z-index: 10;
         }
         
-        /* ========== MENSAJES DEL PÚBLICO ========== */
-        .messages-container {
-            background: var(--panel-bg);
-            border-radius: 15px;
-            padding: 20px;
-            max-height: 70vh;
-            overflow-y: auto;
-            border: 1px solid #333;
-        }
-        
-        .message-card {
-            background: linear-gradient(90deg, #222, #2a2a2a);
-            border-radius: 10px;
-            padding: 18px;
-            margin-bottom: 15px;
-            border-left: 5px solid var(--dj-blue);
-        }
-        
-        .message-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        
-        .message-user {
-            color: var(--dj-blue);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .message-time {
-            font-size: 0.85rem;
-            color: #888;
-        }
-        
-        .message-content {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-            line-height: 1.5;
-        }
-        
-        .message-songs {
-            font-size: 0.9rem;
-            color: var(--dj-green);
-            font-style: italic;
-        }
+        /* ========== MENSAJES DEL PÚBLICO - VERSIÓN GRANDE ========== */
+.messages-container {
+    background: var(--panel-bg);
+    border-radius: 15px;
+    padding: 25px;
+    max-height: 75vh;
+    overflow-y: auto;
+    border: 2px solid #444;
+    font-size: 1.2rem;
+}
+
+.message-card {
+    background: linear-gradient(90deg, #1a1a1a, #252525);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 20px;
+    border-left: 8px solid var(--dj-blue);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.message-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #333;
+}
+
+.message-user {
+    color: var(--dj-blue);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.3rem;
+}
+
+.message-user i {
+    font-size: 1.5rem;
+}
+
+.message-time {
+    font-size: 1.1rem;
+    color: #bbb;
+    font-weight: 600;
+    background: #333;
+    padding: 6px 12px;
+    border-radius: 8px;
+}
+
+.message-content {
+    font-size: 1.6rem; /* ¡MUY GRANDE! */
+    margin-bottom: 15px;
+    line-height: 1.7;
+    font-weight: 600;
+    min-height: 60px;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+/* Mensajes no leídos más destacados */
+.message-card:not(.read) .message-content {
+    color: #fff;
+    font-weight: 700;
+}
+
+.message-songs {
+    font-size: 1.2rem;
+    color: var(--dj-green);
+    font-style: italic;
+    padding: 10px 0;
+    border-top: 1px dashed #444;
+    margin-top: 10px;
+}
+
+.message-songs i {
+    color: var(--dj-green);
+    margin-right: 8px;
+}
+
+/* Botones dentro de mensajes - EXTRA GRANDES */
+.message-card .action-btn {
+    padding: 12px 24px !important;
+    font-size: 1.2rem !important;
+    min-width: 160px !important;
+    margin: 8px;
+    border-radius: 10px;
+    font-weight: 700;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+}
+
+.message-card .action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.4);
+}
+
+/* Botón de "Marcar como leído" */
+.message-card .played-btn {
+    background: linear-gradient(145deg, #007aff, #0056cc);
+    font-size: 1.2rem;
+}
+
+/* Botón de eliminar */
+.message-card .remove-btn {
+    background: linear-gradient(145deg, #ff3b30, #cc0000);
+    font-size: 1.2rem;
+}
+
+/* Estado de leído/no leído */
+.message-card.read {
+    opacity: 0.85;
+    border-left-color: #666;
+}
+
+.message-card.read .message-content {
+    font-weight: 500;
+    color: #ccc;
+}
         
         /* ========== SUGERENCIAS ========== */
         .suggestions-container {
@@ -1366,63 +1442,65 @@
         }
 
         function displayMessages() {
-            const container = document.getElementById('messages-container');
-            
-            if (!container) return;
-            
-            if (allMessages.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-5">
-                        <i class="bi bi-chat-text display-1 text-muted"></i>
-                        <p class="mt-3">No hay mensajes aún</p>
-                        <p class="small text-muted">Los mensajes aparecerán cuando el público los envíe.</p>
+    const container = document.getElementById('messages-container');
+    
+    if (!container) return;
+    
+    if (allMessages.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-5">
+                <i class="bi bi-chat-text display-1 text-muted"></i>
+                <p class="mt-3" style="font-size: 1.4rem;">No hay mensajes aún</p>
+                <p class="small text-muted" style="font-size: 1.1rem;">Los mensajes aparecerán cuando el público los envíe.</p>
+            </div>
+        `;
+        return;
+    }
+    
+    let html = '';
+    allMessages.forEach(msg => {
+        const time = new Date(msg.sentAt).toLocaleTimeString('es-MX', { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+        });
+        
+        const songList = msg.songs && msg.songs.length > 0 
+            ? `<div class="message-songs"><i class="bi bi-music-note"></i> Sugiere: ${msg.songs.join(', ')}</div>` 
+            : '';
+        
+        const readClass = msg.read ? 'read' : '';
+        
+        html += `
+            <div class="message-card ${readClass}">
+                <div class="message-header">
+                    <div class="message-user">
+                        <i class="bi bi-person-circle"></i>
+                        <span>Usuario ${msg.deviceId.substring(0, 8)}</span>
                     </div>
-                `;
-                return;
-            }
-            
-            let html = '';
-            allMessages.forEach(msg => {
-                const time = new Date(msg.sentAt).toLocaleTimeString('es-MX', { 
-                    hour: '2-digit', 
-                    minute: '2-digit' 
-                });
-                
-                const songList = msg.songs && msg.songs.length > 0 
-                    ? `<div class="message-songs"><i class="bi bi-music-note"></i> ${msg.songs.join(', ')}</div>` 
-                    : '';
-                
-                const readClass = msg.read ? '' : 'fw-bold';
-                
-                html += `
-                    <div class="message-card">
-                        <div class="message-header">
-                            <div class="message-user">
-                                <i class="bi bi-person-circle"></i>
-                                <span class="${readClass}">Usuario ${msg.deviceId.substring(0, 6)}...</span>
-                            </div>
-                            <div>
-                                <span class="message-time">${time}</span>
-                                <button class="action-btn remove-btn ms-2" onclick="deleteMessage('${msg.id}')" style="padding: 5px 10px;">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="message-content ${readClass}">
-                            ${msg.message}
-                        </div>
-                        ${songList}
-                        ${!msg.read ? `
-                            <button class="action-btn played-btn mt-2" onclick="markAsRead('${msg.id}')" style="padding: 5px 15px;">
-                                <i class="bi bi-check"></i> Marcar como leído
-                            </button>
-                        ` : ''}
+                    <div>
+                        <span class="message-time">${time}</span>
                     </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-        }
+                </div>
+                <div class="message-content">
+                    ${msg.message}
+                </div>
+                ${songList}
+                <div style="margin-top: 15px; display: flex; gap: 10px;">
+                    ${!msg.read ? `
+                        <button class="action-btn played-btn" onclick="markAsRead('${msg.id}')">
+                            <i class="bi bi-check"></i> MARCADO LEÍDO
+                        </button>
+                    ` : ''}
+                    <button class="action-btn remove-btn" onclick="deleteMessage('${msg.id}')">
+                        <i class="bi bi-trash"></i> ELIMINAR
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+}
 
         function updateMessageStats() {
             const unread = allMessages.filter(m => !m.read).length;
