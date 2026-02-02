@@ -15,8 +15,16 @@
     <!-- Sortable.js para drag & drop -->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     
+    <!-- 🔥 VERSIÓN ACTUALIZADA DEL CSS (FORZAR CACHE) -->
     <style>
-        /* ========== ESTILOS GLOBALES - FONDO NEGRO ========== */
+        /* 
+        ===========================================
+        ESTILOS GLOBALES - VERSIÓN 2.0
+        Última actualización: ${new Date().toISOString()}
+        Cambios: Botones pequeños en mensajes, mejoras visuales
+        ===========================================
+        */
+        
         :root {
             --admin-primary: #0A4062;
             --admin-accent: #ff3366;
@@ -705,7 +713,7 @@
             transform: scale(1.05);
         }
         
-        /* ========== MENSAJES DEL PÚBLICO ========== */
+        /* ========== MENSAJES DEL PÚBLICO - ESTILOS ACTUALIZADOS ========== */
         .messages-container {
             background: var(--panel-bg);
             border-radius: 15px;
@@ -731,7 +739,7 @@
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
         }
         
-        /* Estilos para mensajes leídos */
+        /* 🔥 ESTILOS NUEVOS PARA MENSAJES LEÍDOS */
         .message-card.read {
             opacity: 0.6;
             background: linear-gradient(90deg, #2a2a2a, #333) !important;
@@ -802,7 +810,7 @@
             margin-right: 6px;
         }
         
-        /* Botones más pequeños en mensajes (como en sugerencias) */
+        /* 🔥 BOTONES MÁS PEQUEÑOS EN MENSAJES (COMO EN SUGERENCIAS) */
         .message-actions {
             display: flex;
             gap: 6px;
@@ -840,7 +848,7 @@
             color: white;
         }
         
-        /* ========== SUGERENCIAS ========== */
+        /* ========== SUGERENCIAS - ESTILOS ACTUALIZADOS ========== */
         .suggestions-container {
             background: var(--panel-bg);
             border-radius: 15px;
@@ -879,9 +887,9 @@
             justify-content: flex-end;
         }
         
-        /* Quitar botón de visto en sugerencias */
+        /* 🔥 QUITAR BOTÓN DE VISTO EN SUGERENCIAS */
         .suggestion-card .suggestion-actions .song-action-btn:first-child {
-            display: none; /* Oculta el botón de "marcar como visto" */
+            display: none !important; /* Oculta completamente el botón de "marcar como visto" */
         }
         
         /* ========== AGREGAR CANCIONES ========== */
@@ -1467,6 +1475,10 @@
     </button>
     
     <script>
+        // 🔥 AGREGAR VERSIÓN AL SCRIPT PARA FORZAR CACHE
+        const SCRIPT_VERSION = '2.0';
+        console.log(`🚀 Admin MobyDick v${SCRIPT_VERSION} - Última actualización: ${new Date().toISOString()}`);
+        
         // ========== CONFIGURACIÓN DE FIREBASE (NO MODIFICAR) ==========
         const firebaseConfig = {
             apiKey: "AIzaSyAitXyfb6Zc9GVEm0X_Hen_QOiA5Y3Aw1U",
@@ -1495,7 +1507,7 @@
 
         // ========== INICIALIZAR ==========
         document.addEventListener('DOMContentLoaded', function() {
-            console.log("🚀 Iniciando consola de control MobyDick...");
+            console.log(`🚀 Iniciando consola de control MobyDick v${SCRIPT_VERSION}...`);
             
             // Configurar navegación
             setupNavigation();
@@ -2215,7 +2227,7 @@
                                 <i class="bi bi-person"></i> ${suggestion.deviceId.substring(0, 6)}...
                             </small>
                             <div class="suggestion-actions">
-                                <!-- BOTÓN DE ELIMINAR SOLO -->
+                                <!-- SOLO BOTÓN DE ELIMINAR -->
                                 <button class="song-action-btn song-remove-btn" onclick="deleteSuggestion('${suggestion.id}')" style="min-width: 35px; padding: 6px;">
                                     <i class="bi bi-trash"></i>
                                 </button>
