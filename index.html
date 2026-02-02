@@ -443,9 +443,14 @@
         }
         
         .btn-vote:disabled {
-            background: #28a745;
+            background: #28a745 !important;
             color: white;
-            cursor: not-allowed;
+            cursor: pointer;
+        }
+        
+        /* Botón cuando está seleccionado (toggle) */
+        .btn-vote.selected {
+            background: linear-gradient(135deg, #28a745, #20c997) !important;
         }
         
         /* BOTÓN ENVIAR VOTOS EN MODAL */
@@ -893,7 +898,7 @@
             
             songs.forEach((song) => {
                 const isVoted = myVotes.includes(song.id);
-                const canVote = myVotes.length < 3;
+                const canVote = myVotes.length < 3 || isVoted; // Puede votar si tiene menos de 3 O si ya votó por esta canción (para desmarcar)
                 
                 html += `
                     <div class="song-item" data-song-id="${song.id}">
@@ -906,11 +911,10 @@
                         </div>
                         <div class="song-actions">
                             <span class="votes-badge">${song.votes} ${song.votes === 1 ? 'voto' : 'votos'}</span>
-                            <button class="btn btn-vote" 
-                                    onclick="voteForSongFromModal('${song.id}')"
-                                    ${isVoted ? "disabled" : ""}
-                                    ${!isVoted && !canVote ? "disabled" : ""}>
-                                ${isVoted ? '<i class="bi bi-check-circle"></i> SELECCIONADA' : '<i class="bi bi-hand-thumbs-up"></i> ELEGIR'}
+                            <button class="btn btn-vote ${isVoted ? 'selected' : ''}" 
+                                    onclick="toggleVoteForSong('${song.id}')"
+                                    ${!canVote && !isVoted ? "disabled" : ""}>
+                                ${isVoted ? '<i class="bi bi-check-circle"></i> ELEJIDA' : '<i class="bi bi-hand-thumbs-up"></i> ELEGIR'}
                             </button>
                         </div>
                     </div>
@@ -920,28 +924,29 @@
             container.innerHTML = html;
         }
 
-        window.voteForSongFromModal = function(songId) {
-            voteForSong(songId);
+        // ========== NUEVA FUNCIÓN TOGGLE VOTE ==========
+        window.toggleVoteForSong = function(songId) {
+            const isVoted = myVotes.includes(songId);
             
-            // Actualizar visualización en modal
-            setTimeout(() => {
-                displaySongsInModal(allSongs);
-            }, 300);
+            if (isVoted) {
+                // Si ya está votada, desmarcar
+                removeVote(songId);
+            } else {
+                // Si no está votada, marcar
+                if (checkVoteLimit()) {
+                    return;
+                }
+                
+                if (myVotes.length >= 3) {
+                    showSubmitFeedback("❌ Máximo 3 canciones por persona", "danger");
+                    return;
+                }
+                
+                addVote(songId);
+            }
         };
 
-        // ========== FUNCIONES DE VOTOS ==========
-        window.voteForSong = function(songId) {
-            if (checkVoteLimit()) {
-                return;
-            }
-            
-            if (myVotes.length >= 3) {
-                showSubmitFeedback("❌ Máximo 3 canciones por persona", "danger");
-                return;
-            }
-            
-            if (myVotes.includes(songId)) return;
-            
+        function addVote(songId) {
             const songRef = db.collection("songs").doc(songId);
             songRef.update({
                 votes: firebase.firestore.FieldValue.increment(1),
@@ -954,6 +959,23 @@
                 updateSelectedCounter();
                 updateModalSubmitButton();
                 
+                // Actualizar inmediatamente la UI
+                const songElement = document.querySelector(`.song-item[data-song-id="${songId}"]`);
+                if (songElement) {
+                    const voteBtn = songElement.querySelector('.btn-vote');
+                    if (voteBtn) {
+                        voteBtn.classList.add('selected');
+                        voteBtn.innerHTML = '<i class="bi bi-check-circle"></i> ELEJIDA';
+                    }
+                    
+                    // Actualizar contador de votos
+                    const votesBadge = songElement.querySelector('.votes-badge');
+                    if (votesBadge) {
+                        const currentVotes = parseInt(votesBadge.textContent.split(' ')[0]);
+                        votesBadge.textContent = `${currentVotes + 1} ${currentVotes === 0 ? 'voto' : 'votos'}`;
+                    }
+                }
+                
                 showSubmitFeedback("✅ Canción agregada a tu lista", "success");
                 
             })
@@ -961,10 +983,11 @@
                 console.error("Error votando:", error);
                 showSubmitFeedback("❌ Error al agregar canción", "danger");
             });
-        };
+        }
 
-        window.removeVote = function(songId) {
-            db.collection("songs").doc(songId).update({
+        function removeVote(songId) {
+            const songRef = db.collection("songs").doc(songId);
+            songRef.update({
                 votes: firebase.firestore.FieldValue.increment(-1)
             })
             .then(() => {
@@ -974,6 +997,23 @@
                 updateSelectedCounter();
                 updateModalSubmitButton();
                 
+                // Actualizar inmediatamente la UI
+                const songElement = document.querySelector(`.song-item[data-song-id="${songId}"]`);
+                if (songElement) {
+                    const voteBtn = songElement.querySelector('.btn-vote');
+                    if (voteBtn) {
+                        voteBtn.classList.remove('selected');
+                        voteBtn.innerHTML = '<i class="bi bi-hand-thumbs-up"></i> ELEGIR';
+                    }
+                    
+                    // Actualizar contador de votos
+                    const votesBadge = songElement.querySelector('.votes-badge');
+                    if (votesBadge) {
+                        const currentVotes = parseInt(votesBadge.textContent.split(' ')[0]);
+                        votesBadge.textContent = `${currentVotes - 1} ${currentVotes - 1 === 1 ? 'voto' : 'votos'}`;
+                    }
+                }
+                
                 showSubmitFeedback("🗑️ Canción removida de tu lista", "warning");
                 
             })
@@ -981,7 +1021,7 @@
                 console.error("Error removiendo voto:", error);
                 showSubmitFeedback("❌ Error al remover canción", "danger");
             });
-        };
+        }
 
         // ========== ACTUALIZAR CONTADORES ==========
         function updateSelectedCounter() {
@@ -1209,11 +1249,15 @@
                     modalSubmitBtn.style.background = '#dc3545';
                 }
                 
-                // Deshabilitar todos los botones de voto
+                // Deshabilitar todos los botones de voto (excepto las ya seleccionadas)
                 setTimeout(() => {
                     const voteButtons = document.querySelectorAll('.btn-vote');
                     voteButtons.forEach(btn => {
-                        if (!btn.disabled) {
+                        const songItem = btn.closest('.song-item');
+                        const songId = songItem ? songItem.getAttribute('data-song-id') : null;
+                        const isVoted = songId ? myVotes.includes(songId) : false;
+                        
+                        if (!btn.disabled && !isVoted) {
                             btn.disabled = true;
                             btn.innerHTML = '<i class="bi bi-exclamation-triangle"></i> LÍMITE';
                             btn.style.background = '#6c757d';
@@ -1350,6 +1394,7 @@
                 // Actualizar en modal si está abierto
                 const modal = document.getElementById('repertoire-modal');
                 if (modal.classList.contains('active')) {
+                    // Solo actualizar si el modal está abierto
                     displaySongsInModal(allSongs);
                 }
             }
