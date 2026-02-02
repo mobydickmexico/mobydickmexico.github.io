@@ -47,7 +47,7 @@
             padding-top: 0;
         }
         
-        /* ========== HEADER 迆NICO (SIEMPRE VISIBLE EN M車VIL) ========== */
+        /* ========== HEADER UNICO (SIEMPRE VISIBLE EN MOVIL) ========== */
         .dynamic-header {
             display: flex;
             align-items: center;
@@ -70,7 +70,7 @@
             gap: 6px;
         }
         
-        /* Modo otras secciones: solo bot車n HOME + t赤tulo */
+        /* Modo otras secciones: solo boton HOME + titulo */
         .header-other-mode {
             justify-content: space-between;
             align-items: center;
@@ -110,7 +110,7 @@
             box-shadow: 0 0 20px rgba(255, 51, 102, 0.7) !important;
         }
         
-        /* Botones de navegaci車n (solo visibles en HOME) */
+        /* Botones de navegacion (solo visibles en HOME) */
         .nav-buttons-container {
             display: flex;
             flex-wrap: wrap;
@@ -192,7 +192,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        /* T赤tulos de secci車n */
+        /* Titulos de seccion */
         .section-title {
             font-size: 1.8rem;
             color: var(--admin-accent);
@@ -288,7 +288,7 @@
             box-shadow: 0 0 10px rgba(255, 51, 102, 0.3);
         }
         
-        /* ========== ESCENARIO - DISE?O VERTICAL ========== */
+        /* ========== ESCENARIO - DISENO VERTICAL ========== */
         .stage-section-vertical {
             max-width: 100%;
             margin: 0 auto;
@@ -364,7 +364,7 @@
             scrollbar-width: none;
         }
         
-        /* Items de canci車n */
+        /* Items de cancion */
         .playlist-song-item {
             background: linear-gradient(90deg, #222, #2a2a2a);
             border-radius: 10px;
@@ -384,7 +384,7 @@
             background: linear-gradient(90deg, #2a2a2a, #333);
         }
         
-        /* Icono de arrastre m芍s visible */
+        /* Icono de arrastre mas visible */
         .playlist-song-item::after {
             content: '?';
             position: absolute;
@@ -439,7 +439,7 @@
             font-size: 0.9rem;
         }
         
-        /* Canci車n actual (EN VIVO) */
+        /* Cancion actual (EN VIVO) */
         .current-song {
             border-left: 5px solid var(--dj-green) !important;
             background: linear-gradient(90deg, #1a2a1a, #223322) !important;
@@ -447,7 +447,7 @@
             position: relative;
         }
         
-        /* LED dentro de la canci車n actual */
+        /* LED dentro de la cancion actual */
         .current-song::before {
             content: '';
             position: absolute;
@@ -473,7 +473,7 @@
             margin-left: 18px;
         }
         
-        /* Canci車n ya tocada */
+        /* Cancion ya tocada */
         .played-song {
             opacity: 0.6;
             text-decoration: line-through;
@@ -481,7 +481,7 @@
             border-left-color: #666 !important;
         }
         
-        /* Botones de acci車n en canci車n */
+        /* Botones de accion en cancion */
         .song-action-btn {
             background: #333;
             color: white;
@@ -705,7 +705,7 @@
             transform: scale(1.05);
         }
         
-        /* ========== MENSAJES DEL P迆BLICO ========== */
+        /* ========== MENSAJES DEL PUBLICO ========== */
         .messages-container {
             background: var(--panel-bg);
             border-radius: 15px;
@@ -731,7 +731,7 @@
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
         }
         
-        /* ?? ESTILOS PARA MENSAJES LE赤DOS - ACTUALIZADOS PARA M車VILES */
+        /* ?? ESTILOS PARA MENSAJES LEIDOS - ACTUALIZADOS PARA MOVILES */
         .message-card.read {
             opacity: 0.6;
             background: linear-gradient(90deg, #2a2a2a, #333) !important;
@@ -802,7 +802,7 @@
             margin-right: 6px;
         }
         
-        /* ?? BOTONES PEQUE?OS PARA MENSAJES - ESTILO UNIFICADO */
+        /* ?? BOTONES PEQUENOS PARA MENSAJES - ESTILO UNIFICADO */
         .message-actions {
             display: flex;
             gap: 6px;
@@ -879,7 +879,7 @@
             justify-content: flex-end;
         }
         
-        /* ?? SUGERENCIAS: SOLO BOT車N ELIMINAR */
+        /* ?? SUGERENCIAS: SOLO BOTON ELIMINAR */
         .suggestion-card .suggestion-actions .song-action-btn:first-child {
             display: none !important;
         }
@@ -1035,7 +1035,7 @@
             to { transform: translateX(0); opacity: 1; }
         }
         
-        /* Bot車n de pantalla completa */
+        /* Boton de pantalla completa */
         .fullscreen-btn {
             position: fixed;
             bottom: 12px;
@@ -1060,7 +1060,7 @@
             transform: scale(1.1);
         }
         
-        /* ========== MEJORAS PARA REORDENACI車N T芍CTIL ========== */
+        /* ========== MEJORAS PARA REORDENACION TACTIL ========== */
         .dragging {
             opacity: 0.8 !important;
             transform: rotate(3deg) !important;
@@ -1068,7 +1068,7 @@
             z-index: 10000 !important;
         }
         
-        /* Mejorar visualizaci車n de arrastre SortableJS */
+        /* Mejorar visualizacion de arrastre SortableJS */
         .playlist-song-item.sortable-ghost {
             opacity: 0.5;
             background: linear-gradient(90deg, #333, #444) !important;
@@ -1080,7 +1080,7 @@
             z-index: 10000 !important;
         }
         
-        /* ========== OCULTAR T赤TULOS DUPLICADOS ========== */
+        /* ========== OCULTAR TITULOS DUPLICADOS ========== */
         #stage-section .section-title,
         #messages-section .section-title,
         #suggestions-section .section-title,
@@ -1089,7 +1089,7 @@
             display: none;
         }
         
-        /* Ajustar m芍rgenes cuando no hay t赤tulos */
+        /* Ajustar margenes cuando no hay titulos */
         #stage-section,
         #messages-section,
         #suggestions-section,
@@ -1098,9 +1098,9 @@
             padding-top: 5px;
         }
         
-        /* ========== RESPONSIVE - M車VILES Y TABLETAS ========== */
-        /* ?? ELIMIN谷 TODOS LOS MEDIA QUERIES PARA ESCRITORIO */
-        /* ?? SOLO MANTENGO LOS AJUSTES PARA M車VILES PEQUE?OS */
+        /* ========== RESPONSIVE - MOVILES Y TABLETAS ========== */
+        /* ?? ELIMINE TODOS LOS MEDIA QUERIES PARA ESCRITORIO */
+        /* ?? SOLO MANTENGO LOS AJUSTES PARA MOVILES PEQUENOS */
         
         @media (max-width: 576px) {
             .main-content {
@@ -1158,7 +1158,7 @@
                 font-size: 0.9rem;
             }
             
-            /* ?? AJUSTES PARA M車VILES PEQUE?OS - MENSAJES */
+            /* ?? AJUSTES PARA MOVILES PEQUENOS - MENSAJES */
             .message-content {
                 font-size: 1rem;
                 line-height: 1.3;
@@ -1208,7 +1208,7 @@
                 font-size: 1.1rem;
             }
             
-            /* ?? AJUSTES ESPEC赤FICOS PARA TABLETAS */
+            /* ?? AJUSTES ESPECIFICOS PARA TABLETAS */
             .message-action-btn {
                 padding: 6px 10px;
                 font-size: 0.8rem;
@@ -1222,7 +1222,7 @@
     </style>
 </head>
 <body>
-    <!-- ??? HEADER DIN芍MICO (SIEMPRE VISIBLE EN M車VIL) -->
+    <!-- ??? HEADER DINAMICO (SIEMPRE VISIBLE EN MOVIL) -->
     <div class="dynamic-header header-home-mode" id="dynamic-header">
         <!-- Modo HOME: muestra todos los botones -->
         <div id="home-mode-header">
@@ -1242,7 +1242,7 @@
             </div>
         </div>
         
-        <!-- Modo otras secciones: solo bot車n HOME + t赤tulo -->
+        <!-- Modo otras secciones: solo boton HOME + titulo -->
         <div class="header-other-mode" id="other-mode-header" style="display: none; width: 100%;">
             <button class="back-to-home" onclick="showSection('home')">
                 <i class="bi bi-arrow-left"></i> HOME
@@ -1260,13 +1260,13 @@
             <p class="welcome-text">CONSOLA DE CONTROL - LISTOS PARA EL SHOW</p>
         </section>
 
-        <!-- ?? TOP 10 CANCIONES M芍S VOTADAS -->
+        <!-- ?? TOP 10 CANCIONES MAS VOTADAS -->
         <section id="top10-section" class="content-section">
             <div class="top10-list" id="top10-list">
-                <!-- Las canciones se cargar芍n aqu赤 -->
+                <!-- Las canciones se cargaran aqui -->
             </div>
             
-            <!-- BOT車N REINICIAR VOTOS EN TOP 10 -->
+            <!-- BOTON REINICIAR VOTOS EN TOP 10 -->
             <div class="playlist-controls-vertical" style="margin-top: 20px;">
                 <button class="playlist-control-btn playlist-clear-btn" onclick="resetAllVotes()">
                     <i class="bi bi-arrow-clockwise"></i> REINICIAR TODOS LOS VOTOS
@@ -1274,7 +1274,7 @@
             </div>
         </section>
 
-        <!-- ?? ESCENARIO (DISE?O VERTICAL) -->
+        <!-- ?? ESCENARIO (DISENO VERTICAL) -->
         <section id="stage-section" class="content-section">
             <div class="stage-section-vertical">
                 <!-- CONTENEDOR PRINCIPAL DE PLAYLIST -->
@@ -1294,7 +1294,7 @@
                     
                     <!-- LISTA DE CANCIONES -->
                     <div class="playlist-songs-container" id="playlist-songs-container">
-                        <!-- Playlist se cargar芍 aqu赤 -->
+                        <!-- Playlist se cargara aqui -->
                     </div>
                     
                     <!-- CONTROLES DE PLAYLIST - REDUCIDOS -->
@@ -1323,29 +1323,29 @@
                 <!-- BUSCADOR -->
                 <div class="repertoire-search">
                     <input type="text" class="repertoire-search-input" id="repertoire-search" 
-                           placeholder="Buscar canci車n o artista..." onkeyup="searchRepertoire()">
+                           placeholder="Buscar cancion o artista..." onkeyup="searchRepertoire()">
                 </div>
                 
                 <!-- LISTA DE REPERTORIO -->
                 <div class="repertoire-list-container" id="repertoire-list-container">
-                    <!-- Repertorio se cargar芍 aqu赤 -->
+                    <!-- Repertorio se cargara aqui -->
                 </div>
                 
-                <!-- BOT車N PARA CERRAR -->
+                <!-- BOTON PARA CERRAR -->
                 <button class="playlist-control-btn playlist-clear-btn" onclick="closeRepertoireModal()" style="width: 100%;">
                     <i class="bi bi-check-circle"></i> LISTO
                 </button>
             </div>
         </div>
 
-        <!-- ?? MENSAJES DEL P迆BLICO -->
+        <!-- ?? MENSAJES DEL PUBLICO -->
         <section id="messages-section" class="content-section">
             <div class="messages-container" id="messages-container">
                 <!-- Tarjetas de mensajes -->
             </div>
             <div class="playlist-controls-vertical" style="margin-top: 20px;">
                 <button class="playlist-control-btn playlist-add-btn" onclick="markAllAsRead()">
-                    <i class="bi bi-check-all"></i> MARCAR TODOS COMO LE赤DOS
+                    <i class="bi bi-check-all"></i> MARCAR TODOS COMO LEIDOS
                 </button>
                 <button class="playlist-control-btn playlist-clear-btn" onclick="deleteAllMessages()">
                     <i class="bi bi-trash"></i> ELIMINAR TODOS
@@ -1353,10 +1353,10 @@
             </div>
         </section>
 
-        <!-- ?? SUGERENCIAS DEL P迆BLICO -->
+        <!-- ?? SUGERENCIAS DEL PUBLICO -->
         <section id="suggestions-section" class="content-section">
             <div class="suggestions-container" id="suggestions-list-container">
-                <!-- Sugerencias del p迆blico -->
+                <!-- Sugerencias del publico -->
             </div>
             <div class="playlist-controls-vertical" style="margin-top: 20px;">
                 <button class="playlist-control-btn playlist-clear-btn" onclick="deleteAllSuggestions()">
@@ -1372,7 +1372,7 @@
                     <input type="hidden" id="edit-song-id" value="">
                     
                     <div class="form-group">
-                        <label class="form-label">T赤TULO DE LA CANCI車N *</label>
+                        <label class="form-label">TITULO DE LA CANCION *</label>
                         <input type="text" id="song-title" class="form-input" 
                                placeholder="Ej: Sweet Child O' Mine" required>
                     </div>
@@ -1384,14 +1384,14 @@
                     </div>
                     
                     <div class="form-group">
-                        <label class="form-label">G谷NERO</label>
+                        <label class="form-label">GENERO</label>
                         <select id="song-genre" class="form-input">
                             <option value="Rock">Rock</option>
                             <option value="Hard Rock">Hard Rock</option>
                             <option value="Metal">Metal</option>
                             <option value="Pop Rock">Pop Rock</option>
                             <option value="Alternativo">Alternativo</option>
-                            <option value="Cl芍sico">Cl芍sico</option>
+                            <option value="Clasico">Clasico</option>
                             <option value="Grunge">Grunge</option>
                             <option value="Blues Rock">Blues Rock</option>
                             <option value="Otro">Otro</option>
@@ -1399,7 +1399,7 @@
                     </div>
                     
                     <button type="submit" class="submit-btn">
-                        <i class="bi bi-check-circle"></i> AGREGAR CANCI車N AL REPERTORIO
+                        <i class="bi bi-check-circle"></i> AGREGAR CANCION AL REPERTORIO
                     </button>
                 </form>
             </div>
@@ -1411,13 +1411,13 @@
         </section>
     </main>
 
-    <!-- Bot車n de pantalla completa -->
+    <!-- Boton de pantalla completa -->
     <button class="fullscreen-btn" id="fullscreen-btn" onclick="toggleFullscreen()">
         <i class="bi bi-fullscreen"></i>
     </button>
     
     <script>
-        // ========== CONFIGURACI車N DE FIREBASE (NO MODIFICAR) ==========
+        // ========== CONFIGURACION DE FIREBASE (NO MODIFICAR) ==========
         const firebaseConfig = {
             apiKey: "AIzaSyAitXyfb6Zc9GVEm0X_Hen_QOiA5Y3Aw1U",
             authDomain: "rockrequests.firebaseapp.com",
@@ -1447,7 +1447,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log("?? Iniciando consola de control MobyDick...");
             
-            // Configurar navegaci車n
+            // Configurar navegacion
             setupNavigation();
             
             // Configurar formulario
@@ -1456,7 +1456,7 @@
             // Inicializar Firebase
             initializeFirebase();
             
-            // Verificar autenticaci車n
+            // Verificar autenticacion
             checkAuth();
             
             // Configurar pantalla completa
@@ -1469,7 +1469,7 @@
             updateDynamicHeader('home');
         });
 
-        // ========== HEADER DIN芍MICO ==========
+        // ========== HEADER DINAMICO ==========
         function updateDynamicHeader(sectionId) {
             const dynamicHeader = document.getElementById('dynamic-header');
             const homeModeHeader = document.getElementById('home-mode-header');
@@ -1499,13 +1499,13 @@
             }
         }
 
-        // ========== NAVEGACI車N ==========
+        // ========== NAVEGACION ==========
         function setupNavigation() {
             document.querySelectorAll('.nav-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const sectionId = this.getAttribute('data-section');
                     
-                    // Destruir Sortable si estamos saliendo de la secci車n stage
+                    // Destruir Sortable si estamos saliendo de la seccion stage
                     if (currentSection === 'stage' && sectionId !== 'stage' && sortableInstance) {
                         sortableInstance.destroy();
                         sortableInstance = null;
@@ -1516,7 +1516,7 @@
                         btn.classList.remove('active');
                     });
                     
-                    // Agregar clase active al bot車n clickeado
+                    // Agregar clase active al boton clickeado
                     this.classList.add('active');
                     
                     // Ocultar todas las secciones
@@ -1524,19 +1524,19 @@
                         section.classList.remove('active');
                     });
                     
-                    // Mostrar la secci車n correspondiente
+                    // Mostrar la seccion correspondiente
                     document.getElementById(`${sectionId}-section`).classList.add('active');
                     
-                    // Actualizar header din芍mico
+                    // Actualizar header dinamico
                     updateDynamicHeader(sectionId);
                     
-                    // Cargar datos espec赤ficos de la secci車n (CON FIX DE BUG)
+                    // Cargar datos especificos de la seccion (CON FIX DE BUG)
                     loadSectionData(sectionId);
                     
-                    // Actualizar secci車n actual
+                    // Actualizar seccion actual
                     currentSection = sectionId;
                     
-                    // Cerrar modal de repertorio si est芍 abierto
+                    // Cerrar modal de repertorio si esta abierto
                     if (sectionId !== 'stage') {
                         closeRepertoireModal();
                     }
@@ -1547,7 +1547,7 @@
             });
         }
 
-        // ========== FIX BUG DE ACTUALIZACI車N ==========
+        // ========== FIX BUG DE ACTUALIZACION ==========
         function loadSectionData(sectionId) {
             switch(sectionId) {
                 case 'top10':
@@ -1557,14 +1557,14 @@
                     loadStageMode();
                     break;
                 case 'messages':
-                    // FORZAR actualizaci車n de mensajes inmediatamente
+                    // FORZAR actualizacion de mensajes inmediatamente
                     setTimeout(() => {
                         displayMessages();
                         updateMessageStats();
                     }, 100);
                     break;
                 case 'suggestions':
-                    // FORZAR actualizaci車n de sugerencias inmediatamente
+                    // FORZAR actualizacion de sugerencias inmediatamente
                     setTimeout(() => {
                         displaySuggestions();
                         updateSuggestionStats();
@@ -1578,14 +1578,14 @@
 
         // ========== PANTALLA COMPLETA ==========
         function setupFullscreen() {
-            // Intentar pantalla completa autom芍tica en dispositivos m車viles
+            // Intentar pantalla completa automatica en dispositivos moviles
             if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
                 setTimeout(() => {
                     requestFullscreen();
                 }, 1500);
             }
             
-            // Actualizar icono del bot車n
+            // Actualizar icono del boton
             updateFullscreenButton();
         }
 
@@ -1685,7 +1685,7 @@
                     <div class="text-center py-4">
                         <i class="bi bi-music-note-beamed display-4 text-muted"></i>
                         <p class="mt-3" style="font-size: 1.2rem;">No hay canciones disponibles</p>
-                        <p class="small text-muted">Todas las canciones est芍n en la playlist o no hay canciones en el repertorio.</p>
+                        <p class="small text-muted">Todas las canciones estan en la playlist o no hay canciones en el repertorio.</p>
                     </div>
                 `;
                 return;
@@ -1697,7 +1697,7 @@
                     <div class="repertoire-song-item">
                         <div class="repertoire-song-info">
                             <div class="repertoire-song-title">${song.title}</div>
-                            <div class="repertoire-song-artist">${song.artist} ? ${song.genre || 'Rock'}</div>
+                            <div class="repertoire-song-artist">${song.artist} ‧ ${song.genre || 'Rock'}</div>
                         </div>
                         <div class="d-flex align-items-center">
                             <span class="repertoire-song-votes">${song.votes}</span>
@@ -1731,7 +1731,7 @@
                     
                     showNotification(`? "${song.title}" agregada a la playlist`, "success");
                     
-                    // Actualizar estad赤sticas
+                    // Actualizar estadisticas
                     updatePlaylistStats();
                     
                     // Recargar modal y playlist
@@ -1743,11 +1743,11 @@
                     showNotification("? Error al agregar a playlist", "danger");
                 });
             } else {
-                showNotification(`?? "${song.title}" ya est芍 en la playlist`, "info");
+                showNotification(`?? "${song.title}" ya esta en la playlist`, "info");
             }
         };
 
-        // ========== SISTEMA DE REORDENACI車N CON SORTABLEJS ==========
+        // ========== SISTEMA DE REORDENACION CON SORTABLEJS ==========
         function setupTouchReordering() {
             const playlistContainer = document.getElementById('playlist-songs-container');
             if (!playlistContainer) return;
@@ -1767,7 +1767,7 @@
                 filter: '.played-song',
                 preventOnFilter: false,
                 touchStartThreshold: 5,
-                delay: 200, // Peque?o delay para evitar conflictos con clics
+                delay: 200, // Pequeno delay para evitar conflictos con clics
                 delayOnTouchOnly: true,
                 scroll: true,
                 scrollSensitivity: 60,
@@ -1789,7 +1789,7 @@
                     // Actualizar orden en Firebase
                     updatePlaylistOrder();
                     
-                    // Reactivar listener despu谷s de un tiempo
+                    // Reactivar listener despues de un tiempo
                     setTimeout(() => {
                         isUpdatingOrder = false;
                         setupSongsListener();
@@ -1804,7 +1804,7 @@
                 }
             });
             
-            console.log("? SortableJS configurado para arrastre t芍ctil");
+            console.log("? SortableJS configurado para arrastre tactil");
         }
 
         // ========== INICIALIZAR FIREBASE ==========
@@ -1829,14 +1829,14 @@
                 
             } catch (error) {
                 console.error("? Error inicializando Firebase:", error);
-                showNotification("Error de conexi車n con Firebase", "danger");
+                showNotification("Error de conexion con Firebase", "danger");
             }
         }
 
         function checkAuth() {
             const auth = localStorage.getItem('mobydick_admin');
             if (!auth) {
-                const pass = prompt("?? Contrase?a de administraci車n:");
+                const pass = prompt("?? Contrasena de administracion:");
                 if (pass === "MobyDick2024") {
                     localStorage.setItem('mobydick_admin', 'true');
                     showNotification("? Acceso concedido", "success");
@@ -1894,7 +1894,7 @@
         function updateSongInUI(songId, songData) {
             if (!songData) return;
             
-            // Actualizar en playlist si est芍 visible
+            // Actualizar en playlist si esta visible
             const playlistItem = document.querySelector(`#playlist-songs-container .playlist-song-item[data-id="${songId}"]`);
             if (playlistItem) {
                 const votesBadge = playlistItem.querySelector('.playlist-song-votes');
@@ -1924,7 +1924,7 @@
                         const data = doc.data();
                         songsFromDB.push({
                             id: doc.id,
-                            title: data.title || "Sin t赤tulo",
+                            title: data.title || "Sin titulo",
                             artist: data.artist || "Desconocido",
                             genre: data.genre || "Rock",
                             votes: data.votes || 0,
@@ -1999,7 +1999,7 @@
                     
                     updateMessageStats();
                     
-                    // ACTUALIZAR SIEMPRE, no solo si est芍 en la secci車n
+                    // ACTUALIZAR SIEMPRE, no solo si esta en la seccion
                     if (currentSection === 'messages') {
                         displayMessages();
                     }
@@ -2018,8 +2018,8 @@
                 container.innerHTML = `
                     <div class="text-center py-5">
                         <i class="bi bi-chat-text display-1 text-muted"></i>
-                        <p class="mt-3" style="font-size: 1.4rem;">No hay mensajes a迆n</p>
-                        <p class="small text-muted" style="font-size: 1.1rem;">Los mensajes aparecer芍n cuando el p迆blico los env赤e.</p>
+                        <p class="mt-3" style="font-size: 1.4rem;">No hay mensajes aun</p>
+                        <p class="small text-muted" style="font-size: 1.1rem;">Los mensajes apareceran cuando el publico los envie.</p>
                     </div>
                 `;
                 return;
@@ -2120,7 +2120,7 @@
                     
                     updateSuggestionStats();
                     
-                    // ACTUALIZAR SIEMPRE, no solo si est芍 en la secci車n
+                    // ACTUALIZAR SIEMPRE, no solo si esta en la seccion
                     if (currentSection === 'suggestions') {
                         displaySuggestions();
                     }
@@ -2139,8 +2139,8 @@
                 container.innerHTML = `
                     <div class="text-center py-5">
                         <i class="bi bi-lightbulb display-1 text-muted"></i>
-                        <p class="mt-3">No hay sugerencias a迆n</p>
-                        <p class="small text-muted">Las sugerencias aparecer芍n cuando el p迆blico las env赤e.</p>
+                        <p class="mt-3">No hay sugerencias aun</p>
+                        <p class="small text-muted">Las sugerencias apareceran cuando el publico las envie.</p>
                     </div>
                 `;
                 return;
@@ -2161,11 +2161,11 @@
                         <div class="suggestion-artist">${suggestion.artist}</div>
                         <div class="d-flex justify-content-between align-items-center mt-2">
                             <small class="text-muted">
-                                <i class="bi bi-clock"></i> ${time} ? 
+                                <i class="bi bi-clock"></i> ${time} ‧ 
                                 <i class="bi bi-person"></i> ${suggestion.deviceId.substring(0, 6)}...
                             </small>
                             <div class="suggestion-actions">
-                                <!-- SOLO BOT車N DE ELIMINAR -->
+                                <!-- SOLO BOTON DE ELIMINAR -->
                                 <button class="song-action-btn song-remove-btn" onclick="deleteSuggestion('${suggestion.id}')" style="min-width: 35px; padding: 6px;">
                                     <i class="bi bi-trash"></i>
                                 </button>
@@ -2190,12 +2190,12 @@
             loadPlaylist();
             updatePlaylistStats();
             
-            // Configurar reordenaci車n con SortableJS
+            // Configurar reordenacion con SortableJS
             setTimeout(() => {
                 setupTouchReordering();
             }, 300);
             
-            showNotification("?? Mant谷n presionado una canci車n para arrastrar y reordenar", "info");
+            showNotification("?? Manten presionado una cancion para arrastrar y reordenar", "info");
         }
 
         function updatePlaylistStats() {
@@ -2218,7 +2218,7 @@
                 container.innerHTML = `
                     <div class="text-center py-5">
                         <i class="bi bi-music-note-beamed display-1 text-muted"></i>
-                        <p class="mt-3" style="font-size: 1.2rem;">Playlist vac赤a</p>
+                        <p class="mt-3" style="font-size: 1.2rem;">Playlist vacia</p>
                         <p class="small text-muted">Agrega canciones desde el repertorio</p>
                     </div>
                 `;
@@ -2231,7 +2231,7 @@
                 return;
             }
             
-            // Encontrar la primera canci車n no tocada (EN VIVO)
+            // Encontrar la primera cancion no tocada (EN VIVO)
             const currentSongIndex = playlistSongs.findIndex(song => !song.played);
             
             let html = '';
@@ -2262,7 +2262,7 @@
             
             container.innerHTML = html;
             
-            // Configurar SortableJS despu谷s de cargar
+            // Configurar SortableJS despues de cargar
             setTimeout(() => {
                 setupTouchReordering();
             }, 100);
@@ -2326,7 +2326,7 @@
                 .slice(0, 10);
             
             if (top10.length === 0) {
-                container.innerHTML = '<p class="text-center text-muted">No hay votos a迆n</p>';
+                container.innerHTML = '<p class="text-center text-muted">No hay votos aun</p>';
                 return;
             }
             
@@ -2372,7 +2372,7 @@
                     <div class="delete-song-item">
                         <div class="delete-song-info">
                             <div class="delete-song-title">${song.title}</div>
-                            <div class="delete-song-artist">${song.artist} ? ${song.genre || 'Rock'}</div>
+                            <div class="delete-song-artist">${song.artist} ‧ ${song.genre || 'Rock'}</div>
                         </div>
                         <div class="d-flex align-items-center">
                             <span class="delete-song-votes">${song.votes}</span>
@@ -2394,7 +2394,7 @@
             const genre = document.getElementById('song-genre').value;
             
             if (!title || !artist) {
-                showNotification("T赤tulo y artista son requeridos", "warning");
+                showNotification("Titulo y artista son requeridos", "warning");
                 return;
             }
             
@@ -2414,7 +2414,7 @@
             if (songId) {
                 db.collection("songs").doc(songId).update(songData)
                     .then(() => {
-                        showNotification(`? Canci車n "${title}" actualizada`, "success");
+                        showNotification(`? Cancion "${title}" actualizada`, "success");
                         
                         setTimeout(() => {
                             clearForm();
@@ -2422,8 +2422,8 @@
                         }, 800);
                     })
                     .catch((error) => {
-                        console.error("Error actualizando canci車n:", error);
-                        showNotification("Error al actualizar canci車n", "danger");
+                        console.error("Error actualizando cancion:", error);
+                        showNotification("Error al actualizar cancion", "danger");
                         btn.disabled = false;
                         btn.innerHTML = originalText;
                     });
@@ -2436,7 +2436,7 @@
                 
                 db.collection("songs").add(songData)
                     .then(() => {
-                        showNotification(`? Canci車n "${title}" agregada`, "success");
+                        showNotification(`? Cancion "${title}" agregada`, "success");
                         
                         setTimeout(() => {
                             clearForm();
@@ -2444,8 +2444,8 @@
                         }, 800);
                     })
                     .catch((error) => {
-                        console.error("? Error agregando canci車n:", error);
-                        showNotification("Error al agregar canci車n", "danger");
+                        console.error("? Error agregando cancion:", error);
+                        showNotification("Error al agregar cancion", "danger");
                         btn.disabled = false;
                         btn.innerHTML = originalText;
                     });
@@ -2461,11 +2461,11 @@
             const btn = document.querySelector('#song-form .submit-btn');
             if (btn) {
                 btn.disabled = false;
-                btn.innerHTML = '<i class="bi bi-check-circle"></i> AGREGAR CANCI車N AL REPERTORIO';
+                btn.innerHTML = '<i class="bi bi-check-circle"></i> AGREGAR CANCION AL REPERTORIO';
             }
         }
 
-        // ========== FUNCIONES DE ACCI車N ==========
+        // ========== FUNCIONES DE ACCION ==========
         window.resetAllVotes = function() {
             if (allSongs.length === 0) {
                 showNotification("No hay canciones para reiniciar", "info");
@@ -2560,11 +2560,11 @@
 
         window.clearPlaylist = function() {
             if (playlistSongs.length === 0) {
-                showNotification("La playlist ya est芍 vac赤a", "info");
+                showNotification("La playlist ya esta vacia", "info");
                 return;
             }
             
-            if (confirm("?Limpiar TODA la playlist?\nTodas las canciones se marcar芍n como 'no tocadas'.")) {
+            if (confirm("?Limpiar TODA la playlist?\nTodas las canciones se marcaran como 'no tocadas'.")) {
                 const batch = db.batch();
                 
                 playlistSongs.forEach(song => {
@@ -2599,17 +2599,17 @@
             const song = allSongs.find(s => s.id === songId);
             if (!song) return;
             
-            if (confirm(`?Eliminar la canci車n "${song.title}"?`)) {
+            if (confirm(`?Eliminar la cancion "${song.title}"?`)) {
                 db.collection("songs").doc(songId).delete()
                     .then(() => {
                         allSongs = allSongs.filter(s => s.id !== songId);
                         playlistSongs = playlistSongs.filter(s => s.id !== songId);
-                        showNotification(`? Canci車n "${song.title}" eliminada`, "success");
+                        showNotification(`? Cancion "${song.title}" eliminada`, "success");
                         loadAllData();
                     })
                     .catch((error) => {
-                        console.error("Error eliminando canci車n:", error);
-                        showNotification("? Error al eliminar canci車n", "danger");
+                        console.error("Error eliminando cancion:", error);
+                        showNotification("? Error al eliminar cancion", "danger");
                     });
             }
         };
@@ -2620,26 +2620,26 @@
                 readAt: new Date().toISOString()
             })
             .then(() => {
-                showNotification("? Mensaje marcado como le赤do", "success");
+                showNotification("? Mensaje marcado como leido", "success");
             })
             .catch((error) => {
-                console.error("Error marcando mensaje como le赤do:", error);
+                console.error("Error marcando mensaje como leido:", error);
                 showNotification("? Error al marcar mensaje", "danger");
             });
         };
 
         window.markAllAsRead = function() {
             if (allMessages.length === 0) {
-                showNotification("No hay mensajes para marcar como le赤dos", "info");
+                showNotification("No hay mensajes para marcar como leidos", "info");
                 return;
             }
             
-            if (confirm("?Marcar TODOS los mensajes como le赤dos?")) {
+            if (confirm("?Marcar TODOS los mensajes como leidos?")) {
                 const batch = db.batch();
                 const unreadMessages = allMessages.filter(msg => !msg.read);
                 
                 if (unreadMessages.length === 0) {
-                    showNotification("Todos los mensajes ya est芍n le赤dos", "info");
+                    showNotification("Todos los mensajes ya estan leidos", "info");
                     return;
                 }
                 
@@ -2653,7 +2653,7 @@
                 
                 batch.commit()
                     .then(() => {
-                        showNotification(`? ${unreadMessages.length} mensajes marcados como le赤dos`, "success");
+                        showNotification(`? ${unreadMessages.length} mensajes marcados como leidos`, "success");
                     })
                     .catch((error) => {
                         console.error("Error marcando mensajes:", error);
@@ -2744,7 +2744,7 @@
                 const pendingSuggestions = allSuggestions.filter(suggestion => suggestion.status === 'pending');
                 
                 if (pendingSuggestions.length === 0) {
-                    showNotification("Todas las sugerencias ya est芍n vistas", "info");
+                    showNotification("Todas las sugerencias ya estan vistas", "info");
                     return;
                 }
                 
@@ -2912,7 +2912,7 @@
             }, 5000);
         }
 
-        // Funci車n global para cambiar secci車n desde bot車n HOME
+        // Funcion global para cambiar seccion desde boton HOME
         window.showSection = function(sectionId) {
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 if (btn.getAttribute('data-section') === sectionId) {
