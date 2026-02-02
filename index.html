@@ -145,83 +145,6 @@
             box-shadow: 0 6px 15px rgba(10, 64, 98, 0.3);
         }
         
-        /* Tus votos */
-        .votes-panel {
-            border-color: #28a745;
-            border-width: 3px;
-        }
-        
-        .votes-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .votes-title {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: var(--pub-blue);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .votes-counter {
-            background: var(--pub-blue);
-            color: white;
-            padding: 0.3rem 1rem;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 1rem;
-        }
-        
-        #my-votes-list {
-            min-height: 60px;
-            margin-bottom: 1.5rem;
-        }
-        
-        .vote-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.8rem;
-            background: #f8f9fa;
-            border-radius: 10px;
-            margin-bottom: 0.6rem;
-            border-left: 4px solid var(--pub-red);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        
-        /* BOTÓN ENVIAR VOTOS */
-        .btn-submit-votes {
-            background: linear-gradient(135deg, #28a745, #20c997);
-            color: white;
-            border: none;
-            padding: 1rem;
-            font-weight: bold;
-            border-radius: 12px;
-            width: 100%;
-            font-size: 1.1rem;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-        }
-        
-        .btn-submit-votes:hover:not(:disabled) {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
-        }
-        
-        .btn-submit-votes:disabled {
-            background: #adb5bd;
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
-        
         /* Botón ENVIAR MENSAJE */
         .btn-submit-message {
             background: linear-gradient(135deg, #17a2b8, #138496);
@@ -356,7 +279,7 @@
         .repertoire-modal-content {
             background: white;
             border-radius: 20px;
-            padding: 25px;
+            padding: 20px;
             max-width: 800px;
             margin: 20px auto;
             border: 3px solid var(--pub-blue);
@@ -370,48 +293,46 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
             border-bottom: 2px solid #eee;
         }
         
         .repertoire-modal-title {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             color: var(--pub-blue);
             font-weight: 700;
+            flex: 1;
         }
         
-        .repertoire-modal-close {
+        /* Contador de canciones seleccionadas */
+        .selected-counter {
             background: var(--pub-red);
             color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            font-size: 1.2rem;
-            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            min-width: 70px;
+            text-align: center;
+            box-shadow: 0 3px 8px rgba(194, 11, 23, 0.3);
             display: flex;
             align-items: center;
-            justify-content: center;
-        }
-        
-        .repertoire-modal-close:hover {
-            background: #a80d14;
-            transform: scale(1.1);
+            gap: 5px;
         }
         
         .repertoire-search {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .repertoire-search-input {
             width: 100%;
-            padding: 15px;
+            padding: 12px 15px;
             border-radius: 10px;
             border: 2px solid #ccc;
             background: #f8f9fa;
             color: #333;
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
         
         .repertoire-search-input:focus {
@@ -423,98 +344,31 @@
         .repertoire-list-container {
             flex: 1;
             overflow-y: auto;
-            padding-right: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .repertoire-song-item {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-left: 4px solid var(--pub-blue);
-            transition: all 0.2s;
-        }
-        
-        .repertoire-song-item:hover {
-            background: #e9ecef;
-            transform: translateX(3px);
-        }
-        
-        .repertoire-song-info {
-            flex: 1;
-            padding-right: 15px;
-        }
-        
-        .repertoire-song-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 5px;
-        }
-        
-        .repertoire-song-artist {
-            color: #666;
-            font-size: 0.95rem;
-        }
-        
-        .repertoire-song-votes {
-            background: var(--pub-red);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 15px;
-            font-weight: bold;
-            min-width: 50px;
-            text-align: center;
-            margin-right: 15px;
+            padding-right: 8px;
+            margin-bottom: 15px;
+            min-height: 300px;
         }
         
         /* Lista de canciones en modal */
         .songs-header {
             background: var(--pub-blue);
             color: white;
-            padding: 0.8rem 1rem;
+            padding: 0.7rem 1rem;
             border-radius: 10px 10px 0 0;
-            margin-top: 0.5rem;
+            margin-bottom: 5px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-        
-        .songs-scroll-container {
-            max-height: 400px;
-            overflow-y: auto;
-            padding-right: 5px;
-            background: white;
-            border-radius: 0 0 10px 10px;
-            border: 2px solid #dee2e6;
-            border-top: none;
-            margin-bottom: 1rem;
-        }
-        
-        .songs-scroll-container::-webkit-scrollbar {
-            width: 6px;
-        }
-        
-        .songs-scroll-container::-webkit-scrollbar-track {
-            background: rgba(1, 33, 105, 0.05);
-            border-radius: 3px;
-        }
-        
-        .songs-scroll-container::-webkit-scrollbar-thumb {
-            background: var(--pub-blue);
-            border-radius: 3px;
+            font-size: 0.95rem;
         }
         
         .song-item {
             display: flex;
             flex-direction: column;
-            padding: 0.9rem;
+            padding: 0.8rem;
             border-bottom: 1px solid #eee;
             transition: all 0.2s;
+            background: white;
         }
         
         .song-item:hover {
@@ -594,6 +448,35 @@
             cursor: not-allowed;
         }
         
+        /* BOTÓN ENVIAR VOTOS EN MODAL */
+        .btn-submit-votes {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 1rem;
+            font-weight: bold;
+            border-radius: 12px;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 10px;
+        }
+        
+        .btn-submit-votes:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
+        }
+        
+        .btn-submit-votes:disabled {
+            background: #adb5bd;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
         /* ========== SUGERENCIAS ========== */
         .suggestions-panel {
             border-color: var(--pub-red);
@@ -652,6 +535,21 @@
                 padding: 1rem;
             }
             
+            .repertoire-modal-title {
+                font-size: 1.3rem;
+            }
+            
+            .selected-counter {
+                font-size: 1rem;
+                padding: 6px 12px;
+                min-width: 60px;
+            }
+            
+            .repertoire-modal-content {
+                padding: 15px;
+                margin: 10px;
+            }
+            
             .btn-submit-votes {
                 padding: 0.9rem;
                 font-size: 1rem;
@@ -673,23 +571,9 @@
                 font-size: 0.9rem;
                 padding: 0.3rem 0.7rem;
             }
-            
-            .repertoire-modal-content {
-                padding: 20px;
-                margin: 10px;
-            }
         }
         
         @media (max-width: 480px) {
-            .votes-title {
-                font-size: 1rem;
-            }
-            
-            .votes-counter {
-                font-size: 0.9rem;
-                padding: 0.2rem 0.8rem;
-            }
-            
             .song-title {
                 font-size: 1rem;
             }
@@ -708,6 +592,16 @@
                 min-width: 70px;
                 font-size: 0.85rem;
                 padding: 0.3rem 0.6rem;
+            }
+            
+            .selected-counter {
+                font-size: 0.9rem;
+                padding: 5px 10px;
+                min-width: 50px;
+            }
+            
+            .repertoire-modal-title {
+                font-size: 1.2rem;
             }
         }
     </style>
@@ -744,29 +638,7 @@
                 </button>
             </div>
             
-            <!-- 3. TUS VOTOS (SOLO CANCIONES) -->
-            <div class="content-panel votes-panel">
-                <div class="votes-header">
-                    <div class="votes-title">
-                        <i class="bi bi-music-note-beamed"></i> TUS CANCIONES ELEGIDAS
-                    </div>
-                    <span class="votes-counter" id="vote-count">0/3</span>
-                </div>
-                
-                <div id="my-votes-list">
-                    <p class="text-muted text-center my-3">Selecciona hasta 3 canciones del repertorio.</p>
-                </div>
-                
-                <!-- BOTÓN ENVIAR CANCIONES (ACTIVADO EN MODAL) -->
-                <button id="submit-votes" class="btn-submit-votes" disabled onclick="submitVotes()">
-                    <i class="bi bi-send-check"></i> ENVIAR MIS 3 CANCIONES
-                </button>
-                
-                <!-- Feedback al enviar -->
-                <div id="submit-feedback" class="feedback-container"></div>
-            </div>
-            
-            <!-- 4. MENSAJES A LA BANDA (INDEPENDIENTE) -->
+            <!-- 3. MENSAJES A LA BANDA (INDEPENDIENTE) -->
             <div class="content-panel message-panel">
                 <div class="panel-title">
                     <i class="bi bi-chat-text"></i> MENSAJE A LA BANDA
@@ -788,7 +660,7 @@
                 <div id="message-feedback" class="feedback-container"></div>
             </div>
             
-            <!-- 5. COMPARTIR CON AMIGOS -->
+            <!-- 4. COMPARTIR CON AMIGOS -->
             <div class="content-panel share-panel">
                 <div class="panel-title">
                     <i class="bi bi-share"></i> COMPARTIR CON AMIGOS
@@ -802,7 +674,7 @@
                 <div id="share-feedback" class="feedback-container"></div>
             </div>
             
-            <!-- 6. SUGERIR CANCIONES NUEVAS -->
+            <!-- 5. SUGERIR CANCIONES NUEVAS -->
             <div class="content-panel suggestions-panel">
                 <div class="panel-title">
                     <i class="bi bi-lightbulb"></i> SUGERIR CANCIONES NUEVAS
@@ -855,9 +727,10 @@
         <div class="repertoire-modal-content">
             <div class="repertoire-modal-header">
                 <div class="repertoire-modal-title">REPERTORIO COMPLETO</div>
-                <button class="repertoire-modal-close" onclick="closeRepertoireModal()">
-                    <i class="bi bi-x-lg"></i>
-                </button>
+                <!-- CONTADOR DE CANCIONES SELECCIONADAS -->
+                <div class="selected-counter" id="selected-counter">
+                    <i class="bi bi-music-note-beamed"></i> <span id="selected-count">0</span>/3
+                </div>
             </div>
             
             <!-- BUSCADOR EN MODAL -->
@@ -868,7 +741,7 @@
             
             <!-- LISTA DE CANCIONES EN MODAL -->
             <div class="songs-header">
-                <h5 class="mb-0"><i class="bi bi-music-note-list"></i> CANCIONES DISPONIBLES</h5>
+                <h6 class="mb-0"><i class="bi bi-music-note-list"></i> CANCIONES DISPONIBLES</h6>
                 <span class="badge bg-light text-dark" id="modal-total-songs">0 canciones</span>
             </div>
             
@@ -879,16 +752,19 @@
                 </div>
             </div>
             
-            <!-- BOTÓN ENVIAR PETICIONES DESDE MODAL -->
-            <button id="modal-submit-votes" class="btn btn-submit-votes" disabled 
-                    onclick="submitVotesFromModal()" style="width: 100%; margin-top: 10px;">
-                <i class="bi bi-send-check"></i> ENVIAR MIS 3 CANCIONES
+            <!-- BOTÓN ENVIAR PETICIONES -->
+            <button id="modal-submit-votes" class="btn-submit-votes" disabled 
+                    onclick="submitVotesFromModal()">
+                <i class="bi bi-send-check"></i> ENVIAR MIS <span id="selected-count-btn">0</span> CANCIONES
             </button>
             
             <!-- BOTÓN CERRAR MODAL -->
             <button class="btn btn-share" onclick="closeRepertoireModal()" style="width: 100%; margin-top: 10px;">
                 <i class="bi bi-check-circle"></i> CERRAR
             </button>
+            
+            <!-- Feedback al enviar -->
+            <div id="submit-feedback" class="feedback-container mt-2"></div>
         </div>
     </div>
 
@@ -957,9 +833,8 @@
                 }
             }
             
-            // Actualizar UI inicial
-            updateMyVotesDisplay();
-            updateModalSubmitButton();
+            // Actualizar contador inicial
+            updateSelectedCounter();
         });
 
         // ========== FUNCIONES MODAL ==========
@@ -967,6 +842,7 @@
             const modal = document.getElementById('repertoire-modal');
             modal.classList.add('active');
             displaySongsInModal(allSongs);
+            updateSelectedCounter(); // Actualizar contador
             updateModalSubmitButton(); // Actualizar estado del botón
         };
 
@@ -1075,7 +951,7 @@
                 myVotes.push(songId);
                 localStorage.setItem("mobydick_votes", JSON.stringify(myVotes));
                 
-                updateMyVotesDisplay();
+                updateSelectedCounter();
                 updateModalSubmitButton();
                 
                 showSubmitFeedback("✅ Canción agregada a tu lista", "success");
@@ -1095,7 +971,7 @@
                 myVotes = myVotes.filter(id => id !== songId);
                 localStorage.setItem("mobydick_votes", JSON.stringify(myVotes));
                 
-                updateMyVotesDisplay();
+                updateSelectedCounter();
                 updateModalSubmitButton();
                 
                 showSubmitFeedback("🗑️ Canción removida de tu lista", "warning");
@@ -1107,42 +983,28 @@
             });
         };
 
-        // ========== ACTUALIZAR UI ==========
-        function updateMyVotesDisplay() {
-            const countElement = document.getElementById("vote-count");
-            const container = document.getElementById("my-votes-list");
-            const submitBtn = document.getElementById("submit-votes");
+        // ========== ACTUALIZAR CONTADORES ==========
+        function updateSelectedCounter() {
+            const countElement = document.getElementById("selected-count");
+            const btnCountElement = document.getElementById("selected-count-btn");
             
             if (countElement) {
-                countElement.textContent = `${myVotes.length}/3`;
+                countElement.textContent = myVotes.length;
             }
             
-            if (myVotes.length > 0) {
-                let html = "";
-                
-                myVotes.forEach((songId) => {
-                    const song = allSongs.find(s => s.id === songId);
-                    if (song) {
-                        html += `
-                            <div class="vote-item">
-                                <span class="fw-bold">${song.title}</span>
-                                <button class="btn btn-sm btn-outline-danger" onclick="removeVote('${songId}')">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
-                        `;
-                    }
-                });
-                
-                if (container) container.innerHTML = html;
-                if (submitBtn) submitBtn.disabled = false;
-                
-            } else {
-                if (container) {
-                    container.innerHTML = '<p class="text-muted text-center my-3">Selecciona hasta 3 canciones del repertorio.</p>';
-                }
-                if (submitBtn) {
-                    submitBtn.disabled = true;
+            if (btnCountElement) {
+                btnCountElement.textContent = myVotes.length;
+            }
+            
+            // Actualizar color del contador según la cantidad
+            const counter = document.getElementById("selected-counter");
+            if (counter) {
+                if (myVotes.length === 0) {
+                    counter.style.background = "#6c757d";
+                } else if (myVotes.length < 3) {
+                    counter.style.background = "var(--pub-blue)";
+                } else {
+                    counter.style.background = "var(--pub-red)";
                 }
             }
         }
@@ -1151,14 +1013,15 @@
             const modalSubmitBtn = document.getElementById("modal-submit-votes");
             if (modalSubmitBtn) {
                 modalSubmitBtn.disabled = myVotes.length === 0;
+                modalSubmitBtn.innerHTML = `<i class="bi bi-send-check"></i> ENVIAR MIS ${myVotes.length} CANCIONES`;
             }
         }
 
         // ========== ENVIAR VOTOS ==========
-        window.submitVotes = function() {
+        window.submitVotesFromModal = function() {
             if (myVotes.length === 0) return;
             
-            const btn = document.getElementById("submit-votes");
+            const btn = document.getElementById("modal-submit-votes");
             const originalText = btn.innerHTML;
             
             btn.innerHTML = '<i class="bi bi-check2-circle"></i> ¡ENVIADO!';
@@ -1189,29 +1052,22 @@
             localStorage.removeItem("mobydick_votes");
             
             // Actualizar UI
-            updateMyVotesDisplay();
+            updateSelectedCounter();
             updateModalSubmitButton();
-            
-            // Si el modal está abierto, cerrarlo
-            closeRepertoireModal();
             
             // Mensaje de éxito
             showSubmitFeedback("🎉 ¡Gracias por tus votos! Las canciones fueron enviadas.", "success");
             
-            // Restaurar botón después de 3 segundos
-            setTimeout(() => {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }, 3000);
-        };
-
-        window.submitVotesFromModal = function() {
-            submitVotes();
-            
-            // Cerrar modal después de enviar
+            // Cerrar modal después de 2 segundos
             setTimeout(() => {
                 closeRepertoireModal();
-            }, 1500);
+                
+                // Restaurar botón después de 3 segundos
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }, 1000);
+            }, 2000);
         };
 
         // ========== ENVIAR MENSAJE ==========
@@ -1345,14 +1201,7 @@
             const votesToday = localStorage.getItem(deviceVotesKey);
             if (votesToday && parseInt(votesToday) >= 3) {
                 // Este dispositivo ya votó 3 veces hoy
-                const submitBtn = document.getElementById('submit-votes');
                 const modalSubmitBtn = document.getElementById('modal-submit-votes');
-                
-                if (submitBtn) {
-                    submitBtn.disabled = true;
-                    submitBtn.innerHTML = '<i class="bi bi-exclamation-triangle"></i> LÍMITE ALCANZADO';
-                    submitBtn.style.background = '#dc3545';
-                }
                 
                 if (modalSubmitBtn) {
                     modalSubmitBtn.disabled = true;
@@ -1469,8 +1318,6 @@
                     
                     if (allSongs.length === 0) {
                         showError("No hay canciones en el repertorio aún.");
-                    } else {
-                        updateMyVotesDisplay();
                     }
                     
                 })
