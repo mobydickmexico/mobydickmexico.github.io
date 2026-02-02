@@ -44,11 +44,12 @@
             min-height: 100vh;
             overflow-x: hidden;
             font-size: 16px;
+            padding-top: 0;
         }
         
-        /* ========== HEADER DINÁMICO PARA MÓVIL ========== */
+        /* ========== HEADER ÚNICO (SIEMPRE VISIBLE EN MÓVIL) ========== */
         .dynamic-header {
-            display: none; /* Oculto por defecto, se muestra solo en móvil */
+            display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 12px 15px;
@@ -59,17 +60,20 @@
             z-index: 1000;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
             min-height: 60px;
+            width: 100%;
         }
         
+        /* Modo HOME: muestra todos los botones */
         .header-home-mode {
             justify-content: center;
             flex-wrap: wrap;
             gap: 8px;
         }
         
+        /* Modo otras secciones: solo botón HOME + título */
         .header-other-mode {
-            justify-content: flex-start;
-            width: 100%;
+            justify-content: space-between;
+            align-items: center;
         }
         
         .header-title {
@@ -96,6 +100,7 @@
             gap: 6px;
             min-width: 90px;
             white-space: nowrap;
+            z-index: 1001;
         }
         
         .back-to-home:hover {
@@ -103,36 +108,33 @@
             color: white;
         }
         
-        /* ========== BARRA DE NAVEGACIÓN SUPERIOR ORIGINAL (PARA ESCRITORIO) ========== */
-        .nav-console {
-            background: linear-gradient(to bottom, #111, #000);
-            padding: 12px 15px;
+        /* Botones de navegación (solo visibles en HOME) */
+        .nav-buttons-container {
             display: flex;
-            justify-content: center;
-            gap: 10px;
-            border-bottom: 3px solid #222;
             flex-wrap: wrap;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+            gap: 8px;
+            justify-content: center;
+            width: 100%;
+            padding: 10px 0;
         }
         
         .nav-btn {
             background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
             color: #aaa;
             border: none;
-            border-radius: 12px;
-            padding: 16px 25px;
-            font-size: 1.1rem;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-            min-width: 160px;
+            min-width: 140px;
             text-align: center;
             font-family: 'Segoe UI', sans-serif;
             letter-spacing: 0.5px;
+            flex: 1;
+            max-width: 180px;
         }
         
         .nav-btn:hover {
@@ -151,13 +153,13 @@
         /* Indicadores LED de notificaciones */
         .led-indicator {
             display: inline-block;
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background-color: var(--admin-accent);
-            margin-left: 6px;
+            margin-left: 4px;
             animation: pulse 1.5s infinite;
-            box-shadow: 0 0 8px var(--admin-accent);
+            box-shadow: 0 0 6px var(--admin-accent);
         }
         
         @keyframes pulse {
@@ -168,8 +170,8 @@
         
         /* ========== CONTENIDO PRINCIPAL ========== */
         .main-content {
-            padding: 20px;
-            max-width: 1400px;
+            padding: 15px;
+            max-width: 100%;
             margin: 0 auto;
         }
         
@@ -190,11 +192,11 @@
         
         /* Títulos de sección */
         .section-title {
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: var(--admin-accent);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             text-align: center;
-            padding-bottom: 12px;
+            padding-bottom: 10px;
             border-bottom: 2px solid #333;
             text-shadow: 0 0 10px rgba(255, 51, 102, 0.3);
         }
@@ -202,18 +204,18 @@
         /* ========== HOME / DASHBOARD ========== */
         #home-section {
             text-align: center;
-            padding: 40px 20px;
+            padding: 30px 15px;
         }
         
         .band-logo {
-            max-width: 600px;
+            max-width: 400px;
             width: 90%;
             filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.15));
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
         
         .welcome-text {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             color: var(--dj-yellow);
             margin-top: 20px;
             font-family: 'Segoe UI', sans-serif;
@@ -224,8 +226,8 @@
         .top10-list {
             background: var(--panel-bg);
             border-radius: 15px;
-            padding: 20px;
-            max-height: 70vh;
+            padding: 15px;
+            max-height: 65vh;
             overflow-y: auto;
             border: 1px solid #333;
         }
@@ -233,8 +235,8 @@
         .top-song-item {
             background: linear-gradient(90deg, #222, #2a2a2a);
             border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 10px;
+            padding: 12px;
+            margin-bottom: 8px;
             border-left: 5px solid var(--dj-yellow);
             display: flex;
             justify-content: space-between;
@@ -248,54 +250,54 @@
         }
         
         .top-song-rank {
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: bold;
             color: var(--dj-yellow);
-            min-width: 50px;
+            min-width: 40px;
             text-align: center;
         }
         
         .top-song-info {
             flex: 1;
-            padding: 0 20px;
+            padding: 0 15px;
         }
         
         .top-song-title {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             font-weight: 600;
             color: #fff;
         }
         
         .top-song-artist {
             color: #aaa;
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
         
         .top-song-votes {
             background: var(--admin-accent);
             color: white;
-            padding: 8px 20px;
+            padding: 6px 15px;
             border-radius: 20px;
             font-weight: bold;
-            font-size: 1.1rem;
-            min-width: 100px;
+            font-size: 1rem;
+            min-width: 80px;
             text-align: center;
             box-shadow: 0 0 10px rgba(255, 51, 102, 0.3);
         }
         
         /* ========== ESCENARIO - DISEÑO VERTICAL ========== */
         .stage-section-vertical {
-            max-width: 800px;
+            max-width: 100%;
             margin: 0 auto;
         }
         
         .playlist-main-container {
             background: var(--panel-bg);
             border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 25px;
+            padding: 20px;
+            margin-bottom: 20px;
             border: 2px solid #333;
-            min-height: 60vh;
+            min-height: 50vh;
             display: flex;
             flex-direction: column;
         }
@@ -304,13 +306,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 10px;
         }
         
         .playlist-title {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             color: var(--dj-green);
             font-weight: 700;
             text-shadow: 0 0 10px rgba(76, 217, 100, 0.3);
@@ -318,55 +320,56 @@
         
         .playlist-stats {
             display: flex;
-            gap: 15px;
-            font-size: 1.1rem;
+            gap: 10px;
+            font-size: 1rem;
         }
         
         .stat-badge {
             background: #333;
-            padding: 8px 15px;
-            border-radius: 20px;
+            padding: 6px 12px;
+            border-radius: 15px;
             font-weight: 600;
+            font-size: 0.9rem;
         }
         
         .stat-badge .count {
             color: var(--dj-yellow);
             font-weight: 700;
-            margin-left: 5px;
+            margin-left: 3px;
         }
         
-        /* Lista de canciones con scroll - OPTIMIZADA PARA VERTICAL */
+        /* Lista de canciones con scroll */
         .playlist-songs-container {
             flex: 1;
             overflow-y: auto;
-            padding-right: 10px;
-            margin-bottom: 20px;
+            padding-right: 8px;
+            margin-bottom: 15px;
             -webkit-overflow-scrolling: touch;
             touch-action: pan-y;
-            max-height: 50vh;
+            max-height: 40vh;
         }
         
         /* Estilo para scrollbar */
         .playlist-songs-container::-webkit-scrollbar {
-            width: 10px;
+            width: 8px;
         }
         
         .playlist-songs-container::-webkit-scrollbar-track {
             background: rgba(255,255,255,0.05);
-            border-radius: 5px;
+            border-radius: 4px;
         }
         
         .playlist-songs-container::-webkit-scrollbar-thumb {
             background: var(--admin-accent);
-            border-radius: 5px;
+            border-radius: 4px;
         }
         
-        /* Items de canción - OPTIMIZADOS PARA VERTICAL */
+        /* Items de canción */
         .playlist-song-item {
             background: linear-gradient(90deg, #222, #2a2a2a);
-            border-radius: 12px;
-            padding: 18px;
-            margin-bottom: 12px;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -374,9 +377,6 @@
             transition: all 0.2s;
             cursor: default;
             user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
         }
         
         .playlist-song-item:hover {
@@ -385,45 +385,55 @@
         
         .playlist-song-info {
             flex: 1;
-            padding-right: 15px;
+            padding-right: 10px;
         }
         
         .playlist-song-title {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: #fff;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
         }
         
         .playlist-song-artist {
             color: #aaa;
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
         
         .playlist-song-votes {
             background: var(--admin-accent);
             color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
+            padding: 6px 12px;
+            border-radius: 15px;
             font-weight: bold;
-            min-width: 60px;
+            min-width: 50px;
             text-align: center;
-            margin-right: 15px;
+            margin-right: 10px;
             flex-shrink: 0;
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
         
-        /* LED PARPADEANTE para canción en vivo */
-        .live-indicator {
-            display: inline-block;
-            width: 14px;
-            height: 14px;
+        /* Canción actual (EN VIVO) */
+        .current-song {
+            border-left: 5px solid var(--dj-green) !important;
+            background: linear-gradient(90deg, #1a2a1a, #223322) !important;
+            box-shadow: 0 0 15px rgba(76, 217, 100, 0.4);
+            position: relative;
+        }
+        
+        /* LED dentro de la canción actual */
+        .current-song::before {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
             background-color: #ff3366;
-            margin-right: 12px;
             animation: livePulse 1s infinite;
-            box-shadow: 0 0 12px #ff3366;
-            flex-shrink: 0;
+            box-shadow: 0 0 10px #ff3366;
         }
         
         @keyframes livePulse {
@@ -432,32 +442,9 @@
             100% { opacity: 0.3; transform: scale(0.8); }
         }
         
-        /* Canción actual (EN VIVO - con LED parpadeante) */
-        .current-song {
-            border-left: 5px solid var(--dj-green) !important;
-            background: linear-gradient(90deg, #1a2a1a, #223322) !important;
-            box-shadow: 0 0 20px rgba(76, 217, 100, 0.4);
-            position: relative;
-        }
-        
-        /* LED dentro de la canción actual */
-        .current-song::before {
-            content: '';
-            position: absolute;
-            left: 8px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background-color: #ff3366;
-            animation: livePulse 1s infinite;
-            box-shadow: 0 0 12px #ff3366;
-        }
-        
         /* Ajustar contenido para el LED */
         .current-song .playlist-song-info {
-            margin-left: 25px;
+            margin-left: 20px;
         }
         
         /* Canción ya tocada */
@@ -473,14 +460,14 @@
             background: #333;
             color: white;
             border: none;
-            border-radius: 8px;
-            padding: 10px 15px;
-            font-size: 1rem;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.2s;
-            margin-left: 8px;
+            margin-left: 6px;
             font-weight: 600;
-            min-width: 50px;
+            min-width: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -501,35 +488,36 @@
             color: white;
         }
         
-        /* Controles de playlist - OPTIMIZADOS PARA VERTICAL */
+        /* Controles de playlist */
         .playlist-controls-vertical {
             display: flex;
-            gap: 15px;
+            gap: 10px;
             flex-wrap: wrap;
             justify-content: center;
-            margin-top: 20px;
+            margin-top: 15px;
         }
         
         .playlist-control-btn {
             background: #333;
             color: white;
             border: none;
-            border-radius: 10px;
-            padding: 15px 25px;
-            font-size: 1.1rem;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s;
             font-weight: 700;
-            min-width: 180px;
+            min-width: 160px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            flex: 1;
         }
         
         .playlist-control-btn:hover {
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             box-shadow: 0 6px 15px rgba(0,0,0,0.4);
         }
         
@@ -569,7 +557,7 @@
             background-color: rgba(0, 0, 0, 0.85);
             z-index: 9999;
             overflow-y: auto;
-            padding: 20px;
+            padding: 15px;
         }
         
         .repertoire-modal.active {
@@ -579,10 +567,10 @@
         
         .repertoire-modal-content {
             background: var(--panel-bg);
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 800px;
-            margin: 20px auto;
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 100%;
+            margin: 10px auto;
             border: 2px solid #444;
             box-shadow: 0 10px 40px rgba(0,0,0,0.5);
             max-height: 85vh;
@@ -594,13 +582,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             padding-bottom: 15px;
             border-bottom: 2px solid #333;
         }
         
         .repertoire-modal-title {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             color: var(--dj-blue);
             font-weight: 700;
         }
@@ -610,9 +598,9 @@
             color: white;
             border: none;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            font-size: 1.2rem;
+            width: 35px;
+            height: 35px;
+            font-size: 1rem;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -625,17 +613,17 @@
         }
         
         .repertoire-search {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .repertoire-search-input {
             width: 100%;
-            padding: 15px;
-            border-radius: 10px;
+            padding: 12px;
+            border-radius: 8px;
             border: 2px solid #444;
             background: #222;
             color: white;
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
         
         .repertoire-search-input:focus {
@@ -647,15 +635,15 @@
         .repertoire-list-container {
             flex: 1;
             overflow-y: auto;
-            padding-right: 10px;
-            margin-bottom: 20px;
+            padding-right: 8px;
+            margin-bottom: 15px;
         }
         
         .repertoire-song-item {
             background: linear-gradient(90deg, #222, #2a2a2a);
-            border-radius: 10px;
-            padding: 18px;
-            margin-bottom: 12px;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -664,39 +652,39 @@
         
         .repertoire-song-info {
             flex: 1;
-            padding-right: 15px;
+            padding-right: 10px;
         }
         
         .repertoire-song-title {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 600;
             color: #fff;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
         }
         
         .repertoire-song-artist {
             color: #aaa;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
         
         .repertoire-song-votes {
             background: var(--admin-accent);
             color: white;
-            padding: 6px 12px;
-            border-radius: 15px;
+            padding: 5px 10px;
+            border-radius: 12px;
             font-weight: bold;
-            min-width: 50px;
+            min-width: 45px;
             text-align: center;
-            margin-right: 15px;
+            margin-right: 10px;
         }
         
         .repertoire-add-btn {
             background: linear-gradient(145deg, var(--dj-green), #2aad46);
             color: white;
             border: none;
-            border-radius: 8px;
-            padding: 10px 20px;
-            font-size: 1rem;
+            border-radius: 6px;
+            padding: 8px 15px;
+            font-size: 0.9rem;
             cursor: pointer;
             font-weight: 600;
         }
@@ -710,19 +698,18 @@
         .messages-container {
             background: var(--panel-bg);
             border-radius: 15px;
-            padding: 25px;
-            max-height: 70vh;
+            padding: 20px;
+            max-height: 65vh;
             overflow-y: auto;
             border: 2px solid #444;
-            font-size: 1.2rem;
         }
         
         .message-card {
             background: linear-gradient(90deg, #1a1a1a, #252525);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
-            border-left: 8px solid var(--dj-blue);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 6px solid var(--dj-blue);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease;
         }
@@ -736,8 +723,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
             border-bottom: 1px solid #333;
         }
         
@@ -746,113 +733,114 @@
             font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 1.3rem;
+            gap: 8px;
+            font-size: 1.1rem;
         }
         
         .message-user i {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
         }
         
         .message-time {
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             color: #bbb;
             font-weight: 600;
             background: #333;
-            padding: 6px 12px;
-            border-radius: 8px;
+            padding: 4px 8px;
+            border-radius: 6px;
         }
         
         .message-content {
-            font-size: 1.6rem;
-            margin-bottom: 15px;
-            line-height: 1.7;
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            line-height: 1.5;
             font-weight: 600;
-            min-height: 60px;
+            min-height: 50px;
             color: #fff;
             text-shadow: 0 1px 2px rgba(0,0,0,0.5);
         }
         
         .message-songs {
-            font-size: 1.2rem;
+            font-size: 1rem;
             color: var(--dj-green);
             font-style: italic;
-            padding: 10px 0;
+            padding: 8px 0;
             border-top: 1px dashed #444;
-            margin-top: 10px;
+            margin-top: 8px;
         }
         
         .message-songs i {
             color: var(--dj-green);
-            margin-right: 8px;
+            margin-right: 6px;
         }
         
         /* ========== SUGERENCIAS ========== */
         .suggestions-container {
             background: var(--panel-bg);
             border-radius: 15px;
-            padding: 20px;
-            max-height: 70vh;
+            padding: 15px;
+            max-height: 65vh;
             overflow-y: auto;
             border: 1px solid #333;
         }
         
         .suggestion-card {
             background: linear-gradient(90deg, #222, #2a2a2a);
-            border-radius: 10px;
-            padding: 18px;
-            margin-bottom: 15px;
-            border-left: 5px solid var(--dj-purple);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--dj-purple);
         }
         
         .suggestion-title {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             font-weight: 600;
             color: #fff;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
         }
         
         .suggestion-artist {
             color: #aaa;
-            font-size: 1rem;
-            margin-bottom: 10px;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
         }
         
         .suggestion-actions {
             display: flex;
-            gap: 10px;
-            margin-top: 10px;
+            gap: 8px;
+            margin-top: 8px;
         }
         
         /* ========== AGREGAR CANCIONES ========== */
         .form-container {
             background: var(--panel-bg);
             border-radius: 15px;
-            padding: 25px;
-            max-width: 800px;
+            padding: 20px;
+            max-width: 100%;
             margin: 0 auto;
             border: 1px solid #333;
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .form-label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             color: #ddd;
             font-weight: 500;
+            font-size: 0.95rem;
         }
         
         .form-input {
             width: 100%;
-            padding: 14px;
-            border-radius: 10px;
+            padding: 12px;
+            border-radius: 8px;
             border: 2px solid #333;
             background: #222;
             color: white;
-            font-size: 1.1rem;
+            font-size: 1rem;
             transition: all 0.3s;
         }
         
@@ -866,9 +854,9 @@
             background: linear-gradient(145deg, var(--dj-green), #2aad46);
             color: white;
             border: none;
-            border-radius: 10px;
-            padding: 18px 35px;
-            font-size: 1.3rem;
+            border-radius: 8px;
+            padding: 15px 25px;
+            font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
             width: 100%;
@@ -877,30 +865,30 @@
         }
         
         .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(76, 217, 100, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(76, 217, 100, 0.4);
         }
         
-        /* ========== LISTA PARA ELIMINAR CANCIONES - ESTILOS MEJORADOS ========== */
+        /* ========== LISTA PARA ELIMINAR CANCIONES ========== */
         .delete-list {
             background: var(--panel-bg);
             border-radius: 15px;
-            padding: 25px;
-            margin-top: 30px;
-            max-height: 400px;
+            padding: 20px;
+            margin-top: 20px;
+            max-height: 350px;
             overflow-y: auto;
             border: 2px solid #444;
         }
         
         .delete-song-item {
             background: linear-gradient(90deg, #222, #2a2a2a);
-            border-radius: 12px;
-            padding: 18px;
-            margin-bottom: 15px;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-left: 5px solid var(--admin-accent);
+            border-left: 4px solid var(--admin-accent);
             transition: all 0.2s;
         }
         
@@ -911,45 +899,45 @@
         
         .delete-song-info {
             flex: 1;
-            padding-right: 15px;
+            padding-right: 10px;
         }
         
         .delete-song-title {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: #fff;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
         }
         
         .delete-song-artist {
             color: #aaa;
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
         
         .delete-song-votes {
             background: var(--admin-accent);
             color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
+            padding: 6px 12px;
+            border-radius: 15px;
             font-weight: bold;
-            min-width: 60px;
+            min-width: 50px;
             text-align: center;
-            margin-right: 15px;
-            font-size: 1.1rem;
+            margin-right: 10px;
+            font-size: 1rem;
         }
         
         .delete-song-btn {
             background: linear-gradient(145deg, #ff3b30, #d70015);
             color: white;
             border: none;
-            border-radius: 10px;
-            padding: 12px 25px;
-            font-size: 1.1rem;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 1rem;
             cursor: pointer;
             font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             transition: all 0.3s;
         }
         
@@ -961,10 +949,10 @@
         /* ========== NOTIFICACIONES ========== */
         .notification {
             position: fixed;
-            top: 80px;
-            right: 20px;
+            top: 70px;
+            right: 10px;
             z-index: 9999;
-            min-width: 300px;
+            min-width: 280px;
             animation: slideIn 0.3s ease-out;
         }
         
@@ -976,15 +964,15 @@
         /* Botón de pantalla completa */
         .fullscreen-btn {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
+            bottom: 15px;
+            right: 15px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             background: linear-gradient(145deg, var(--admin-accent), #cc0044);
             color: white;
             border: none;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             cursor: pointer;
             z-index: 9999;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
@@ -1000,64 +988,29 @@
         
         /* ========== RESPONSIVE ========== */
         @media (max-width: 768px) {
-            /* Mostrar header dinámico en móvil */
             .dynamic-header {
-                display: flex;
-            }
-            
-            /* Ocultar nav-console original en móvil */
-            .nav-console {
-                display: none !important;
+                padding: 10px;
+                min-height: 50px;
             }
             
             .main-content {
-                padding: 10px 5px;
-                padding-top: 5px;
+                padding: 10px;
             }
             
             .section-title {
-                font-size: 1.7rem;
-                margin-bottom: 20px;
-            }
-            
-            .playlist-control-btn {
-                min-width: 150px;
-                padding: 12px 20px;
-                font-size: 1rem;
-            }
-            
-            .playlist-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-            
-            .playlist-stats {
-                width: 100%;
-                justify-content: space-between;
-            }
-            
-            .fullscreen-btn {
-                bottom: 15px;
-                right: 15px;
-                width: 45px;
-                height: 45px;
-                font-size: 1.3rem;
-            }
-            
-            .repertoire-modal-content {
-                padding: 20px;
-                margin: 10px;
-            }
-            
-            .message-content {
-                font-size: 1.4rem;
+                font-size: 1.5rem;
+                margin-bottom: 15px;
             }
             
             .nav-btn {
-                min-width: 140px;
-                padding: 12px 15px;
-                font-size: 0.9rem;
+                min-width: 120px;
+                padding: 10px 15px;
+                font-size: 0.85rem;
+                max-width: 160px;
+            }
+            
+            .header-title {
+                font-size: 1.1rem;
             }
             
             .back-to-home {
@@ -1066,36 +1019,10 @@
                 min-width: 80px;
             }
             
-            .header-title {
-                font-size: 1.1rem;
-            }
-        }
-        
-        @media (max-width: 576px) {
-            .main-content {
-                padding: 5px;
-            }
-            
             .playlist-control-btn {
-                min-width: 100%;
-                margin-bottom: 10px;
-            }
-            
-            .playlist-controls-vertical {
-                flex-direction: column;
-            }
-            
-            .playlist-song-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-            
-            .playlist-song-actions {
-                display: flex;
-                gap: 10px;
-                width: 100%;
-                justify-content: flex-end;
+                min-width: 140px;
+                padding: 10px 15px;
+                font-size: 0.9rem;
             }
             
             .fullscreen-btn {
@@ -1105,9 +1032,56 @@
                 height: 40px;
                 font-size: 1.2rem;
             }
+        }
+        
+        @media (max-width: 576px) {
+            .main-content {
+                padding: 8px;
+            }
+            
+            .nav-buttons-container {
+                gap: 6px;
+            }
+            
+            .nav-btn {
+                min-width: calc(50% - 6px);
+                max-width: calc(50% - 6px);
+                padding: 10px 8px;
+                font-size: 0.8rem;
+            }
+            
+            .playlist-control-btn {
+                min-width: 100%;
+                margin-bottom: 8px;
+            }
+            
+            .playlist-controls-vertical {
+                flex-direction: column;
+            }
+            
+            .playlist-song-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            
+            .playlist-song-actions {
+                display: flex;
+                gap: 8px;
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .fullscreen-btn {
+                bottom: 8px;
+                right: 8px;
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
             
             .section-title {
-                font-size: 1.5rem;
+                font-size: 1.3rem;
             }
             
             .back-to-home {
@@ -1121,14 +1095,15 @@
             }
         }
         
-        @media (min-width: 769px) {
-            /* En escritorio, mostrar nav-console normal */
-            .dynamic-header {
-                display: none !important;
+        @media (min-width: 769px) and (max-width: 1024px) {
+            /* Para tabletas */
+            .nav-btn {
+                min-width: 150px;
+                max-width: 180px;
             }
             
-            .nav-console {
-                display: flex !important;
+            .header-title {
+                font-size: 1.3rem;
             }
         }
         
@@ -1140,26 +1115,28 @@
     </style>
 </head>
 <body>
-    <!-- 🎚️ HEADER DINÁMICO (PARA MÓVIL) -->
+    <!-- 🎚️ HEADER DINÁMICO (SIEMPRE VISIBLE) -->
     <div class="dynamic-header header-home-mode" id="dynamic-header">
         <!-- Modo HOME: muestra todos los botones -->
-        <div class="nav-console" id="full-nav">
-            <button class="nav-btn active" data-section="home">HOME</button>
-            <button class="nav-btn" data-section="top10">TOP 10</button>
-            <button class="nav-btn" data-section="stage">
-                ESCENARIO <span class="led-indicator" id="stage-indicator"></span>
-            </button>
-            <button class="nav-btn" data-section="messages">
-                MENSAJES <span class="led-indicator" id="messages-indicator"></span>
-            </button>
-            <button class="nav-btn" data-section="suggestions">
-                SUGERENCIAS <span class="led-indicator" id="suggestions-indicator"></span>
-            </button>
-            <button class="nav-btn" data-section="add">+ CANCIONES</button>
+        <div id="home-mode-header">
+            <div class="nav-buttons-container">
+                <button class="nav-btn active" data-section="home">HOME</button>
+                <button class="nav-btn" data-section="top10">TOP 10</button>
+                <button class="nav-btn" data-section="stage">
+                    ESCENARIO <span class="led-indicator" id="stage-indicator"></span>
+                </button>
+                <button class="nav-btn" data-section="messages">
+                    MENSAJES <span class="led-indicator" id="messages-indicator"></span>
+                </button>
+                <button class="nav-btn" data-section="suggestions">
+                    SUGERENCIAS <span class="led-indicator" id="suggestions-indicator"></span>
+                </button>
+                <button class="nav-btn" data-section="add">+ CANCIONES</button>
+            </div>
         </div>
         
         <!-- Modo otras secciones: solo botón HOME + título -->
-        <div class="header-other-mode" id="minimal-header" style="display: none; width: 100%;">
+        <div class="header-other-mode" id="other-mode-header" style="display: none; width: 100%;">
             <button class="back-to-home" onclick="showSection('home')">
                 <i class="bi bi-arrow-left"></i> HOME
             </button>
@@ -1167,22 +1144,6 @@
             <div style="min-width: 80px;"></div> <!-- Espaciador -->
         </div>
     </div>
-
-    <!-- 🎚️ BARRA DE NAVEGACIÓN SUPERIOR ORIGINAL (PARA ESCRITORIO) -->
-    <nav class="nav-console">
-        <button class="nav-btn active" data-section="home">HOME</button>
-        <button class="nav-btn" data-section="top10">TOP 10</button>
-        <button class="nav-btn" data-section="stage">
-            ESCENARIO <span class="led-indicator" id="stage-indicator-desktop"></span>
-        </button>
-        <button class="nav-btn" data-section="messages">
-            MENSAJES <span class="led-indicator" id="messages-indicator-desktop"></span>
-        </button>
-        <button class="nav-btn" data-section="suggestions">
-            SUGERENCIAS <span class="led-indicator" id="suggestions-indicator-desktop"></span>
-        </button>
-        <button class="nav-btn" data-section="add">+ CANCIONES</button>
-    </nav>
 
     <!-- CONTENIDO PRINCIPAL -->
     <main class="main-content">
@@ -1203,7 +1164,7 @@
         <!-- 🎤 ESCENARIO (DISEÑO VERTICAL) -->
         <section id="stage-section" class="content-section">
             <div class="stage-section-vertical">
-                <h2 class="section-title" style="margin-bottom: 20px;">PLAYLIST A TOCAR EN EL SHOW</h2>
+                <h2 class="section-title" style="margin-bottom: 15px;">PLAYLIST A TOCAR EN EL SHOW</h2>
                 
                 <!-- CONTENEDOR PRINCIPAL DE PLAYLIST -->
                 <div class="playlist-main-container">
@@ -1281,7 +1242,7 @@
             <div class="messages-container" id="messages-container">
                 <!-- Tarjetas de mensajes -->
             </div>
-            <div class="playlist-controls-vertical" style="margin-top: 25px;">
+            <div class="playlist-controls-vertical" style="margin-top: 20px;">
                 <button class="playlist-control-btn playlist-add-btn" onclick="markAllAsRead()">
                     <i class="bi bi-check-all"></i> MARCAR TODOS COMO LEÍDOS
                 </button>
@@ -1297,7 +1258,7 @@
             <div class="suggestions-container" id="suggestions-list-container">
                 <!-- Sugerencias del público -->
             </div>
-            <div class="playlist-controls-vertical" style="margin-top: 25px;">
+            <div class="playlist-controls-vertical" style="margin-top: 20px;">
                 <button class="playlist-control-btn playlist-add-btn" onclick="markAllAsViewed()">
                     <i class="bi bi-check-all"></i> MARCAR TODAS COMO VISTAS
                 </button>
@@ -1349,7 +1310,7 @@
             </div>
             
             <!-- Lista para eliminar canciones -->
-            <h3 class="section-title" style="margin-top: 40px;">ELIMINAR CANCIONES</h3>
+            <h3 class="section-title" style="margin-top: 30px;">ELIMINAR CANCIONES</h3>
             <div class="delete-list" id="delete-songs-list">
                 <!-- Canciones para eliminar -->
             </div>
@@ -1410,13 +1371,16 @@
             
             // Configurar detectores de pantalla completa
             setupFullscreenDetectors();
+            
+            // Inicializar header
+            updateDynamicHeader('home');
         });
 
         // ========== HEADER DINÁMICO ==========
         function updateDynamicHeader(sectionId) {
             const dynamicHeader = document.getElementById('dynamic-header');
-            const fullNav = document.getElementById('full-nav');
-            const minimalHeader = document.getElementById('minimal-header');
+            const homeModeHeader = document.getElementById('home-mode-header');
+            const otherModeHeader = document.getElementById('other-mode-header');
             const sectionTitle = document.getElementById('current-section-title');
             
             const sectionNames = {
@@ -1428,34 +1392,28 @@
                 'add': 'AGREGAR CANCIONES'
             };
             
-            // Solo aplicar en móvil (ancho < 769px)
-            if (window.innerWidth < 769) {
-                if (sectionId === 'home') {
-                    // Modo HOME: mostrar todos los botones
-                    dynamicHeader.className = 'dynamic-header header-home-mode';
-                    fullNav.style.display = 'flex';
-                    minimalHeader.style.display = 'none';
-                } else {
-                    // Otras secciones: header minimalista
-                    dynamicHeader.className = 'dynamic-header header-other-mode';
-                    fullNav.style.display = 'none';
-                    minimalHeader.style.display = 'flex';
-                    sectionTitle.textContent = sectionNames[sectionId] || sectionId.toUpperCase();
-                }
+            if (sectionId === 'home') {
+                // Modo HOME: mostrar todos los botones
+                dynamicHeader.className = 'dynamic-header header-home-mode';
+                homeModeHeader.style.display = 'block';
+                otherModeHeader.style.display = 'none';
+            } else {
+                // Otras secciones: header minimalista
+                dynamicHeader.className = 'dynamic-header header-other-mode';
+                homeModeHeader.style.display = 'none';
+                otherModeHeader.style.display = 'flex';
+                sectionTitle.textContent = sectionNames[sectionId] || sectionId.toUpperCase();
             }
         }
 
         // ========== NAVEGACIÓN ==========
         function setupNavigation() {
-            // Configurar listeners para ambos sets de botones
-            const allNavButtons = document.querySelectorAll('.nav-btn');
-            
-            allNavButtons.forEach(button => {
+            document.querySelectorAll('.nav-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const sectionId = this.getAttribute('data-section');
                     
                     // Remover clase active de todos los botones
-                    allNavButtons.forEach(btn => {
+                    document.querySelectorAll('.nav-btn').forEach(btn => {
                         btn.classList.remove('active');
                     });
                     
@@ -1922,14 +1880,6 @@
                 });
         }
 
-        function loadMessages() {
-            updateMessageStats();
-            // FORZAR actualización
-            setTimeout(() => {
-                displayMessages();
-            }, 100);
-        }
-
         function displayMessages() {
             const container = document.getElementById('messages-container');
             
@@ -1974,13 +1924,13 @@
                             ${msg.message}
                         </div>
                         ${songList}
-                        <div style="margin-top: 20px; display: flex; gap: 15px;">
+                        <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
                             ${!msg.read ? `
-                                <button class="playlist-control-btn playlist-add-btn" onclick="markAsRead('${msg.id}')" style="padding: 12px 20px; min-width: 180px;">
+                                <button class="playlist-control-btn playlist-add-btn" onclick="markAsRead('${msg.id}')" style="padding: 10px 15px; min-width: 150px; font-size: 0.9rem;">
                                     <i class="bi bi-check"></i> MARCAR LEÍDO
                                 </button>
                             ` : ''}
-                            <button class="playlist-control-btn playlist-clear-btn" onclick="deleteMessage('${msg.id}')" style="padding: 12px 20px; min-width: 150px;">
+                            <button class="playlist-control-btn playlist-clear-btn" onclick="deleteMessage('${msg.id}')" style="padding: 10px 15px; min-width: 120px; font-size: 0.9rem;">
                                 <i class="bi bi-trash"></i> ELIMINAR
                             </button>
                         </div>
@@ -1994,10 +1944,8 @@
         function updateMessageStats() {
             const unread = allMessages.filter(m => !m.read).length;
             const indicator = document.getElementById('messages-indicator');
-            const indicatorDesktop = document.getElementById('messages-indicator-desktop');
             
             if (indicator) indicator.style.display = unread > 0 ? 'inline-block' : 'none';
-            if (indicatorDesktop) indicatorDesktop.style.display = unread > 0 ? 'inline-block' : 'none';
         }
 
         // ========== LISTENER DE SUGERENCIAS ==========
@@ -2053,14 +2001,6 @@
                 });
         }
 
-        function loadSuggestions() {
-            updateSuggestionStats();
-            // FORZAR actualización
-            setTimeout(() => {
-                displaySuggestions();
-            }, 100);
-        }
-
         function displaySuggestions() {
             const container = document.getElementById('suggestions-list-container');
             
@@ -2097,11 +2037,11 @@
                             </small>
                             <div class="suggestion-actions">
                                 ${suggestion.status !== 'viewed' ? `
-                                    <button class="song-action-btn song-played-btn" onclick="markSuggestionAsViewed('${suggestion.id}')" style="min-width: 40px;">
+                                    <button class="song-action-btn song-played-btn" onclick="markSuggestionAsViewed('${suggestion.id}')" style="min-width: 35px; padding: 6px;">
                                         <i class="bi bi-check"></i>
                                     </button>
                                 ` : ''}
-                                <button class="song-action-btn song-remove-btn" onclick="deleteSuggestion('${suggestion.id}')" style="min-width: 40px;">
+                                <button class="song-action-btn song-remove-btn" onclick="deleteSuggestion('${suggestion.id}')" style="min-width: 35px; padding: 6px;">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </div>
@@ -2116,10 +2056,8 @@
         function updateSuggestionStats() {
             const pending = allSuggestions.filter(s => s.status === 'pending').length;
             const indicator = document.getElementById('suggestions-indicator');
-            const indicatorDesktop = document.getElementById('suggestions-indicator-desktop');
             
             if (indicator) indicator.style.display = pending > 0 ? 'inline-block' : 'none';
-            if (indicatorDesktop) indicatorDesktop.style.display = pending > 0 ? 'inline-block' : 'none';
         }
 
         // ========== MODO ESCENARIO VERTICAL ==========
@@ -2927,16 +2865,6 @@
                 }
             });
         };
-
-        // Actualizar header al cargar/redimensionar
-        window.addEventListener('resize', function() {
-            updateDynamicHeader(currentSection);
-        });
-
-        // Inicializar header
-        setTimeout(() => {
-            updateDynamicHeader('home');
-        }, 100);
 
     </script>
 </body>

@@ -21,7 +21,7 @@
             padding-bottom: 1rem;
         }
         
-        /* ========== HEADER GRANDE PARA MÓVIL ========== */
+        /* ========== HEADER GRANDE ========== */
         .header-simple {
             width: 100%;
             margin: 0 auto 1rem auto;
@@ -67,9 +67,9 @@
             box-shadow: 0 3px 10px rgba(0,0,0,0.06);
         }
         
-        /* Top 5 */
-        .top5-panel {
-            border-color: #ffc107;
+        /* Buscador */
+        .search-panel {
+            border-color: var(--pub-blue);
         }
         
         .panel-title {
@@ -84,48 +84,65 @@
             border-bottom: 2px solid #f0f0f0;
         }
         
-        .top-song-item {
+        .search-input-group {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.7rem;
-            background: #f8f9fa;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .search-input {
+            flex: 1;
+            border: 2px solid #dee2e6;
             border-radius: 8px;
-            margin-bottom: 0.6rem;
-            border-left: 3px solid #ffc107;
-            transition: all 0.2s;
+            padding: 0.7rem 1rem;
+            font-size: 1rem;
         }
         
-        .top-song-item:hover {
-            background: #e9ecef;
-            transform: translateX(3px);
-        }
-        
-        /* Compartir */
-        .share-panel {
+        .search-input:focus {
+            outline: none;
             border-color: var(--pub-blue);
+            box-shadow: 0 0 0 3px rgba(1, 33, 105, 0.1);
         }
         
-        .btn-share {
-            background: linear-gradient(135deg, var(--pub-red), var(--pub-blue));
+        .btn-clear-search {
+            background: #6c757d;
             color: white;
             border: none;
-            padding: 0.9rem;
+            border-radius: 8px;
+            padding: 0 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .btn-clear-search:hover {
+            background: #5a6268;
+        }
+        
+        /* BOTÓN VER REPERTORIO */
+        .repertoire-btn {
+            background: var(--pub-blue);
+            color: white;
+            border: none;
+            padding: 1rem;
             font-weight: bold;
-            border-radius: 10px;
-            transition: all 0.3s;
+            border-radius: 12px;
             width: 100%;
-            font-size: 1rem;
+            font-size: 1.1rem;
+            transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
             margin-top: 0.5rem;
+            box-shadow: 0 4px 10px rgba(10, 64, 98, 0.2);
         }
         
-        .btn-share:hover {
+        .repertoire-btn:hover {
+            background: #083354;
             transform: translateY(-2px);
-            box-shadow: 0 5px 12px rgba(200, 16, 46, 0.3);
+            box-shadow: 0 6px 15px rgba(10, 64, 98, 0.3);
         }
         
         /* Tus votos */
@@ -176,7 +193,7 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
         
-        /* BOTÓN ENVIAR VOTOS - PROMINENTE */
+        /* BOTÓN ENVIAR VOTOS */
         .btn-submit-votes {
             background: linear-gradient(135deg, #28a745, #20c997);
             color: white;
@@ -256,70 +273,177 @@
             margin-top: 0.5rem;
         }
         
-        /* Buscador */
-        .search-panel {
+        /* Compartir */
+        .share-panel {
             border-color: var(--pub-blue);
         }
         
-        .search-input-group {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-        }
-        
-        .search-input {
-            flex: 1;
-            border: 2px solid #dee2e6;
-            border-radius: 8px;
-            padding: 0.7rem 1rem;
-            font-size: 1rem;
-        }
-        
-        .search-input:focus {
-            outline: none;
-            border-color: var(--pub-blue);
-            box-shadow: 0 0 0 3px rgba(1, 33, 105, 0.1);
-        }
-        
-        .btn-clear-search {
-            background: #6c757d;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 0 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-        
-        .btn-clear-search:hover {
-            background: #5a6268;
-        }
-        
-        /* BOTÓN TOGGLE REPERTORIO */
-        .repertoire-toggle-btn {
-            background: var(--pub-blue);
+        .btn-share {
+            background: linear-gradient(135deg, var(--pub-red), var(--pub-blue));
             color: white;
             border: none;
             padding: 0.9rem;
             font-weight: bold;
             border-radius: 10px;
+            transition: all 0.3s;
             width: 100%;
             font-size: 1rem;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            transition: all 0.3s;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
         }
         
-        .repertoire-toggle-btn:hover {
-            background: #0A4062;
+        .btn-share:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(10, 64, 98, 0.3);
+            box-shadow: 0 5px 12px rgba(200, 16, 46, 0.3);
         }
         
-        /* ========== LISTA DE CANCIONES (OCULTA INICIALMENTE) ========== */
+        /* ========== MODAL DE REPERTORIO (FLOTANTE) ========== */
+        .repertoire-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .repertoire-modal.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .repertoire-modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 800px;
+            margin: 20px auto;
+            border: 3px solid var(--pub-blue);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .repertoire-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .repertoire-modal-title {
+            font-size: 1.8rem;
+            color: var(--pub-blue);
+            font-weight: 700;
+        }
+        
+        .repertoire-modal-close {
+            background: var(--pub-red);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .repertoire-modal-close:hover {
+            background: #a80d14;
+            transform: scale(1.1);
+        }
+        
+        .repertoire-search {
+            margin-bottom: 20px;
+        }
+        
+        .repertoire-search-input {
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #ccc;
+            background: #f8f9fa;
+            color: #333;
+            font-size: 1.1rem;
+        }
+        
+        .repertoire-search-input:focus {
+            border-color: var(--pub-blue);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(10, 64, 98, 0.2);
+        }
+        
+        .repertoire-list-container {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .repertoire-song-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--pub-blue);
+            transition: all 0.2s;
+        }
+        
+        .repertoire-song-item:hover {
+            background: #e9ecef;
+            transform: translateX(3px);
+        }
+        
+        .repertoire-song-info {
+            flex: 1;
+            padding-right: 15px;
+        }
+        
+        .repertoire-song-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .repertoire-song-artist {
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .repertoire-song-votes {
+            background: var(--pub-red);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-weight: bold;
+            min-width: 50px;
+            text-align: center;
+            margin-right: 15px;
+        }
+        
+        /* Lista de canciones en modal */
         .songs-header {
             background: var(--pub-blue);
             color: white;
@@ -332,7 +456,7 @@
         }
         
         .songs-scroll-container {
-            max-height: 500px;
+            max-height: 400px;
             overflow-y: auto;
             padding-right: 5px;
             background: white;
@@ -516,21 +640,13 @@
                 padding: 0.3rem 0.7rem;
             }
             
-            .songs-header {
-                padding: 0.7rem;
-                font-size: 0.9rem;
-            }
-            
-            .songs-header h5 {
-                font-size: 1rem;
+            .repertoire-modal-content {
+                padding: 20px;
+                margin: 10px;
             }
         }
         
         @media (max-width: 480px) {
-            .header-full img {
-                max-height: 100px;
-            }
-            
             .votes-title {
                 font-size: 1rem;
             }
@@ -565,7 +681,6 @@
 <body>
     <!-- ========== HEADER GRANDE ========== -->
     <div class="container py-3">
-        <!-- ========== HEADER SIMPLIFICADO ========== -->
         <div class="header-simple">
             <img src="images/header.webp" alt="MobyDick @ Porter British Pub" class="header-image" 
                  fetchpriority="high" decoding="async" onload="this.classList.add('loaded')">
@@ -574,17 +689,7 @@
         <!-- ========== CONTENIDO EN COLUMNA ÚNICA ========== -->
         <div class="content-column">
             
-            <!-- 1. TOP 5 CANCIONES MÁS VOTADAS -->
-            <div class="content-panel top5-panel">
-                <div class="panel-title">
-                    <i class="bi bi-trophy"></i> TOP 5 MÁS VOTADAS
-                </div>
-                <div id="top-songs">
-                    <p class="text-center small text-muted my-3">Cargando tendencias...</p>
-                </div>
-            </div>
-            
-            <!-- 2. BUSCAR CANCIONES -->
+            <!-- 1. BUSCAR CANCIONES -->
             <div class="content-panel search-panel">
                 <div class="panel-title">
                     <i class="bi bi-search"></i> BUSCAR CANCIONES
@@ -598,33 +703,14 @@
                 </div>
             </div>
             
-            <!-- 3. BOTÓN TOGGLE REPERTORIO -->
+            <!-- 2. BOTÓN VER REPERTORIO COMPLETO (MODAL) -->
             <div class="content-panel" style="border-color: var(--pub-blue);">
-                <button class="repertoire-toggle-btn" onclick="toggleRepertoire()">
-                    <div>
-                        <i class="bi bi-music-note-list"></i> 
-                        <span id="repertoire-toggle-text">VER REPERTORIO COMPLETO</span>
-                    </div>
-                    <i class="bi bi-chevron-down" id="repertoire-chevron"></i>
+                <button class="repertoire-btn" onclick="openRepertoireModal()">
+                    <i class="bi bi-music-note-list"></i> VER REPERTORIO COMPLETO
                 </button>
             </div>
             
-            <!-- REPERTORIO (INICIALMENTE OCULTO) -->
-            <div id="repertoire-container" style="display: none;">
-                <div class="songs-header">
-                    <h5 class="mb-0"><i class="bi bi-music-note-list"></i> REPERTORIO</h5>
-                    <span class="badge bg-light text-dark" id="total-songs">0 canciones</span>
-                </div>
-                
-                <div class="songs-scroll-container" id="songs-container">
-                    <div class="text-center py-4">
-                        <div class="spinner-border text-primary"></div>
-                        <p class="mt-2">Cargando canciones...</p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- 4. TUS VOTOS Y MENSAJE -->
+            <!-- 3. TUS VOTOS Y MENSAJE -->
             <div class="content-panel votes-panel">
                 <div class="votes-header">
                     <div class="votes-title">
@@ -660,7 +746,7 @@
                 <div id="submit-feedback" class="feedback-container"></div>
             </div>
             
-            <!-- 5. COMPARTIR CON AMIGOS -->
+            <!-- 4. COMPARTIR CON AMIGOS -->
             <div class="content-panel share-panel">
                 <div class="panel-title">
                     <i class="bi bi-share"></i> COMPARTIR CON AMIGOS
@@ -674,7 +760,7 @@
                 <div id="share-feedback" class="feedback-container"></div>
             </div>
             
-            <!-- 6. SUGERIR CANCIONES NUEVAS -->
+            <!-- 5. SUGERIR CANCIONES NUEVAS -->
             <div class="content-panel suggestions-panel">
                 <div class="panel-title">
                     <i class="bi bi-lightbulb"></i> SUGERIR CANCIONES NUEVAS
@@ -722,6 +808,42 @@
         </div>
     </div>
 
+    <!-- ========== MODAL DE REPERTORIO (FLOTANTE) ========== -->
+    <div class="repertoire-modal" id="repertoire-modal">
+        <div class="repertoire-modal-content">
+            <div class="repertoire-modal-header">
+                <div class="repertoire-modal-title">REPERTORIO COMPLETO</div>
+                <button class="repertoire-modal-close" onclick="closeRepertoireModal()">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            
+            <!-- BUSCADOR EN MODAL -->
+            <div class="repertoire-search">
+                <input type="text" class="repertoire-search-input" id="modal-search" 
+                       placeholder="Buscar canción o artista..." onkeyup="searchInModal()">
+            </div>
+            
+            <!-- LISTA DE CANCIONES EN MODAL -->
+            <div class="songs-header">
+                <h5 class="mb-0"><i class="bi bi-music-note-list"></i> CANCIONES DISPONIBLES</h5>
+                <span class="badge bg-light text-dark" id="modal-total-songs">0 canciones</span>
+            </div>
+            
+            <div class="repertoire-list-container" id="modal-songs-container">
+                <div class="text-center py-4">
+                    <div class="spinner-border text-primary"></div>
+                    <p class="mt-2">Cargando canciones...</p>
+                </div>
+            </div>
+            
+            <!-- BOTÓN CERRAR MODAL -->
+            <button class="btn btn-share" onclick="closeRepertoireModal()" style="width: 100%; margin-top: 10px;">
+                <i class="bi bi-check-circle"></i> CERRAR
+            </button>
+        </div>
+    </div>
+
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -744,7 +866,6 @@
         let connectionListener = null;
         let userMessage = '';
         let deviceId = null;
-        let isRepertoireVisible = false;
 
         // ========== INICIALIZAR ==========
         document.addEventListener('DOMContentLoaded', function() {
@@ -778,28 +899,94 @@
             }
         });
 
-        // ========== TOGGLE REPERTORIO ==========
-        window.toggleRepertoire = function() {
-            const container = document.getElementById('repertoire-container');
-            const chevron = document.getElementById('repertoire-chevron');
-            const text = document.getElementById('repertoire-toggle-text');
+        // ========== FUNCIONES MODAL ==========
+        window.openRepertoireModal = function() {
+            const modal = document.getElementById('repertoire-modal');
+            modal.classList.add('active');
+            displaySongsInModal(allSongs);
+        };
+
+        window.closeRepertoireModal = function() {
+            const modal = document.getElementById('repertoire-modal');
+            modal.classList.remove('active');
+        };
+
+        window.searchInModal = function() {
+            const searchTerm = document.getElementById('modal-search').value.toLowerCase();
             
-            isRepertoireVisible = !isRepertoireVisible;
-            
-            if (isRepertoireVisible) {
-                container.style.display = 'block';
-                chevron.className = 'bi bi-chevron-up';
-                text.textContent = 'OCULTAR REPERTORIO';
-                
-                // Asegurar que las canciones estén cargadas
-                if (allSongs.length === 0) {
-                    loadSongs();
-                }
-            } else {
-                container.style.display = 'none';
-                chevron.className = 'bi bi-chevron-down';
-                text.textContent = 'VER REPERTORIO COMPLETO';
+            if (!searchTerm) {
+                displaySongsInModal(allSongs);
+                return;
             }
+            
+            const filtered = allSongs.filter(song => 
+                song.title.toLowerCase().includes(searchTerm) ||
+                song.artist.toLowerCase().includes(searchTerm) ||
+                (song.genre && song.genre.toLowerCase().includes(searchTerm))
+            );
+            
+            displaySongsInModal(filtered);
+        };
+
+        function displaySongsInModal(songs) {
+            const container = document.getElementById("modal-songs-container");
+            const totalElement = document.getElementById("modal-total-songs");
+            
+            if (!container) return;
+            
+            if (songs.length === 0) {
+                container.innerHTML = `
+                    <div class="alert alert-info m-3">
+                        <i class="bi bi-info-circle"></i>
+                        No hay canciones que coincidan.
+                    </div>
+                `;
+                if (totalElement) totalElement.textContent = "0 canciones";
+                return;
+            }
+            
+            if (totalElement) {
+                totalElement.textContent = `${songs.length} cancion${songs.length !== 1 ? "es" : ""}`;
+            }
+            
+            let html = "";
+            
+            songs.forEach((song) => {
+                const isVoted = myVotes.includes(song.id);
+                const canVote = myVotes.length < 3;
+                
+                html += `
+                    <div class="song-item" data-song-id="${song.id}">
+                        <div class="song-info">
+                            <div class="song-title">${song.title}</div>
+                            <div class="song-artist">${song.artist}</div>
+                            <div class="mt-1">
+                                ${song.genre ? `<span class="badge" style="background: var(--pub-blue); color: white;">${song.genre}</span>` : ""}
+                            </div>
+                        </div>
+                        <div class="song-actions">
+                            <span class="votes-badge">${song.votes} ${song.votes === 1 ? 'voto' : 'votos'}</span>
+                            <button class="btn btn-vote" 
+                                    onclick="voteForSongFromModal('${song.id}')"
+                                    ${isVoted ? "disabled" : ""}
+                                    ${!isVoted && !canVote ? "disabled" : ""}>
+                                ${isVoted ? '<i class="bi bi-check-circle"></i> VOTADA' : '<i class="bi bi-hand-thumbs-up"></i> VOTAR'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        window.voteForSongFromModal = function(songId) {
+            voteForSong(songId);
+            
+            // Actualizar visualización en modal
+            setTimeout(() => {
+                displaySongsInModal(allSongs);
+            }, 300);
         };
 
         function initializeFirebase() {
@@ -835,7 +1022,7 @@
                 // Iniciar sistema de conexiones
                 setupConnectionCounter();
                 
-                // Cargar canciones (siempre se cargan, estén visibles o no)
+                // Cargar canciones
                 loadSongs();
                 setupEventListeners();
                 
@@ -975,8 +1162,6 @@
 
         // ========== FUNCIONES DE CANCIONES ==========
         function loadSongs() {
-            showLoading();
-            
             db.collection("songs").orderBy("title").get()
                 .then((snapshot) => {
                     allSongs = [];
@@ -996,11 +1181,8 @@
                     console.log(`✅ ${allSongs.length} canciones cargadas`);
                     
                     if (allSongs.length === 0) {
-                        showNoSongs();
+                        showError("No hay canciones en el repertorio aún.");
                     } else {
-                        displaySongs(allSongs);
-                        updateTopSongs();
-                        updateTotalSongs();
                         updateMyVotesDisplay();
                     }
                     
@@ -1031,62 +1213,12 @@
             if (index !== -1) {
                 allSongs[index] = song;
                 
-                const songElement = document.querySelector(`[data-song-id="${song.id}"]`);
-                if (songElement) {
-                    const votesBadge = songElement.querySelector('.votes-badge');
-                    if (votesBadge) {
-                        votesBadge.textContent = `${song.votes} ${song.votes === 1 ? 'voto' : 'votos'}`;
-                    }
+                // Actualizar en modal si está abierto
+                const modal = document.getElementById('repertoire-modal');
+                if (modal.classList.contains('active')) {
+                    displaySongsInModal(allSongs);
                 }
-                
-                updateTopSongs();
             }
-        }
-
-        function displaySongs(songs) {
-            const container = document.getElementById("songs-container");
-            if (!container) return;
-            
-            if (songs.length === 0) {
-                container.innerHTML = `
-                    <div class="alert alert-info m-3">
-                        <i class="bi bi-info-circle"></i>
-                        No hay canciones que coincidan.
-                    </div>
-                `;
-                return;
-            }
-            
-            let html = "";
-            
-            songs.forEach((song) => {
-                const isVoted = myVotes.includes(song.id);
-                const canVote = myVotes.length < 3;
-                
-                html += `
-                    <div class="song-item" data-song-id="${song.id}">
-                        <div class="song-info">
-                            <div class="song-title">${song.title}</div>
-                            <div class="song-artist">${song.artist}</div>
-                            <div class="mt-1">
-                                ${song.genre ? `<span class="badge" style="background: var(--pub-blue);">${song.genre}</span>` : ""}
-                                ${song.duration ? `<small class="text-muted ms-2"><i class="bi bi-clock"></i> ${song.duration}</small>` : ""}
-                            </div>
-                        </div>
-                        <div class="song-actions">
-                            <span class="votes-badge">${song.votes} ${song.votes === 1 ? 'voto' : 'votos'}</span>
-                            <button class="btn btn-vote" 
-                                    onclick="voteForSong('${song.id}')"
-                                    ${isVoted ? "disabled" : ""}
-                                    ${!isVoted && !canVote ? "disabled" : ""}>
-                                ${isVoted ? '<i class="bi bi-check-circle"></i> VOTADA' : '<i class="bi bi-hand-thumbs-up"></i> VOTAR'}
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
         }
 
         window.voteForSong = function(songId) {
@@ -1113,13 +1245,6 @@
                 
                 updateMyVotesDisplay();
                 
-                const buttons = document.querySelectorAll(`[onclick="voteForSong('${songId}')"]`);
-                buttons.forEach(btn => {
-                    btn.innerHTML = '<i class="bi bi-check-circle"></i> VOTADA';
-                    btn.disabled = true;
-                    btn.style.background = '#28a745';
-                });
-                
                 showSubmitFeedback("✅ Voto registrado", "success");
                 
             })
@@ -1138,13 +1263,6 @@
                 localStorage.setItem("mobydick_votes", JSON.stringify(myVotes));
                 
                 updateMyVotesDisplay();
-                
-                const buttons = document.querySelectorAll(`[onclick="voteForSong('${songId}')"]`);
-                buttons.forEach(btn => {
-                    btn.innerHTML = '<i class="bi bi-hand-thumbs-up"></i> VOTAR';
-                    btn.disabled = false;
-                    btn.style.background = '';
-                });
                 
                 showSubmitFeedback("🗑️ Voto removido", "warning");
                 
@@ -1256,43 +1374,6 @@
             }
         }
 
-        function updateTopSongs() {
-            const container = document.getElementById("top-songs");
-            if (!container) return;
-            
-            const topSongs = [...allSongs]
-                .sort((a, b) => (b.votes || 0) - (a.votes || 0))
-                .slice(0, 5);
-            
-            if (topSongs.length === 0) {
-                container.innerHTML = '<p class="text-center small text-muted my-3">Sin votos aún</p>';
-                return;
-            }
-            
-            let html = "";
-            topSongs.forEach((song, index) => {
-                const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '🎵';
-                html += `
-                    <div class="top-song-item">
-                        <div>
-                            <span class="badge bg-warning text-dark me-2">${medal}</span>
-                            <small>${song.title}</small>
-                        </div>
-                        <span class="badge" style="background: var(--pub-red); color: white;">${song.votes}</span>
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-        }
-
-        function updateTotalSongs() {
-            const element = document.getElementById("total-songs");
-            if (element) {
-                element.textContent = `${allSongs.length} cancion${allSongs.length !== 1 ? "es" : ""}`;
-            }
-        }
-
         // ========== COMPARTIR ENLACE ==========
         window.shareLink = function() {
             const url = window.location.href;
@@ -1374,7 +1455,7 @@
 
         // ========== ENVIAR VOTOS Y MENSAJES ==========
         function setupEventListeners() {
-            // Buscador
+            // Buscador principal
             const searchInput = document.getElementById("search");
             if (searchInput) {
                 let searchTimeout;
@@ -1384,19 +1465,13 @@
                     searchTimeout = setTimeout(() => {
                         const term = e.target.value.toLowerCase().trim();
                         
-                        if (term === "") {
-                            displaySongs(allSongs);
-                            return;
+                        // Si hay término, abrir modal y buscar
+                        if (term) {
+                            openRepertoireModal();
+                            document.getElementById('modal-search').value = term;
+                            searchInModal();
                         }
-                        
-                        const filtered = allSongs.filter(song => 
-                            song.title.toLowerCase().includes(term) ||
-                            song.artist.toLowerCase().includes(term) ||
-                            (song.genre && song.genre.toLowerCase().includes(term))
-                        );
-                        
-                        displaySongs(filtered);
-                    }, 300);
+                    }, 500);
                 });
             }
             
@@ -1488,40 +1563,15 @@
         // Función para limpiar búsqueda
         window.clearSearch = function() {
             document.getElementById("search").value = "";
-            displaySongs(allSongs);
         };
 
-        function showLoading() {
-            const container = document.getElementById("songs-container");
-            if (container) {
-                container.innerHTML = `
-                    <div class="text-center py-4">
-                        <div class="spinner-border text-primary"></div>
-                        <p class="mt-2">Cargando canciones...</p>
-                    </div>
-                `;
-            }
-        }
-
-        function showNoSongs() {
-            const container = document.getElementById("songs-container");
-            if (container) {
-                container.innerHTML = `
-                    <div class="alert alert-warning m-3">
-                        <i class="bi bi-info-circle"></i>
-                        No hay canciones en el repertorio aún.
-                    </div>
-                `;
-            }
-        }
-
         function showError(message) {
-            const container = document.getElementById("songs-container");
+            const container = document.getElementById("submit-feedback");
             if (container) {
                 container.innerHTML = `
-                    <div class="alert alert-danger m-3">
-                        <i class="bi bi-exclamation-triangle"></i>
-                        ${message}
+                    <div class="alert alert-danger alert-dismissible fade show py-2" role="alert">
+                        <small>${message}</small>
+                        <button type="button" class="btn-close btn-sm" onclick="this.parentElement.remove()"></button>
                     </div>
                 `;
             }
