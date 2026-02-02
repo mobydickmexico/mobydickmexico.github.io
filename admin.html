@@ -340,30 +340,26 @@
             margin-left: 3px;
         }
         
-        /* Lista de canciones con scroll */
+        /* Lista de canciones con scroll - SIN BARRA DESLIZABLE VISIBLE */
         .playlist-songs-container {
             flex: 1;
             overflow-y: auto;
-            padding-right: 8px;
+            padding-right: 0;
             margin-bottom: 15px;
             -webkit-overflow-scrolling: touch;
             touch-action: pan-y;
             max-height: 40vh;
         }
         
-        /* Estilo para scrollbar */
+        /* Ocultar scrollbar pero mantener funcionalidad */
         .playlist-songs-container::-webkit-scrollbar {
-            width: 8px;
+            width: 0;
+            background: transparent;
         }
         
-        .playlist-songs-container::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.05);
-            border-radius: 4px;
-        }
-        
-        .playlist-songs-container::-webkit-scrollbar-thumb {
-            background: var(--admin-accent);
-            border-radius: 4px;
+        .playlist-songs-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
         
         /* Items de canción */
@@ -379,10 +375,34 @@
             transition: all 0.2s;
             cursor: default;
             user-select: none;
+            position: relative;
         }
         
         .playlist-song-item:hover {
             background: linear-gradient(90deg, #2a2a2a, #333);
+        }
+        
+        /* Indicador de arrastre (visible solo al mantener presionado) */
+        .playlist-song-item::after {
+            content: '☰';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            font-size: 1.2rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .playlist-song-item.drag-ready::after {
+            opacity: 1;
+            color: #ff9500;
+        }
+        
+        .playlist-song-item.dragging::after {
+            color: #ff3366;
+            opacity: 1;
         }
         
         .playlist-song-info {
@@ -490,7 +510,7 @@
             color: white;
         }
         
-        /* Controles de playlist */
+        /* Controles de playlist - REDUCIDOS */
         .playlist-controls-vertical {
             display: flex;
             gap: 10px;
@@ -528,23 +548,8 @@
             color: white;
         }
         
-        .playlist-generate-btn {
-            background: linear-gradient(145deg, var(--dj-purple), #8e44ad);
-            color: white;
-        }
-        
-        .playlist-reset-btn {
-            background: linear-gradient(145deg, var(--admin-accent), #cc0044);
-            color: white;
-        }
-        
         .playlist-clear-btn {
             background: linear-gradient(145deg, #ff3b30, #d70015);
-            color: white;
-        }
-        
-        .playlist-reorder-btn {
-            background: linear-gradient(145deg, #ff9500, #ff5e00);
             color: white;
         }
         
@@ -989,38 +994,11 @@
         }
         
         /* ========== MEJORAS PARA REORDENACIÓN TÁCTIL ========== */
-        .drag-indicator {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #ff9500;
-            font-size: 0.9rem;
-            opacity: 0.5;
-            pointer-events: none;
-            transition: opacity 0.3s;
-        }
-        
         .dragging {
             opacity: 0.8 !important;
             transform: rotate(3deg) !important;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
+            box-shadow: 0 10px 30px rgba(255, 149, 0, 0.6) !important;
             z-index: 10000 !important;
-        }
-        
-        .reorder-mode .playlist-song-item:not(.played-song) {
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        .reorder-mode .playlist-song-item:not(.played-song):active {
-            transform: scale(0.98);
-        }
-        
-        /* Indicador visual durante arrastre */
-        .sortable-fallback {
-            opacity: 0.9 !important;
-            box-shadow: 0 0 30px rgba(255, 149, 0, 0.6) !important;
         }
         
         /* ========== RESPONSIVE ========== */
@@ -1144,10 +1122,9 @@
             }
         }
         
-        /* Clase para modo reordenar */
-        .reorder-mode .playlist-song-item {
+        /* Clase para indicar que se puede arrastrar */
+        .drag-ready {
             cursor: move !important;
-            touch-action: none;
         }
     </style>
 </head>
@@ -1196,6 +1173,13 @@
             <div class="top10-list" id="top10-list">
                 <!-- Las canciones se cargarán aquí -->
             </div>
+            
+            <!-- BOTÓN REINICIAR VOTOS EN TOP 10 -->
+            <div class="playlist-controls-vertical" style="margin-top: 20px;">
+                <button class="playlist-control-btn playlist-clear-btn" onclick="resetAllVotes()">
+                    <i class="bi bi-arrow-clockwise"></i> REINICIAR TODOS LOS VOTOS
+                </button>
+            </div>
         </section>
 
         <!-- 🎤 ESCENARIO (DISEÑO VERTICAL) -->
@@ -1223,22 +1207,13 @@
                         <!-- Playlist se cargará aquí -->
                     </div>
                     
-                    <!-- CONTROLES DE PLAYLIST -->
+                    <!-- CONTROLES DE PLAYLIST - REDUCIDOS -->
                     <div class="playlist-controls-vertical">
                         <button class="playlist-control-btn playlist-add-btn" onclick="openRepertoireModal()">
                             <i class="bi bi-plus-circle"></i> + CANCIONES
                         </button>
-                        <button class="playlist-control-btn playlist-generate-btn" onclick="autoGeneratePlaylist()">
-                            <i class="bi bi-magic"></i> GENERAR AUTO
-                        </button>
-                        <button class="playlist-control-btn playlist-reorder-btn" id="reorder-toggle-btn" onclick="toggleReorderMode()">
-                            <i class="bi bi-arrow-down-up"></i> REORDENAR
-                        </button>
                         <button class="playlist-control-btn playlist-clear-btn" onclick="clearPlaylist()">
                             <i class="bi bi-trash"></i> LIMPIAR TODO
-                        </button>
-                        <button class="playlist-control-btn playlist-reset-btn" onclick="resetAllVotes()">
-                            <i class="bi bi-arrow-clockwise"></i> REINICIAR VOTOS
                         </button>
                     </div>
                 </div>
@@ -1384,13 +1359,14 @@
         let isFullscreen = false;
         let songsListener = null;
         let isUpdatingOrder = false;
-        let isReorderMode = false;
         let filteredRepertoire = null;
 
-        // ========== VARIABLES PARA SISTEMA MEJORADO DE REORDENACIÓN ==========
+        // ========== VARIABLES PARA SISTEMA DE REORDENACIÓN TÁCTIL ==========
         let longPressTimer = null;
         let isDragging = false;
         let currentDraggedItem = null;
+        let touchStartY = 0;
+        let touchStartTime = 0;
 
         // ========== INICIALIZAR ==========
         document.addEventListener('DOMContentLoaded', function() {
@@ -1690,199 +1666,70 @@
             }
         };
 
-        // ========== SISTEMA MEJORADO DE REORDENACIÓN ==========
-        window.toggleReorderMode = function() {
-            const playlistContainer = document.getElementById('playlist-songs-container');
-            const reorderBtn = document.getElementById('reorder-toggle-btn');
-            
-            isReorderMode = !isReorderMode;
-            
-            if (isReorderMode) {
-                // Activar modo reordenar
-                playlistContainer.classList.add('reorder-mode');
-                reorderBtn.innerHTML = '<i class="bi bi-list"></i> SCROLL';
-                reorderBtn.style.background = 'linear-gradient(145deg, #444, #333)';
-                initImprovedSortable();
-                showNotification("Modo REORDENAR activado. Mantén presionado 2 segundos sobre una canción para moverla.", "info");
-                
-                // Agregar eventos táctiles para mejorar la experiencia
-                setupTouchEvents();
-            } else {
-                // Desactivar modo reordenar
-                playlistContainer.classList.remove('reorder-mode');
-                reorderBtn.innerHTML = '<i class="bi bi-arrow-down-up"></i> REORDENAR';
-                reorderBtn.style.background = 'linear-gradient(145deg, #ff9500, #ff5e00)';
-                
-                // Destruir Sortable.js
-                if (sortableInstance) {
-                    sortableInstance.destroy();
-                    sortableInstance = null;
-                }
-                
-                // Limpiar eventos táctiles
-                cleanupTouchEvents();
-                
-                showNotification("Modo SCROLL activado. Desliza para ver la lista.", "info");
-            }
-        };
-
-        function initImprovedSortable() {
-            const playlist = document.getElementById('playlist-songs-container');
-            if (!playlist || playlist.children.length === 0) return;
-            
-            if (sortableInstance) {
-                sortableInstance.destroy();
-            }
-            
-            // Crear Sortable con mejor configuración para móviles
-            sortableInstance = Sortable.create(playlist, {
-                animation: 200,
-                ghostClass: 'dragging',
-                filter: '.played-song',
-                delay: 100, // Pequeño delay para evitar activación accidental
-                delayOnTouchOnly: true,
-                touchStartThreshold: 5,
-                forceFallback: true, // Mejor compatibilidad con móviles
-                fallbackClass: 'sortable-fallback',
-                fallbackOnBody: true,
-                fallbackTolerance: 5,
-                
-                onStart: function(evt) {
-                    isDragging = true;
-                    currentDraggedItem = evt.item;
-                    
-                    // Detener listener temporalmente
-                    if (songsListener) {
-                        songsListener();
-                    }
-                    
-                    // Mostrar indicador visual
-                    evt.item.style.opacity = '0.8';
-                    evt.item.style.boxShadow = '0 0 20px rgba(255, 149, 0, 0.7)';
-                },
-                
-                onEnd: function() {
-                    isDragging = false;
-                    currentDraggedItem = null;
-                    
-                    // Restaurar estilo
-                    const items = document.querySelectorAll('#playlist-songs-container .playlist-song-item');
-                    items.forEach(item => {
-                        item.style.opacity = '';
-                        item.style.boxShadow = '';
-                    });
-                    
-                    // Actualizar orden en Firebase
-                    updatePlaylistOrder();
-                    
-                    // Reactivar listener después de un tiempo
-                    setTimeout(() => {
-                        setupSongsListener();
-                    }, 1500);
-                }
-            });
-        }
-
-        // Sistema de eventos táctiles mejorado
-        function setupTouchEvents() {
+        // ========== SISTEMA DE REORDENACIÓN TÁCTIL MEJORADO ==========
+        function setupTouchReordering() {
             const playlistContainer = document.getElementById('playlist-songs-container');
             if (!playlistContainer) return;
             
-            // Agregar indicador visual en cada canción
             const items = playlistContainer.querySelectorAll('.playlist-song-item:not(.played-song)');
-            items.forEach(item => {
-                // Agregar indicador de que se puede arrastrar
-                const dragIndicator = document.createElement('div');
-                dragIndicator.className = 'drag-indicator';
-                dragIndicator.innerHTML = '<i class="bi bi-arrow-down-up"></i>';
-                dragIndicator.style.cssText = `
-                    position: absolute;
-                    right: 10px;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    color: #ff9500;
-                    font-size: 0.9rem;
-                    opacity: 0.5;
-                    pointer-events: none;
-                    transition: opacity 0.3s;
-                `;
-                item.style.position = 'relative';
-                item.appendChild(dragIndicator);
-                
-                // Eventos táctiles
-                item.addEventListener('touchstart', handleTouchStart, { passive: false });
-                item.addEventListener('touchmove', handleTouchMove, { passive: false });
-                item.addEventListener('touchend', handleTouchEnd, { passive: false });
-            });
-        }
-
-        function cleanupTouchEvents() {
-            const playlistContainer = document.getElementById('playlist-songs-container');
-            if (!playlistContainer) return;
             
-            const items = playlistContainer.querySelectorAll('.playlist-song-item');
             items.forEach(item => {
-                // Remover indicador
-                const indicator = item.querySelector('.drag-indicator');
-                if (indicator) indicator.remove();
-                
-                item.style.position = '';
-                
-                // Remover eventos
+                // Limpiar eventos anteriores
                 item.removeEventListener('touchstart', handleTouchStart);
                 item.removeEventListener('touchmove', handleTouchMove);
                 item.removeEventListener('touchend', handleTouchEnd);
+                item.removeEventListener('touchcancel', handleTouchCancel);
+                
+                // Agregar nuevos eventos
+                item.addEventListener('touchstart', handleTouchStart, { passive: false });
+                item.addEventListener('touchmove', handleTouchMove, { passive: false });
+                item.addEventListener('touchend', handleTouchEnd, { passive: true });
+                item.addEventListener('touchcancel', handleTouchCancel, { passive: true });
             });
         }
 
         function handleTouchStart(e) {
-            if (!isReorderMode || e.target.closest('.song-action-btn')) return;
+            if (e.target.closest('.song-action-btn')) return;
             
             const item = e.currentTarget;
             if (item.classList.contains('played-song')) return;
             
+            touchStartY = e.touches[0].clientY;
+            touchStartTime = Date.now();
+            currentDraggedItem = item;
+            
+            // Iniciar timer para arrastre
             longPressTimer = setTimeout(() => {
-                // Activar arrastre después de 2 segundos
-                if (sortableInstance && !isDragging) {
-                    sortableInstance._onTapStart({
-                        originalEvent: e,
-                        target: item,
-                        item: item,
-                        touch: e.touches[0]
-                    });
-                    
-                    // Mostrar feedback visual
-                    item.style.transform = 'scale(1.02)';
-                    item.style.boxShadow = '0 5px 25px rgba(255, 149, 0, 0.5)';
-                    
-                    // Mostrar flechas arriba/abajo
-                    const indicator = item.querySelector('.drag-indicator');
-                    if (indicator) {
-                        indicator.innerHTML = '<i class="bi bi-arrows-expand-vertical"></i>';
-                        indicator.style.opacity = '1';
-                        indicator.style.color = '#ff3366';
-                    }
+                if (!isDragging && currentDraggedItem === item) {
+                    activateDragMode(item);
                 }
-            }, 2000);
+            }, 800); // 0.8 segundos para activar arrastre
         }
 
         function handleTouchMove(e) {
-            if (longPressTimer) {
-                clearTimeout(longPressTimer);
-                longPressTimer = null;
+            if (longPressTimer && !isDragging) {
+                // Si el dedo se mueve mucho antes de activar arrastre, cancelar
+                const deltaY = Math.abs(e.touches[0].clientY - touchStartY);
+                if (deltaY > 15) {
+                    clearTimeout(longPressTimer);
+                    longPressTimer = null;
+                    resetDragState();
+                }
+                return;
             }
             
             if (isDragging && currentDraggedItem) {
-                // Permitir scroll normal si no estamos arrastrando
+                e.preventDefault();
+                
                 const touchY = e.touches[0].clientY;
                 const container = document.getElementById('playlist-songs-container');
                 const containerRect = container.getBoundingClientRect();
                 
                 // Scroll automático cuando se acerca a los bordes
                 if (touchY < containerRect.top + 100) {
-                    container.scrollTop -= 10;
+                    container.scrollTop -= 8;
                 } else if (touchY > containerRect.bottom - 100) {
-                    container.scrollTop += 10;
+                    container.scrollTop += 8;
                 }
             }
         }
@@ -1893,19 +1740,78 @@
                 longPressTimer = null;
             }
             
-            const item = e.currentTarget;
-            if (isDragging) return;
-            
-            // Restaurar estilo
-            item.style.transform = '';
-            item.style.boxShadow = '';
-            
-            const indicator = item.querySelector('.drag-indicator');
-            if (indicator) {
-                indicator.innerHTML = '<i class="bi bi-arrow-down-up"></i>';
-                indicator.style.opacity = '0.5';
-                indicator.style.color = '#ff9500';
+            if (isDragging) {
+                e.preventDefault();
+                finalizeDrag();
+            } else {
+                resetDragState();
             }
+        }
+
+        function handleTouchCancel(e) {
+            if (longPressTimer) {
+                clearTimeout(longPressTimer);
+                longPressTimer = null;
+            }
+            
+            if (isDragging) {
+                finalizeDrag();
+            } else {
+                resetDragState();
+            }
+        }
+
+        function activateDragMode(item) {
+            isDragging = true;
+            
+            // Agregar clases visuales
+            item.classList.add('drag-ready', 'dragging');
+            item.style.opacity = '0.8';
+            item.style.boxShadow = '0 0 20px rgba(255, 149, 0, 0.7)';
+            item.style.zIndex = '10000';
+            
+            // Detener listener temporalmente
+            if (songsListener) {
+                songsListener();
+            }
+            
+            showNotification("🎵 Mantén presionado y arrastra para reordenar. Suelta para colocar.", "info");
+        }
+
+        function finalizeDrag() {
+            isDragging = false;
+            
+            // Actualizar orden en Firebase
+            updatePlaylistOrder();
+            
+            // Restaurar estilos
+            const items = document.querySelectorAll('#playlist-songs-container .playlist-song-item');
+            items.forEach(item => {
+                item.classList.remove('drag-ready', 'dragging');
+                item.style.opacity = '';
+                item.style.boxShadow = '';
+                item.style.zIndex = '';
+                item.style.transform = '';
+            });
+            
+            currentDraggedItem = null;
+            
+            // Reactivar listener después de un tiempo
+            setTimeout(() => {
+                setupSongsListener();
+            }, 1500);
+        }
+
+        function resetDragState() {
+            if (currentDraggedItem) {
+                currentDraggedItem.classList.remove('drag-ready');
+                currentDraggedItem.style.opacity = '';
+                currentDraggedItem.style.boxShadow = '';
+                currentDraggedItem.style.zIndex = '';
+                currentDraggedItem.style.transform = '';
+            }
+            currentDraggedItem = null;
+            isDragging = false;
         }
 
         // ========== INICIALIZAR FIREBASE ==========
@@ -2295,28 +2201,12 @@
             loadPlaylist();
             updatePlaylistStats();
             
-            // Por defecto, NO activar Sortable.js (solo scroll)
-            isReorderMode = false;
-            const playlistContainer = document.getElementById('playlist-songs-container');
-            const reorderBtn = document.getElementById('reorder-toggle-btn');
+            // Configurar reordenación táctil
+            setTimeout(() => {
+                setupTouchReordering();
+            }, 300);
             
-            if (playlistContainer) {
-                playlistContainer.classList.remove('reorder-mode');
-            }
-            
-            if (reorderBtn) {
-                reorderBtn.innerHTML = '<i class="bi bi-arrow-down-up"></i> REORDENAR';
-                reorderBtn.style.background = 'linear-gradient(145deg, #ff9500, #ff5e00)';
-            }
-            
-            // Destruir Sortable si existe
-            if (sortableInstance) {
-                sortableInstance.destroy();
-                sortableInstance = null;
-            }
-            
-            // Limpiar eventos táctiles
-            cleanupTouchEvents();
+            showNotification("🎵 Mantén presionado una canción por 1 segundo para reordenar la playlist", "info");
         }
 
         function updatePlaylistStats() {
@@ -2375,6 +2265,11 @@
             });
             
             container.innerHTML = html;
+            
+            // Configurar eventos táctiles después de cargar
+            setTimeout(() => {
+                setupTouchReordering();
+            }, 100);
         }
 
         // ========== ACTUALIZAR ORDEN DE PLAYLIST ==========
@@ -2596,8 +2491,8 @@
                         
                         showNotification("✅ Todos los votos reiniciados", "success");
                         
-                        if (currentSection === 'stage') {
-                            loadStageMode();
+                        if (currentSection === 'top10') {
+                            updateTop10List();
                         }
                     })
                     .catch((error) => {
@@ -2665,48 +2560,6 @@
                 console.error("Error actualizando estado:", error);
                 showNotification("❌ Error al actualizar estado", "danger");
             });
-        };
-
-        window.autoGeneratePlaylist = function() {
-            const topSongs = allSongs
-                .filter(song => !song.inPlaylist)
-                .sort((a, b) => b.votes - a.votes)
-                .slice(0, 10);
-            
-            if (topSongs.length === 0) {
-                showNotification("No hay canciones disponibles para agregar", "info");
-                return;
-            }
-            
-            const batch = db.batch();
-            let order = playlistSongs.length;
-            
-            topSongs.forEach(song => {
-                const songRef = db.collection("songs").doc(song.id);
-                batch.update(songRef, {
-                    inPlaylist: true,
-                    played: false,
-                    playlistOrder: order++,
-                    addedToPlaylistAt: new Date().toISOString()
-                });
-                
-                song.inPlaylist = true;
-                song.playlistOrder = order - 1;
-                playlistSongs.push(song);
-            });
-            
-            batch.commit()
-                .then(() => {
-                    showNotification(`✅ Playlist generada con ${topSongs.length} canciones`, "success");
-                    loadStageMode();
-                    if (document.getElementById('repertoire-modal').classList.contains('active')) {
-                        loadRepertoireModal();
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error generando playlist:", error);
-                    showNotification("❌ Error al generar playlist", "danger");
-                });
         };
 
         window.clearPlaylist = function() {
