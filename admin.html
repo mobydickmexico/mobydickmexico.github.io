@@ -291,6 +291,7 @@
         .stage-section-vertical {
             max-width: 100%;
             margin: 0 auto;
+            margin-top: 10px;
         }
         
         .playlist-main-container {
@@ -302,6 +303,7 @@
             min-height: 50vh;
             display: flex;
             flex-direction: column;
+            margin-top: 5px;
         }
         
         .playlist-header {
@@ -382,7 +384,7 @@
             background: linear-gradient(90deg, #2a2a2a, #333);
         }
         
-        /* Indicador de arrastre (visible solo al mantener presionado) */
+        /* Icono de arrastre más visible */
         .playlist-song-item::after {
             content: '☰';
             position: absolute;
@@ -390,14 +392,16 @@
             top: 50%;
             transform: translateY(-50%);
             color: #666;
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             opacity: 0;
             transition: opacity 0.3s;
+            cursor: grab;
         }
         
-        .playlist-song-item.drag-ready::after {
-            opacity: 1;
-            color: #ff9500;
+        .playlist-song-item.sortable-chosen::after,
+        .playlist-song-item:hover::after {
+            opacity: 0.7;
+            color: var(--dj-blue);
         }
         
         .playlist-song-item.dragging::after {
@@ -1001,6 +1005,31 @@
             z-index: 10000 !important;
         }
         
+        /* Mejorar visualización de arrastre SortableJS */
+        .playlist-song-item.sortable-ghost {
+            opacity: 0.5;
+            background: linear-gradient(90deg, #333, #444) !important;
+        }
+        
+        .playlist-song-item.sortable-chosen {
+            box-shadow: 0 0 25px rgba(255, 149, 0, 0.8) !important;
+            transform: scale(1.02) !important;
+            z-index: 10000 !important;
+        }
+        
+        /* Para móviles, hacer el área de arrastre más grande */
+        @media (max-width: 576px) {
+            .playlist-song-item {
+                min-height: 70px;
+            }
+            
+            .playlist-song-item::after {
+                right: 10px;
+                font-size: 1.3rem;
+                opacity: 0.5; /* Siempre visible en móviles */
+            }
+        }
+        
         /* ========== RESPONSIVE ========== */
         @media (max-width: 768px) {
             .dynamic-header {
@@ -1126,6 +1155,11 @@
         .drag-ready {
             cursor: move !important;
         }
+        
+        /* Ocultar título duplicado en ESCENARIO */
+        #stage-section .section-title {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -1185,8 +1219,6 @@
         <!-- 🎤 ESCENARIO (DISEÑO VERTICAL) -->
         <section id="stage-section" class="content-section">
             <div class="stage-section-vertical">
-                <h2 class="section-title" style="margin-bottom: 15px;">PLAYLIST A TOCAR EN EL SHOW</h2>
-                
                 <!-- CONTENEDOR PRINCIPAL DE PLAYLIST -->
                 <div class="playlist-main-container">
                     <!-- ENCABEZADO DE PLAYLIST -->
@@ -1361,13 +1393,6 @@
         let isUpdatingOrder = false;
         let filteredRepertoire = null;
 
-        // ========== VARIABLES PARA SISTEMA DE REORDENACIÓN TÁCTIL ==========
-        let longPressTimer = null;
-        let isDragging = false;
-        let currentDraggedItem = null;
-        let touchStartY = 0;
-        let touchStartTime = 0;
-
         // ========== INICIALIZAR ==========
         document.addEventListener('DOMContentLoaded', function() {
             console.log("🚀 Iniciando consola de control MobyDick...");
@@ -1429,6 +1454,12 @@
             document.querySelectorAll('.nav-btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const sectionId = this.getAttribute('data-section');
+                    
+                    // Destruir Sortable si estamos saliendo de la sección stage
+                    if (currentSection === 'stage' && sectionId !== 'stage' && sortableInstance) {
+                        sortableInstance.destroy();
+                        sortableInstance = null;
+                    }
                     
                     // Remover clase active de todos los botones
                     document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -1666,152 +1697,64 @@
             }
         };
 
-        // ========== SISTEMA DE REORDENACIÓN TÁCTIL MEJORADO ==========
+        // ========== SISTEMA DE REORDENACIÓN CON SORTABLEJS ==========
         function setupTouchReordering() {
             const playlistContainer = document.getElementById('playlist-songs-container');
             if (!playlistContainer) return;
             
-            const items = playlistContainer.querySelectorAll('.playlist-song-item:not(.played-song)');
+            // Destruir instancia anterior si existe
+            if (sortableInstance) {
+                sortableInstance.destroy();
+                sortableInstance = null;
+            }
             
-            items.forEach(item => {
-                // Limpiar eventos anteriores
-                item.removeEventListener('touchstart', handleTouchStart);
-                item.removeEventListener('touchmove', handleTouchMove);
-                item.removeEventListener('touchend', handleTouchEnd);
-                item.removeEventListener('touchcancel', handleTouchCancel);
-                
-                // Agregar nuevos eventos
-                item.addEventListener('touchstart', handleTouchStart, { passive: false });
-                item.addEventListener('touchmove', handleTouchMove, { passive: false });
-                item.addEventListener('touchend', handleTouchEnd, { passive: true });
-                item.addEventListener('touchcancel', handleTouchCancel, { passive: true });
-            });
-        }
-
-        function handleTouchStart(e) {
-            if (e.target.closest('.song-action-btn')) return;
-            
-            const item = e.currentTarget;
-            if (item.classList.contains('played-song')) return;
-            
-            touchStartY = e.touches[0].clientY;
-            touchStartTime = Date.now();
-            currentDraggedItem = item;
-            
-            // Iniciar timer para arrastre
-            longPressTimer = setTimeout(() => {
-                if (!isDragging && currentDraggedItem === item) {
-                    activateDragMode(item);
+            // Crear nueva instancia de Sortable
+            sortableInstance = new Sortable(playlistContainer, {
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+                chosenClass: 'sortable-chosen',
+                dragClass: 'dragging',
+                filter: '.played-song',
+                preventOnFilter: false,
+                touchStartThreshold: 5,
+                delay: 200, // Pequeño delay para evitar conflictos con clics
+                delayOnTouchOnly: true,
+                scroll: true,
+                scrollSensitivity: 60,
+                scrollSpeed: 20,
+                onStart: function(evt) {
+                    console.log("Iniciando arrastre...");
+                    evt.item.classList.add('dragging');
+                    
+                    // Pausar listener temporalmente
+                    if (songsListener) {
+                        songsListener();
+                        isUpdatingOrder = true;
+                    }
+                },
+                onEnd: function(evt) {
+                    console.log("Finalizando arrastre...");
+                    evt.item.classList.remove('dragging', 'drag-ready');
+                    
+                    // Actualizar orden en Firebase
+                    updatePlaylistOrder();
+                    
+                    // Reactivar listener después de un tiempo
+                    setTimeout(() => {
+                        isUpdatingOrder = false;
+                        setupSongsListener();
+                    }, 1500);
+                },
+                onMove: function(evt) {
+                    // Prevenir mover canciones ya tocadas
+                    if (evt.related.classList.contains('played-song')) {
+                        return false;
+                    }
+                    return true;
                 }
-            }, 800); // 0.8 segundos para activar arrastre
-        }
-
-        function handleTouchMove(e) {
-            if (longPressTimer && !isDragging) {
-                // Si el dedo se mueve mucho antes de activar arrastre, cancelar
-                const deltaY = Math.abs(e.touches[0].clientY - touchStartY);
-                if (deltaY > 15) {
-                    clearTimeout(longPressTimer);
-                    longPressTimer = null;
-                    resetDragState();
-                }
-                return;
-            }
-            
-            if (isDragging && currentDraggedItem) {
-                e.preventDefault();
-                
-                const touchY = e.touches[0].clientY;
-                const container = document.getElementById('playlist-songs-container');
-                const containerRect = container.getBoundingClientRect();
-                
-                // Scroll automático cuando se acerca a los bordes
-                if (touchY < containerRect.top + 100) {
-                    container.scrollTop -= 8;
-                } else if (touchY > containerRect.bottom - 100) {
-                    container.scrollTop += 8;
-                }
-            }
-        }
-
-        function handleTouchEnd(e) {
-            if (longPressTimer) {
-                clearTimeout(longPressTimer);
-                longPressTimer = null;
-            }
-            
-            if (isDragging) {
-                e.preventDefault();
-                finalizeDrag();
-            } else {
-                resetDragState();
-            }
-        }
-
-        function handleTouchCancel(e) {
-            if (longPressTimer) {
-                clearTimeout(longPressTimer);
-                longPressTimer = null;
-            }
-            
-            if (isDragging) {
-                finalizeDrag();
-            } else {
-                resetDragState();
-            }
-        }
-
-        function activateDragMode(item) {
-            isDragging = true;
-            
-            // Agregar clases visuales
-            item.classList.add('drag-ready', 'dragging');
-            item.style.opacity = '0.8';
-            item.style.boxShadow = '0 0 20px rgba(255, 149, 0, 0.7)';
-            item.style.zIndex = '10000';
-            
-            // Detener listener temporalmente
-            if (songsListener) {
-                songsListener();
-            }
-            
-            showNotification("🎵 Mantén presionado y arrastra para reordenar. Suelta para colocar.", "info");
-        }
-
-        function finalizeDrag() {
-            isDragging = false;
-            
-            // Actualizar orden en Firebase
-            updatePlaylistOrder();
-            
-            // Restaurar estilos
-            const items = document.querySelectorAll('#playlist-songs-container .playlist-song-item');
-            items.forEach(item => {
-                item.classList.remove('drag-ready', 'dragging');
-                item.style.opacity = '';
-                item.style.boxShadow = '';
-                item.style.zIndex = '';
-                item.style.transform = '';
             });
             
-            currentDraggedItem = null;
-            
-            // Reactivar listener después de un tiempo
-            setTimeout(() => {
-                setupSongsListener();
-            }, 1500);
-        }
-
-        function resetDragState() {
-            if (currentDraggedItem) {
-                currentDraggedItem.classList.remove('drag-ready');
-                currentDraggedItem.style.opacity = '';
-                currentDraggedItem.style.boxShadow = '';
-                currentDraggedItem.style.zIndex = '';
-                currentDraggedItem.style.transform = '';
-            }
-            currentDraggedItem = null;
-            isDragging = false;
+            console.log("✅ SortableJS configurado para arrastre táctil");
         }
 
         // ========== INICIALIZAR FIREBASE ==========
@@ -1994,27 +1937,27 @@
                             allMessages.push({
                                 id: doc.id,
                                 message: data.message || "",
-                                deviceId: data.deviceId || "desconocido",
-                                songs: data.songs || [],
-                                sentAt: data.createdAt || new Date().toISOString(),
-                                read: data.status === "read" || false
-                            });
+                                    deviceId: data.deviceId || "desconocido",
+                                    songs: data.songs || [],
+                                    sentAt: data.createdAt || new Date().toISOString(),
+                                    read: data.status === "read" || false
+                                });
+                            }
+                        });
+                        
+                        allMessages.sort((a, b) => new Date(b.sentAt) - new Date(a.sentAt));
+                        
+                        updateMessageStats();
+                        
+                        // ACTUALIZAR SIEMPRE, no solo si está en la sección
+                        if (currentSection === 'messages') {
+                            displayMessages();
                         }
+                    }, (error) => {
+                        console.error("❌ Error en listener de mensajes:", error);
+                        showNotification("Error cargando mensajes", "danger");
                     });
-                    
-                    allMessages.sort((a, b) => new Date(b.sentAt) - new Date(a.sentAt));
-                    
-                    updateMessageStats();
-                    
-                    // ACTUALIZAR SIEMPRE, no solo si está en la sección
-                    if (currentSection === 'messages') {
-                        displayMessages();
-                    }
-                }, (error) => {
-                    console.error("❌ Error en listener de mensajes:", error);
-                    showNotification("Error cargando mensajes", "danger");
-                });
-        }
+                }
 
         function displayMessages() {
             const container = document.getElementById('messages-container');
@@ -2201,12 +2144,12 @@
             loadPlaylist();
             updatePlaylistStats();
             
-            // Configurar reordenación táctil
+            // Configurar reordenación con SortableJS
             setTimeout(() => {
                 setupTouchReordering();
             }, 300);
             
-            showNotification("🎵 Mantén presionado una canción por 1 segundo para reordenar la playlist", "info");
+            showNotification("🎵 Mantén presionado una canción para arrastrar y reordenar", "info");
         }
 
         function updatePlaylistStats() {
@@ -2233,6 +2176,12 @@
                         <p class="small text-muted">Agrega canciones desde el repertorio</p>
                     </div>
                 `;
+                
+                // Destruir Sortable si no hay canciones
+                if (sortableInstance) {
+                    sortableInstance.destroy();
+                    sortableInstance = null;
+                }
                 return;
             }
             
@@ -2242,9 +2191,10 @@
             let html = '';
             playlistSongs.forEach((song, index) => {
                 const isCurrent = index === currentSongIndex;
+                const isPlayed = song.played;
                 
                 html += `
-                    <div class="playlist-song-item ${song.played ? 'played-song' : ''} ${isCurrent ? 'current-song' : ''}" data-id="${song.id}">
+                    <div class="playlist-song-item ${isPlayed ? 'played-song' : ''} ${isCurrent ? 'current-song' : ''}" data-id="${song.id}">
                         <div class="playlist-song-info">
                             <div class="playlist-song-title">${song.title}</div>
                             <div class="playlist-song-artist">${song.artist}</div>
@@ -2252,8 +2202,8 @@
                         <div class="d-flex align-items-center">
                             <span class="playlist-song-votes">${song.votes}</span>
                             <div class="playlist-song-actions">
-                                <button class="song-action-btn ${song.played ? '' : 'song-played-btn'}" onclick="togglePlayed('${song.id}')">
-                                    <i class="bi ${song.played ? 'bi-arrow-counterclockwise' : 'bi-check'}"></i>
+                                <button class="song-action-btn ${isPlayed ? '' : 'song-played-btn'}" onclick="togglePlayed('${song.id}')">
+                                    <i class="bi ${isPlayed ? 'bi-arrow-counterclockwise' : 'bi-check'}"></i>
                                 </button>
                                 <button class="song-action-btn song-remove-btn" onclick="removeFromPlaylist('${song.id}')">
                                     <i class="bi bi-x"></i>
@@ -2266,7 +2216,7 @@
             
             container.innerHTML = html;
             
-            // Configurar eventos táctiles después de cargar
+            // Configurar SortableJS después de cargar
             setTimeout(() => {
                 setupTouchReordering();
             }, 100);
