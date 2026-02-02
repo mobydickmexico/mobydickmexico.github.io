@@ -222,6 +222,35 @@
             opacity: 0.7;
         }
         
+        /* Botón ENVIAR MENSAJE */
+        .btn-submit-message {
+            background: linear-gradient(135deg, #17a2b8, #138496);
+            color: white;
+            border: none;
+            padding: 1rem;
+            font-weight: bold;
+            border-radius: 12px;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
+        }
+        
+        .btn-submit-message:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(23, 162, 184, 0.4);
+        }
+        
+        .btn-submit-message:disabled {
+            background: #adb5bd;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
         /* Panel de mensajes */
         .message-panel {
             border-color: #17a2b8;
@@ -628,6 +657,11 @@
                 font-size: 1rem;
             }
             
+            .btn-submit-message {
+                padding: 0.9rem;
+                font-size: 1rem;
+            }
+            
             .btn-vote {
                 min-width: 100px;
                 padding: 0.4rem 1rem;
@@ -710,43 +744,51 @@
                 </button>
             </div>
             
-            <!-- 3. TUS VOTOS Y MENSAJE -->
+            <!-- 3. TUS VOTOS (SOLO CANCIONES) -->
             <div class="content-panel votes-panel">
                 <div class="votes-header">
                     <div class="votes-title">
-                        <i class="bi bi-check-circle"></i> TUS PETICIONES
+                        <i class="bi bi-music-note-beamed"></i> TUS CANCIONES ELEGIDAS
                     </div>
                     <span class="votes-counter" id="vote-count">0/3</span>
                 </div>
                 
                 <div id="my-votes-list">
-                    <p class="text-muted text-center my-3">Selecciona hasta 3 canciones.</p>
+                    <p class="text-muted text-center my-3">Selecciona hasta 3 canciones del repertorio.</p>
                 </div>
                 
-                <!-- MENSAJE A LA BANDA (SIN LÍMITE) -->
-                <div class="mt-3">
-                    <div class="message-label">
-                        <i class="bi bi-chat-text"></i> MENSAJE A LA BANDA (OPCIONAL)
-                    </div>
-                    <textarea id="user-message" class="message-input" 
-                              placeholder="Ej: ¡Feliz cumpleaños a Juan! 🎉 / Saludos a MOBY DICK / ¡Excelente show! 🤘"
-                              maxlength="500"></textarea>
-                    <div class="char-counter" id="char-counter">0/500 caracteres</div>
-                    <div class="message-examples">
-                        <small>Envía saludos, felicitaciones o mensajes especiales. ¡Sin límite de veces!</small>
-                    </div>
-                </div>
-                
-                <!-- BOTÓN ENVIAR VOTOS -->
-                <button id="submit-votes" class="btn-submit-votes" disabled>
-                    <i class="bi bi-send-check"></i> ENVIAR PETICIONES Y MENSAJE
+                <!-- BOTÓN ENVIAR CANCIONES (ACTIVADO EN MODAL) -->
+                <button id="submit-votes" class="btn-submit-votes" disabled onclick="submitVotes()">
+                    <i class="bi bi-send-check"></i> ENVIAR MIS 3 CANCIONES
                 </button>
                 
                 <!-- Feedback al enviar -->
                 <div id="submit-feedback" class="feedback-container"></div>
             </div>
             
-            <!-- 4. COMPARTIR CON AMIGOS -->
+            <!-- 4. MENSAJES A LA BANDA (INDEPENDIENTE) -->
+            <div class="content-panel message-panel">
+                <div class="panel-title">
+                    <i class="bi bi-chat-text"></i> MENSAJE A LA BANDA
+                </div>
+                <div class="message-label">
+                    <i class="bi bi-info-circle"></i> Envía saludos, felicitaciones o mensajes especiales
+                </div>
+                <textarea id="user-message" class="message-input" 
+                          placeholder="Ej: ¡Feliz cumpleaños a Juan! 🎉 / Saludos a MOBY DICK / ¡Excelente show! 🤘"
+                          maxlength="120"></textarea>
+                <div class="char-counter" id="char-counter">0/120 caracteres</div>
+                
+                <!-- BOTÓN ENVIAR MENSAJE -->
+                <button id="submit-message" class="btn-submit-message" onclick="submitMessage()">
+                    <i class="bi bi-send"></i> ENVIAR MENSAJE
+                </button>
+                
+                <!-- Feedback mensaje -->
+                <div id="message-feedback" class="feedback-container"></div>
+            </div>
+            
+            <!-- 5. COMPARTIR CON AMIGOS -->
             <div class="content-panel share-panel">
                 <div class="panel-title">
                     <i class="bi bi-share"></i> COMPARTIR CON AMIGOS
@@ -760,7 +802,7 @@
                 <div id="share-feedback" class="feedback-container"></div>
             </div>
             
-            <!-- 5. SUGERIR CANCIONES NUEVAS -->
+            <!-- 6. SUGERIR CANCIONES NUEVAS -->
             <div class="content-panel suggestions-panel">
                 <div class="panel-title">
                     <i class="bi bi-lightbulb"></i> SUGERIR CANCIONES NUEVAS
@@ -837,6 +879,12 @@
                 </div>
             </div>
             
+            <!-- BOTÓN ENVIAR PETICIONES DESDE MODAL -->
+            <button id="modal-submit-votes" class="btn btn-submit-votes" disabled 
+                    onclick="submitVotesFromModal()" style="width: 100%; margin-top: 10px;">
+                <i class="bi bi-send-check"></i> ENVIAR MIS 3 CANCIONES
+            </button>
+            
             <!-- BOTÓN CERRAR MODAL -->
             <button class="btn btn-share" onclick="closeRepertoireModal()" style="width: 100%; margin-top: 10px;">
                 <i class="bi bi-check-circle"></i> CERRAR
@@ -864,7 +912,6 @@
         let myVotes = [];
         let db = null;
         let connectionListener = null;
-        let userMessage = '';
         let deviceId = null;
 
         // ========== INICIALIZAR ==========
@@ -897,6 +944,22 @@
                     submitSuggestion();
                 });
             }
+            
+            // Cargar votos guardados
+            const saved = localStorage.getItem('mobydick_votes');
+            if (saved) {
+                try {
+                    myVotes = JSON.parse(saved);
+                    console.log(`📋 ${myVotes.length} votos cargados`);
+                } catch (e) {
+                    console.error("Error cargando votos:", e);
+                    myVotes = [];
+                }
+            }
+            
+            // Actualizar UI inicial
+            updateMyVotesDisplay();
+            updateModalSubmitButton();
         });
 
         // ========== FUNCIONES MODAL ==========
@@ -904,6 +967,7 @@
             const modal = document.getElementById('repertoire-modal');
             modal.classList.add('active');
             displaySongsInModal(allSongs);
+            updateModalSubmitButton(); // Actualizar estado del botón
         };
 
         window.closeRepertoireModal = function() {
@@ -970,7 +1034,7 @@
                                     onclick="voteForSongFromModal('${song.id}')"
                                     ${isVoted ? "disabled" : ""}
                                     ${!isVoted && !canVote ? "disabled" : ""}>
-                                ${isVoted ? '<i class="bi bi-check-circle"></i> VOTADA' : '<i class="bi bi-hand-thumbs-up"></i> VOTAR'}
+                                ${isVoted ? '<i class="bi bi-check-circle"></i> SELECCIONADA' : '<i class="bi bi-hand-thumbs-up"></i> ELEGIR'}
                             </button>
                         </div>
                     </div>
@@ -989,6 +1053,264 @@
             }, 300);
         };
 
+        // ========== FUNCIONES DE VOTOS ==========
+        window.voteForSong = function(songId) {
+            if (checkVoteLimit()) {
+                return;
+            }
+            
+            if (myVotes.length >= 3) {
+                showSubmitFeedback("❌ Máximo 3 canciones por persona", "danger");
+                return;
+            }
+            
+            if (myVotes.includes(songId)) return;
+            
+            const songRef = db.collection("songs").doc(songId);
+            songRef.update({
+                votes: firebase.firestore.FieldValue.increment(1),
+                lastVoted: new Date().toISOString()
+            })
+            .then(() => {
+                myVotes.push(songId);
+                localStorage.setItem("mobydick_votes", JSON.stringify(myVotes));
+                
+                updateMyVotesDisplay();
+                updateModalSubmitButton();
+                
+                showSubmitFeedback("✅ Canción agregada a tu lista", "success");
+                
+            })
+            .catch((error) => {
+                console.error("Error votando:", error);
+                showSubmitFeedback("❌ Error al agregar canción", "danger");
+            });
+        };
+
+        window.removeVote = function(songId) {
+            db.collection("songs").doc(songId).update({
+                votes: firebase.firestore.FieldValue.increment(-1)
+            })
+            .then(() => {
+                myVotes = myVotes.filter(id => id !== songId);
+                localStorage.setItem("mobydick_votes", JSON.stringify(myVotes));
+                
+                updateMyVotesDisplay();
+                updateModalSubmitButton();
+                
+                showSubmitFeedback("🗑️ Canción removida de tu lista", "warning");
+                
+            })
+            .catch((error) => {
+                console.error("Error removiendo voto:", error);
+                showSubmitFeedback("❌ Error al remover canción", "danger");
+            });
+        };
+
+        // ========== ACTUALIZAR UI ==========
+        function updateMyVotesDisplay() {
+            const countElement = document.getElementById("vote-count");
+            const container = document.getElementById("my-votes-list");
+            const submitBtn = document.getElementById("submit-votes");
+            
+            if (countElement) {
+                countElement.textContent = `${myVotes.length}/3`;
+            }
+            
+            if (myVotes.length > 0) {
+                let html = "";
+                
+                myVotes.forEach((songId) => {
+                    const song = allSongs.find(s => s.id === songId);
+                    if (song) {
+                        html += `
+                            <div class="vote-item">
+                                <span class="fw-bold">${song.title}</span>
+                                <button class="btn btn-sm btn-outline-danger" onclick="removeVote('${songId}')">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        `;
+                    }
+                });
+                
+                if (container) container.innerHTML = html;
+                if (submitBtn) submitBtn.disabled = false;
+                
+            } else {
+                if (container) {
+                    container.innerHTML = '<p class="text-muted text-center my-3">Selecciona hasta 3 canciones del repertorio.</p>';
+                }
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                }
+            }
+        }
+
+        function updateModalSubmitButton() {
+            const modalSubmitBtn = document.getElementById("modal-submit-votes");
+            if (modalSubmitBtn) {
+                modalSubmitBtn.disabled = myVotes.length === 0;
+            }
+        }
+
+        // ========== ENVIAR VOTOS ==========
+        window.submitVotes = function() {
+            if (myVotes.length === 0) return;
+            
+            const btn = document.getElementById("submit-votes");
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="bi bi-check2-circle"></i> ¡ENVIADO!';
+            btn.disabled = true;
+            
+            // Registrar voto por dispositivo/día
+            const today = new Date().toISOString().split('T')[0];
+            const deviceVotesKey = `mobydick_votes_${deviceId}_${today}`;
+            const votesToday = parseInt(localStorage.getItem(deviceVotesKey) || '0') + 1;
+            localStorage.setItem(deviceVotesKey, votesToday.toString());
+            
+            // Guardar en historial local
+            const history = JSON.parse(localStorage.getItem("mobydick_history") || "[]");
+            const songTitles = myVotes.map(id => {
+                const song = allSongs.find(s => s.id === id);
+                return song ? song.title : "";
+            }).filter(Boolean);
+            
+            history.push({
+                date: new Date().toISOString(),
+                songs: songTitles,
+                type: "votes"
+            });
+            localStorage.setItem("mobydick_history", JSON.stringify(history));
+            
+            // Limpiar votos
+            myVotes = [];
+            localStorage.removeItem("mobydick_votes");
+            
+            // Actualizar UI
+            updateMyVotesDisplay();
+            updateModalSubmitButton();
+            
+            // Si el modal está abierto, cerrarlo
+            closeRepertoireModal();
+            
+            // Mensaje de éxito
+            showSubmitFeedback("🎉 ¡Gracias por tus votos! Las canciones fueron enviadas.", "success");
+            
+            // Restaurar botón después de 3 segundos
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }, 3000);
+        };
+
+        window.submitVotesFromModal = function() {
+            submitVotes();
+            
+            // Cerrar modal después de enviar
+            setTimeout(() => {
+                closeRepertoireModal();
+            }, 1500);
+        };
+
+        // ========== ENVIAR MENSAJE ==========
+        window.submitMessage = function() {
+            const messageInput = document.getElementById('user-message');
+            const message = messageInput.value.trim();
+            
+            if (!message) {
+                showMessageFeedback("Escribe un mensaje para la banda", "warning");
+                return;
+            }
+            
+            if (message.length > 120) {
+                showMessageFeedback("Máximo 120 caracteres", "warning");
+                return;
+            }
+            
+            const btn = document.getElementById('submit-message');
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="bi bi-check2-circle"></i> ENVIANDO...';
+            btn.disabled = true;
+            
+            // Guardar en Firebase (sin límite)
+            db.collection("temporary_data").add({
+                type: "message",
+                message: message,
+                deviceId: deviceId,
+                createdAt: new Date().toISOString(),
+                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 24 horas
+                status: "unread"
+            })
+            .then(() => {
+                // Limpiar campo
+                messageInput.value = '';
+                updateCharCounter();
+                
+                // Guardar en historial local
+                const history = JSON.parse(localStorage.getItem("mobydick_messages_history") || "[]");
+                history.push({
+                    date: new Date().toISOString(),
+                    message: message,
+                    type: "message"
+                });
+                localStorage.setItem("mobydick_messages_history", JSON.stringify(history));
+                
+                showMessageFeedback("✅ ¡Mensaje enviado a la banda!", "success");
+            })
+            .catch(error => {
+                console.error("Error enviando mensaje:", error);
+                showMessageFeedback("❌ Error al enviar mensaje", "danger");
+            })
+            .finally(() => {
+                // Restaurar botón
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }, 2000);
+            });
+        };
+
+        function showMessageFeedback(message, type) {
+            const feedback = document.getElementById("message-feedback");
+            if (!feedback) return;
+            
+            feedback.innerHTML = `
+                <div class="alert alert-${type} alert-dismissible fade show py-2" role="alert">
+                    <small>${message}</small>
+                    <button type="button" class="btn-close btn-sm" onclick="this.parentElement.remove()"></button>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                if (feedback.firstChild) {
+                    feedback.firstChild.remove();
+                }
+            }, 3000);
+        }
+
+        // ========== CONTADOR DE CARACTERES ==========
+        function updateCharCounter() {
+            const messageInput = document.getElementById('user-message');
+            const counter = document.getElementById('char-counter');
+            
+            if (!messageInput || !counter) return;
+            
+            const message = messageInput.value;
+            const length = message.length;
+            const maxLength = 120;
+            
+            counter.textContent = `${length}/${maxLength} caracteres`;
+            
+            if (length > maxLength * 0.9) { // Más del 90%
+                counter.classList.add('warning');
+            } else {
+                counter.classList.remove('warning');
+            }
+        }
+
         function initializeFirebase() {
             try {
                 firebase.initializeApp(firebaseConfig);
@@ -998,26 +1320,6 @@
                 
                 // Verificar límite de votos por dispositivo
                 checkVoteLimit();
-                
-                // Cargar votos guardados
-                const saved = localStorage.getItem('mobydick_votes');
-                if (saved) {
-                    try {
-                        myVotes = JSON.parse(saved);
-                        console.log(`📋 ${myVotes.length} votos cargados`);
-                    } catch (e) {
-                        console.error("Error cargando votos:", e);
-                        myVotes = [];
-                    }
-                }
-                
-                // Cargar mensaje guardado
-                const savedMessage = localStorage.getItem('mobydick_message');
-                if (savedMessage) {
-                    userMessage = savedMessage;
-                    document.getElementById('user-message').value = userMessage;
-                    updateCharCounter();
-                }
                 
                 // Iniciar sistema de conexiones
                 setupConnectionCounter();
@@ -1044,10 +1346,18 @@
             if (votesToday && parseInt(votesToday) >= 3) {
                 // Este dispositivo ya votó 3 veces hoy
                 const submitBtn = document.getElementById('submit-votes');
+                const modalSubmitBtn = document.getElementById('modal-submit-votes');
+                
                 if (submitBtn) {
                     submitBtn.disabled = true;
                     submitBtn.innerHTML = '<i class="bi bi-exclamation-triangle"></i> LÍMITE ALCANZADO';
                     submitBtn.style.background = '#dc3545';
+                }
+                
+                if (modalSubmitBtn) {
+                    modalSubmitBtn.disabled = true;
+                    modalSubmitBtn.innerHTML = '<i class="bi bi-exclamation-triangle"></i> LÍMITE ALCANZADO';
+                    modalSubmitBtn.style.background = '#dc3545';
                 }
                 
                 // Deshabilitar todos los botones de voto
@@ -1137,29 +1447,6 @@
             }
         }
 
-        // ========== CONTADOR DE CARACTERES ==========
-        function updateCharCounter() {
-            const messageInput = document.getElementById('user-message');
-            const counter = document.getElementById('char-counter');
-            
-            if (!messageInput || !counter) return;
-            
-            userMessage = messageInput.value;
-            const length = userMessage.length;
-            const maxLength = 500;
-            
-            counter.textContent = `${length}/${maxLength} caracteres`;
-            
-            if (length > maxLength * 0.9) { // Más del 90%
-                counter.classList.add('warning');
-            } else {
-                counter.classList.remove('warning');
-            }
-            
-            // Guardar en localStorage temporalmente
-            localStorage.setItem('mobydick_message', userMessage);
-        }
-
         // ========== FUNCIONES DE CANCIONES ==========
         function loadSongs() {
             db.collection("songs").orderBy("title").get()
@@ -1221,58 +1508,6 @@
             }
         }
 
-        window.voteForSong = function(songId) {
-            // Verificar límite por dispositivo
-            if (checkVoteLimit()) {
-                return;
-            }
-            
-            if (myVotes.length >= 3) {
-                showSubmitFeedback("❌ Máximo 3 votos por persona", "danger");
-                return;
-            }
-            
-            if (myVotes.includes(songId)) return;
-            
-            const songRef = db.collection("songs").doc(songId);
-            songRef.update({
-                votes: firebase.firestore.FieldValue.increment(1),
-                lastVoted: new Date().toISOString()
-            })
-            .then(() => {
-                myVotes.push(songId);
-                localStorage.setItem("mobydick_votes", JSON.stringify(myVotes));
-                
-                updateMyVotesDisplay();
-                
-                showSubmitFeedback("✅ Voto registrado", "success");
-                
-            })
-            .catch((error) => {
-                console.error("Error votando:", error);
-                showSubmitFeedback("❌ Error al votar", "danger");
-            });
-        }
-
-        window.removeVote = function(songId) {
-            db.collection("songs").doc(songId).update({
-                votes: firebase.firestore.FieldValue.increment(-1)
-            })
-            .then(() => {
-                myVotes = myVotes.filter(id => id !== songId);
-                localStorage.setItem("mobydick_votes", JSON.stringify(myVotes));
-                
-                updateMyVotesDisplay();
-                
-                showSubmitFeedback("🗑️ Voto removido", "warning");
-                
-            })
-            .catch((error) => {
-                console.error("Error removiendo voto:", error);
-                showSubmitFeedback("❌ Error al remover voto", "danger");
-            });
-        }
-
         // ========== SUGERENCIAS ==========
         function submitSuggestion() {
             const title = document.getElementById('suggestion-title').value.trim();
@@ -1332,46 +1567,6 @@
                     feedback.firstChild.remove();
                 }
             }, 3000);
-        }
-
-        // ========== ACTUALIZAR UI ==========
-        function updateMyVotesDisplay() {
-            const countElement = document.getElementById("vote-count");
-            const container = document.getElementById("my-votes-list");
-            const submitBtn = document.getElementById("submit-votes");
-            
-            if (countElement) {
-                countElement.textContent = `${myVotes.length}/3`;
-            }
-            
-            if (myVotes.length > 0) {
-                let html = "";
-                
-                myVotes.forEach((songId) => {
-                    const song = allSongs.find(s => s.id === songId);
-                    if (song) {
-                        html += `
-                            <div class="vote-item">
-                                <span class="fw-bold">${song.title}</span>
-                                <button class="btn btn-sm btn-outline-danger" onclick="removeVote('${songId}')">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
-                        `;
-                    }
-                });
-                
-                if (container) container.innerHTML = html;
-                if (submitBtn) submitBtn.disabled = false;
-                
-            } else {
-                if (container) {
-                    container.innerHTML = '<p class="text-muted text-center my-3">Selecciona hasta 3 canciones.</p>';
-                }
-                if (submitBtn) {
-                    submitBtn.disabled = true;
-                }
-            }
         }
 
         // ========== COMPARTIR ENLACE ==========
@@ -1453,7 +1648,7 @@
             }, 3000);
         }
 
-        // ========== ENVIAR VOTOS Y MENSAJES ==========
+        // ========== EVENT LISTENERS ==========
         function setupEventListeners() {
             // Buscador principal
             const searchInput = document.getElementById("search");
@@ -1472,90 +1667,6 @@
                             searchInModal();
                         }
                     }, 500);
-                });
-            }
-            
-            // Botón enviar votos
-            const submitBtn = document.getElementById("submit-votes");
-            if (submitBtn) {
-                submitBtn.addEventListener("click", function() {
-                    if (myVotes.length === 0) return;
-                    
-                    const btn = this;
-                    const originalText = btn.innerHTML;
-                    
-                    btn.innerHTML = '<i class="bi bi-check2-circle"></i> ¡ENVIADO!';
-                    btn.disabled = true;
-                    
-                    // Registrar voto por dispositivo/día
-                    const today = new Date().toISOString().split('T')[0];
-                    const deviceVotesKey = `mobydick_votes_${deviceId}_${today}`;
-                    const votesToday = parseInt(localStorage.getItem(deviceVotesKey) || '0') + 1;
-                    localStorage.setItem(deviceVotesKey, votesToday.toString());
-                    
-                    // Guardar mensaje en Firebase si existe (SIN LÍMITE)
-                    if (userMessage.trim()) {
-                        const songTitles = myVotes.map(id => {
-                            const song = allSongs.find(s => s.id === id);
-                            return song ? song.title : "";
-                        }).filter(Boolean);
-                        
-                        // Guardar en colección temporal
-                        db.collection("temporary_data").add({
-                            type: "message",
-                            message: userMessage.trim(),
-                            deviceId: deviceId,
-                            songs: songTitles,
-                            createdAt: new Date().toISOString(),
-                            expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 24 horas
-                            status: "unread"
-                        })
-                        .then(() => {
-                            console.log("✅ Mensaje guardado en Firebase");
-                        })
-                        .catch(error => {
-                            console.error("Error guardando mensaje:", error);
-                        });
-                    }
-                    
-                    // Guardar en historial local
-                    const history = JSON.parse(localStorage.getItem("mobydick_history") || "[]");
-                    const songTitles = myVotes.map(id => {
-                        const song = allSongs.find(s => s.id === id);
-                        return song ? song.title : "";
-                    }).filter(Boolean);
-                    
-                    history.push({
-                        date: new Date().toISOString(),
-                        songs: songTitles,
-                        message: userMessage.trim()
-                    });
-                    localStorage.setItem("mobydick_history", JSON.stringify(history));
-                    
-                    // Limpiar votos y mensaje
-                    myVotes = [];
-                    localStorage.removeItem("mobydick_votes");
-                    
-                    userMessage = '';
-                    document.getElementById('user-message').value = '';
-                    updateCharCounter();
-                    localStorage.removeItem('mobydick_message');
-                    
-                    // Actualizar UI
-                    updateMyVotesDisplay();
-                    
-                    // Mensaje de éxito
-                    let successMsg = "🎉 ¡Gracias por tus votos!";
-                    if (userMessage.trim()) {
-                        successMsg += " Tu mensaje fue enviado a la banda.";
-                    }
-                    showSubmitFeedback(successMsg, "success");
-                    
-                    // Restaurar botón después de 3 segundos
-                    setTimeout(() => {
-                        btn.innerHTML = originalText;
-                        btn.disabled = false;
-                    }, 3000);
                 });
             }
         }
