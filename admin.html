@@ -1219,6 +1219,32 @@
         .drag-ready {
             cursor: move !important;
         }
+		/* ?? FIX DEFINITIVO PARA BOTONES DE MENSAJES EN GITHUB PAGES */
+#messages-section .message-action-btn,
+#messages-container .message-action-btn,
+.message-card .message-action-btn,
+button.message-action-btn {
+    padding: 4px 8px !important;
+    font-size: 0.75rem !important;
+    min-width: 28px !important;
+    height: 28px !important;
+    margin: 1px !important;
+    line-height: 1 !important;
+}
+
+/* Para pantallas muy pequeñas */
+@media (max-width: 480px) {
+    .message-action-btn {
+        padding: 2px 4px !important;
+        font-size: 0.7rem !important;
+        min-width: 26px !important;
+        height: 26px !important;
+    }
+    
+    .message-action-btn i {
+        font-size: 0.7rem !important;
+    }
+}
     </style>
 </head>
 <body>
