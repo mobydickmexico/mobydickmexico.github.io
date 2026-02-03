@@ -802,42 +802,78 @@
             margin-right: 6px;
         }
         
-        /* ?? BOTONES PEQUENOS PARA MENSAJES - ESTILO UNIFICADO */
+        /* ?? BOTONES GRANDES PARA MENSAJES - FACIL MANEJO EN ESCENARIO */
         .message-actions {
             display: flex;
-            gap: 6px;
-            margin-top: 8px;
+            gap: 12px;                     /* Más espacio entre botones */
+            margin-top: 15px;              /* Más espacio arriba */
+            padding-top: 12px;             /* Espacio extra */
+            border-top: 2px dashed #444;   /* Línea separadora visual */
+            justify-content: flex-start;   /* Alineados a la izquierda */
         }
         
         .message-action-btn {
             background: #333;
             color: white;
             border: none;
-            border-radius: 6px;
-            padding: 6px 10px;
-            font-size: 0.8rem;
+            border-radius: 10px;           /* Bordes más redondeados */
+            padding: 10px 16px;            /* MUCHO más grande */
+            font-size: 0.9rem;             /* Texto más grande */
             cursor: pointer;
-            transition: all 0.2s;
-            font-weight: 600;
-            min-width: 30px;
+            transition: all 0.3s;          /* Transición más suave */
+            font-weight: 700;              /* Texto en negrita */
+            min-width: 70px;               /* Ancho mínimo mayor */
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 8px;                      /* Espacio entre icono y texto */
+            box-shadow: 0 3px 8px rgba(0,0,0,0.4); /* Sombra para destacar */
+            border: 2px solid transparent; /* Borde preparado para hover */
         }
         
         .message-action-btn:hover {
-            opacity: 0.9;
-            transform: scale(1.05);
+            opacity: 0.95;
+            transform: translateY(-3px);   /* Efecto elevación */
+            box-shadow: 0 5px 12px rgba(0,0,0,0.5);
         }
         
         .message-read-btn {
-            background: linear-gradient(145deg, var(--dj-blue), #007aff);
+            background: linear-gradient(145deg, #28a745, #1e7e34);
             color: white;
+            border-color: #1e7e34;
         }
         
         .message-delete-btn {
-            background: linear-gradient(145deg, #ff3b30, #d70015);
+            background: linear-gradient(145deg, #ff3366, #cc0044);
             color: white;
+            border-color: #cc0044;
+        }
+        
+        /* Para mensajes NO leídos - botón de leer más llamativo */
+        .message-card:not(.read) .message-read-btn {
+            animation: pulse-attention 2s infinite;
+            border: 2px solid #28a745;
+        }
+        
+        /* Animación de pulso para llamar atención */
+        @keyframes pulse-attention {
+            0% { 
+                box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
+                transform: scale(1);
+            }
+            70% { 
+                box-shadow: 0 0 0 10px rgba(40, 167, 69, 0);
+                transform: scale(1.05);
+            }
+            100% { 
+                box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
+                transform: scale(1);
+            }
+        }
+        
+        /* Iconos más grandes dentro de botones */
+        .message-action-btn i {
+            font-size: 1rem;
         }
         
         /* ========== SUGERENCIAS ========== */
@@ -1169,13 +1205,14 @@
             }
             
             .message-actions {
-                gap: 4px;
+                gap: 10px;
             }
             
             .message-action-btn {
-                padding: 5px 8px;
-                font-size: 0.75rem;
-                min-width: 28px;
+                padding: 8px 12px !important;
+                font-size: 0.85rem !important;
+                min-width: 60px !important;
+                height: auto !important;
             }
             
             .playlist-song-title {
@@ -1210,8 +1247,9 @@
             
             /* ?? AJUSTES ESPECIFICOS PARA TABLETAS */
             .message-action-btn {
-                padding: 6px 10px;
-                font-size: 0.8rem;
+                min-width: 75px !important;
+                padding: 11px 18px !important;
+                font-size: 0.9rem !important;
             }
         }
         
@@ -1219,91 +1257,40 @@
         .drag-ready {
             cursor: move !important;
         }
-		/* ?? FIX DEFINITIVO PARA BOTONES DE MENSAJES EN GITHUB PAGES */
-#messages-section .message-action-btn,
-#messages-container .message-action-btn,
-.message-card .message-action-btn,
-button.message-action-btn {
-    padding: 4px 8px !important;
-    font-size: 0.75rem !important;
-    min-width: 28px !important;
-    height: 28px !important;
-    margin: 1px !important;
-    line-height: 1 !important;
-}
 
-/* Para pantallas muy pequeñas */
-@media (max-width: 480px) {
-    .message-action-btn {
-        padding: 2px 4px !important;
-        font-size: 0.7rem !important;
-        min-width: 26px !important;
-        height: 26px !important;
-    }
-    
-    .message-action-btn i {
-        font-size: 0.7rem !important;
-    }
-}
+        /* ?? FIX EXTRA - Asegurar botones grandes en todas las situaciones */
+        #messages-section .message-action-btn,
+        #messages-container .message-action-btn,
+        .message-card .message-action-btn,
+        button[onclick*="markAsRead"],
+        button[onclick*="deleteMessage"] {
+            padding: 10px 16px !important;
+            font-size: 0.9rem !important;
+            min-width: 70px !important;
+            height: auto !important;
+            margin: 4px !important;
+            border-radius: 10px !important;
+            font-weight: 700 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 8px !important;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.4) !important;
+        }
 
+        /* Botones específicos */
+        button[onclick*="markAsRead"] {
+            background: linear-gradient(145deg, #28a745, #1e7e34) !important;
+            color: white !important;
+            border: 2px solid #1e7e34 !important;
+        }
 
-    /* ?? FIX DEFINITIVO PARA BOTONES DE MENSAJES EN GITHUB PAGES */
-#messages-section .message-action-btn,
-#messages-container .message-action-btn,
-.message-card .message-action-btn,
-button.message-action-btn {
-    padding: 4px 8px !important;
-    font-size: 0.75rem !important;
-    min-width: 28px !important;
-    height: 28px !important;
-    margin: 1px !important;
-    line-height: 1 !important;
-}
-
-/* Para pantallas muy pequeñas */
-@media (max-width: 480px) {
-    .message-action-btn {
-        padding: 2px 4px !important;
-        font-size: 0.7rem !important;
-        min-width: 26px !important;
-        height: 26px !important;
-    }
-    
-    .message-action-btn i {
-        font-size: 0.7rem !important;
-    }
-}
-/* ?? AJUSTES PARA BOTONES MAS ANCHOS Y FACILES DE TOCAR EN ESCENARIO */
-.message-action-btn {
-    min-width: 50px !important;      /* Más ancho */
-    padding: 6px 10px !important;    /* Más relleno */
-    margin: 4px !important;          /* Más separación */
-    font-size: 0.8rem !important;
-    height: 34px !important;         /* Más alto */
-    gap: 4px !important;             /* Espacio entre icono y texto */
-}
-
-/* Para móviles pequeños - aún más grandes */
-@media (max-width: 576px) {
-    .message-action-btn {
-        min-width: 45px !important;
-        padding: 5px 8px !important;
-        height: 32px !important;
-        margin: 3px !important;
-    }
-}
-
-/* Separar más los botones entre sí */
-.message-actions {
-    gap: 8px !important;             /* Más espacio entre botones */
-    margin-top: 12px !important;     /* Más espacio arriba */
-}
-
-/* Hacer iconos más grandes */
-.message-action-btn i {
-    font-size: 0.9rem !important;
-}
-	</style>
+        button[onclick*="deleteMessage"] {
+            background: linear-gradient(145deg, #ff3366, #cc0044) !important;
+            color: white !important;
+            border: 2px solid #cc0044 !important;
+        }
+    </style>
 </head>
 <body>
     <!-- ??? HEADER DINAMICO (SIEMPRE VISIBLE EN MOVIL) -->
@@ -1781,7 +1768,7 @@ button.message-action-btn {
                     <div class="repertoire-song-item">
                         <div class="repertoire-song-info">
                             <div class="repertoire-song-title">${song.title}</div>
-                            <div class="repertoire-song-artist">${song.artist} ¡E ${song.genre || 'Rock'}</div>
+                            <div class="repertoire-song-artist">${song.artist} ? ${song.genre || 'Rock'}</div>
                         </div>
                         <div class="d-flex align-items-center">
                             <span class="repertoire-song-votes">${song.votes}</span>
@@ -2245,7 +2232,7 @@ button.message-action-btn {
                         <div class="suggestion-artist">${suggestion.artist}</div>
                         <div class="d-flex justify-content-between align-items-center mt-2">
                             <small class="text-muted">
-                                <i class="bi bi-clock"></i> ${time} ¡E 
+                                <i class="bi bi-clock"></i> ${time} ? 
                                 <i class="bi bi-person"></i> ${suggestion.deviceId.substring(0, 6)}...
                             </small>
                             <div class="suggestion-actions">
@@ -2456,7 +2443,7 @@ button.message-action-btn {
                     <div class="delete-song-item">
                         <div class="delete-song-info">
                             <div class="delete-song-title">${song.title}</div>
-                            <div class="delete-song-artist">${song.artist} ¡E ${song.genre || 'Rock'}</div>
+                            <div class="delete-song-artist">${song.artist} ? ${song.genre || 'Rock'}</div>
                         </div>
                         <div class="d-flex align-items-center">
                             <span class="delete-song-votes">${song.votes}</span>
@@ -2565,20 +2552,20 @@ button.message-action-btn {
                 });
                 
                 batch.commit()
-                    .then(() => {
-                        allSongs.forEach(song => song.votes = 0);
-                        playlistSongs.forEach(song => song.votes = 0);
-                        
-                        showNotification("? Todos los votos reiniciados", "success");
-                        
-                        if (currentSection === 'top10') {
-                            updateTop10List();
-                        }
-                    })
-                    .catch((error) => {
-                        console.error("Error reiniciando votos:", error);
-                        showNotification("? Error al reiniciar votos", "danger");
-                    });
+                .then(() => {
+                    allSongs.forEach(song => song.votes = 0);
+                    playlistSongs.forEach(song => song.votes = 0);
+                    
+                    showNotification("? Todos los votos reiniciados", "success");
+                    
+                    if (currentSection === 'top10') {
+                        updateTop10List();
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error reiniciando votos:", error);
+                    showNotification("? Error al reiniciar votos", "danger");
+                });
             }
         };
 
