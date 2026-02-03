@@ -12,6 +12,7 @@
         :root {
             --pub-red: #C20B17;
             --pub-blue: #0A4062;
+            --pub-blue-dark: #082C47; /* Azul más oscuro original */
             --pub-yellow: #FFD700;
             --bg-dark: #0a0a0a;
             --bg-darker: #050505;
@@ -28,7 +29,7 @@
             padding-bottom: 1rem;
         }
         
-        /* ========== HEADER OPTIMIZADO ========== */
+        /* ========== HEADER OPTIMIZADO (MÁS PEQUEÑO) ========== */
         .header-container {
             width: 100%;
             margin: 0 auto 1rem auto;
@@ -47,7 +48,7 @@
             opacity: 0;
             transform: scale(1.01);
             transition: filter 0.3s ease-out, opacity 0.3s ease-out, transform 0.3s ease-out;
-            max-height: 150px;
+            max-height: 150px; /* REDUCIDO */
         }
         
         .header-image.loaded {
@@ -60,19 +61,26 @@
         .content-column {
             display: flex;
             flex-direction: column;
-            gap: 0.7rem; /* REDUCIDO: antes 1rem */
+            gap: 0.8rem; /* REDUCIDO de 1rem a 0.8rem */
             max-width: 800px;
             margin: 0 auto;
             padding: 0 0.5rem;
         }
         
-        /* Panel genérico */
+        /* Panel genérico - TEMA OSCURO */
         .content-panel {
             background: var(--bg-panel);
             border-radius: 15px;
             padding: 1.2rem;
             border: 2px solid #333;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .content-panel:hover {
+            border-color: var(--pub-blue);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.4);
         }
         
         /* Buscador */
@@ -106,6 +114,7 @@
             font-size: 1rem;
             background: #222;
             color: var(--text-light);
+            transition: all 0.3s;
         }
         
         .search-input:focus {
@@ -125,55 +134,64 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            transition: all 0.3s;
         }
         
         .btn-clear-search:hover {
             background: var(--pub-red);
+            transform: scale(1.05);
         }
         
-        /* ========== BOTONES ORIGINALES (TAMAÑO NORMAL) ========== */
+        /* ========== BOTONES COMPACTOS ORIGINALES ========== */
         .action-btn {
-            background: #333;
+            background: linear-gradient(145deg, var(--pub-blue), #083354);
             color: white;
             border: none;
-            padding: 0.8rem 1.2rem; /* TAMAÑO ORIGINAL */
+            padding: 0.9rem 1rem; /* COMPACTO (era 1rem) */
             font-weight: bold;
-            border-radius: 10px;
+            border-radius: 12px;
             width: 100%;
-            font-size: 1rem; /* TAMAÑO ORIGINAL */
+            font-size: 1rem; /* COMPACTO (era 1.1rem) */
             transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
+            box-shadow: 0 4px 10px rgba(10, 64, 98, 0.3);
+            border: 2px solid transparent;
             cursor: pointer;
         }
         
         .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(10, 64, 98, 0.4);
+            border-color: var(--pub-blue);
         }
         
-        /* Botón VER REPERTORIO - AZUL ORIGINAL */
+        .action-btn.share-btn {
+            background: linear-gradient(145deg, var(--pub-red), #a80d14);
+        }
+        
+        .action-btn.share-btn:hover {
+            border-color: var(--pub-red);
+        }
+        
+        .action-btn.suggestion-btn {
+            background: linear-gradient(145deg, #28a745, #1e7e34);
+        }
+        
+        .action-btn.suggestion-btn:hover {
+            border-color: #28a745;
+        }
+        
+        /* ========== BOTÓN VER REPERTORIO (AZUL MÁS OSCURO ORIGINAL) ========== */
         .action-btn.repertoire-btn {
-            background: linear-gradient(145deg, var(--pub-blue), #083354);
-            color: white;
+            background: linear-gradient(145deg, var(--pub-blue-dark), #061e30) !important; /* AZUL OSCURO ORIGINAL */
         }
         
         .action-btn.repertoire-btn:hover {
-            background: linear-gradient(145deg, #083354, var(--pub-blue));
-        }
-        
-        /* Botón COMPARTIR - ROJO */
-        .action-btn.share-btn {
-            background: linear-gradient(145deg, var(--pub-red), #a80d14);
-            color: white;
-        }
-        
-        /* Botón SUGERIR - VERDE */
-        .action-btn.suggestion-btn {
-            background: linear-gradient(145deg, #28a745, #1e7e34);
-            color: white;
+            border-color: var(--pub-blue);
+            background: linear-gradient(145deg, var(--pub-blue), #083354) !important;
         }
         
         /* ========== MENSAJES A LA BANDA ========== */
@@ -199,6 +217,7 @@
             font-size: 0.95rem;
             resize: none;
             min-height: 80px;
+            transition: all 0.2s;
             font-family: inherit;
             background: #222;
             color: var(--text-light);
@@ -227,23 +246,26 @@
             background: linear-gradient(145deg, #17a2b8, #138496);
             color: white;
             border: none;
-            padding: 0.8rem 1.2rem; /* TAMAÑO ORIGINAL */
+            padding: 0.8rem; /* COMPACTO (era 0.9rem) */
             font-weight: bold;
-            border-radius: 10px;
+            border-radius: 12px;
             width: 100%;
-            font-size: 1rem; /* TAMAÑO ORIGINAL */
+            font-size: 1rem;
             transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
             margin-top: 0.8rem;
+            box-shadow: 0 4px 10px rgba(23, 162, 184, 0.3);
+            border: 2px solid transparent;
             cursor: pointer;
         }
         
         .btn-submit-message:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(23, 162, 184, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(23, 162, 184, 0.4);
+            border-color: #17a2b8;
         }
         
         .btn-submit-message:disabled {
@@ -290,6 +312,9 @@
         }
         
         .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 15px;
             padding-bottom: 10px;
             border-bottom: 2px solid #333;
@@ -299,7 +324,12 @@
             font-size: 1.5rem;
             color: var(--pub-yellow);
             font-weight: 700;
-            text-align: center;
+            flex: 1;
+        }
+        
+        /* QUITADO EL BOTÓN ROJO DE CERRAR EN MODAL SUGERENCIAS */
+        .modal-suggestions .modal-close {
+            display: none !important;
         }
         
         /* ========== MODAL DE SUGERENCIAS ========== */
@@ -390,15 +420,17 @@
         .selected-counter {
             background: linear-gradient(145deg, var(--pub-red), #a80d14);
             color: white;
-            padding: 6px 12px; /* TAMAÑO ORIGINAL */
+            padding: 8px 16px;
             border-radius: 20px;
             font-weight: bold;
-            font-size: 1rem; /* TAMAÑO ORIGINAL */
-            min-width: 60px;
+            font-size: 1.1rem;
+            min-width: 70px;
             text-align: center;
+            box-shadow: 0 3px 8px rgba(194, 11, 23, 0.4);
             display: flex;
             align-items: center;
             gap: 5px;
+            border: 2px solid transparent;
         }
         
         .repertoire-search {
@@ -457,6 +489,7 @@
         
         .song-item:hover {
             background-color: #222;
+            transform: translateX(5px);
         }
         
         @media (min-width: 768px) {
@@ -527,47 +560,54 @@
         .btn-vote:hover:not(:disabled) {
             transform: scale(1.05);
             box-shadow: 0 4px 10px rgba(1, 33, 105, 0.3);
+            border-color: var(--pub-blue);
         }
         
         .btn-vote:disabled {
             background: linear-gradient(145deg, #28a745, #20c997) !important;
             color: white;
             cursor: pointer;
+            border-color: #28a745;
         }
         
         /* Botón cuando está seleccionado (toggle) */
         .btn-vote.selected {
             background: linear-gradient(145deg, #28a745, #20c997) !important;
+            border-color: #28a745;
         }
         
-        /* BOTÓN ENVIAR VOTOS - TAMAÑO ORIGINAL */
+        /* BOTÓN ENVIAR VOTOS EN MODAL (COMPACTO ORIGINAL) */
         .btn-submit-votes {
             background: linear-gradient(145deg, #28a745, #20c997);
             color: white;
             border: none;
-            padding: 0.8rem 1.2rem; /* TAMAÑO ORIGINAL */
+            padding: 0.9rem 1rem; /* COMPACTO ORIGINAL */
             font-weight: bold;
-            border-radius: 10px; /* TAMAÑO ORIGINAL */
+            border-radius: 12px;
             width: 100%;
-            font-size: 1rem; /* TAMAÑO ORIGINAL */
+            font-size: 1rem; /* COMPACTO ORIGINAL */
             transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
             margin-top: 10px;
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+            border: 2px solid transparent;
             cursor: pointer;
         }
         
         .btn-submit-votes:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
+            border-color: #28a745;
         }
         
         .btn-submit-votes:disabled {
             background: #555;
             cursor: not-allowed;
             opacity: 0.7;
+            border-color: #555;
         }
         
         /* Footer */
@@ -613,7 +653,7 @@
         @media (max-width: 768px) {
             .content-column {
                 padding: 0 0.3rem;
-                gap: 0.6rem; /* Aún más reducido en móviles */
+                gap: 0.7rem; /* REDUCIDO en móvil */
             }
             
             .content-panel {
@@ -622,6 +662,11 @@
             
             .header-image {
                 max-height: 130px;
+            }
+            
+            .action-btn {
+                padding: 0.8rem; /* COMPACTO en móvil */
+                font-size: 0.95rem;
             }
             
             .modal-content, .repertoire-modal-content {
@@ -639,8 +684,17 @@
                 max-height: 110px;
             }
             
+            .action-btn {
+                padding: 0.75rem; /* MÁS COMPACTO en móvil pequeño */
+                font-size: 0.9rem;
+            }
+            
             .modal-title, .repertoire-modal-title {
                 font-size: 1.2rem;
+            }
+            
+            .content-column {
+                gap: 0.6rem; /* MÁS COMPACTO en móvil pequeño */
             }
         }
     </style>
@@ -670,8 +724,8 @@
                 </div>
             </div>
             
-            <!-- 2. BOTÓN VER REPERTORIO COMPLETO (MODAL) -->
-            <div class="content-panel">
+            <!-- 2. BOTÓN VER REPERTORIO COMPLETO (MODAL) - AHORA AZUL MÁS OSCURO -->
+            <div class="content-panel repertoire-section">
                 <button class="action-btn repertoire-btn" onclick="openRepertoireModal()">
                     <i class="bi bi-music-note-list"></i> VER REPERTORIO COMPLETO
                 </button>
@@ -700,7 +754,7 @@
             <!-- 4. BOTÓN COMPARTIR ENLACE (SOLO BOTÓN) -->
             <div class="content-panel">
                 <button class="action-btn share-btn" onclick="shareLink()">
-                    <i class="bi bi-share-fill"></i> COMPARTIR CON AMIGOS
+                    <i class="bi bi-share-fill"></i> COMPARTIR ENLACE CON AMIGOS
                 </button>
                 <div id="share-feedback" class="feedback-container"></div>
             </div>
@@ -734,9 +788,10 @@
 
     <!-- ========== MODAL SUGERENCIAS (FLOTANTE) ========== -->
     <div class="modal-overlay" id="suggestion-modal">
-        <div class="modal-content">
+        <div class="modal-content modal-suggestions">
             <div class="modal-header">
                 <div class="modal-title">SUGERIR CANCIÓN NUEVA</div>
+                <!-- SE QUITA LA X ROJA, SOLO DEJAMOS EL BOTÓN DE CANCELAR ABAJO -->
             </div>
             
             <form id="suggestion-form" class="suggestion-form">
@@ -765,7 +820,7 @@
         </div>
     </div>
 
-        <!-- ========== MODAL REPERTORIO (FLOTANTE) ========== -->
+    <!-- ========== MODAL REPERTORIO (FLOTANTE) ========== -->
     <div class="repertoire-modal" id="repertoire-modal">
         <div class="repertoire-modal-content">
             <div class="repertoire-modal-header">
@@ -795,7 +850,7 @@
                 </div>
             </div>
             
-            <!-- BOTÓN ENVIAR PETICIONES -->
+            <!-- BOTÓN ENVIAR PETICIONES (TAMAÑO ORIGINAL COMPACTO) -->
             <button id="modal-submit-votes" class="btn-submit-votes" disabled 
                     onclick="submitVotesFromModal()">
                 <i class="bi bi-send-check"></i> ENVIAR MIS <span id="selected-count-btn">0</span> CANCIONES
@@ -810,6 +865,10 @@
             <div id="submit-feedback" class="feedback-container mt-2"></div>
         </div>
     </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
     <script>
         // ========== CONFIGURACIÓN FIREBASE ==========
