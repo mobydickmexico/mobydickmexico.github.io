@@ -700,7 +700,7 @@
             <!-- 4. BOTÓN COMPARTIR ENLACE (SOLO BOTÓN) -->
             <div class="content-panel">
                 <button class="action-btn share-btn" onclick="shareLink()">
-                    <i class="bi bi-share-fill"></i> COMPARTIR ENLACE CON AMIGOS
+                    <i class="bi bi-share-fill"></i> COMPARTIR CON AMIGOS
                 </button>
                 <div id="share-feedback" class="feedback-container"></div>
             </div>
@@ -765,10 +765,51 @@
         </div>
     </div>
 
-    <!-- ========== MODAL REPERTORIO (FLOTANTE) ========== */
-    <!-- EL JAVASCRIPT ES EL MISMO QUE EL ANTERIOR -->
-    <!-- Solo copia todo el JavaScript del archivo anterior aquí -->
-    <!-- (Es demasiado largo para repetirlo, pero es el mismo código) -->
+        <!-- ========== MODAL REPERTORIO (FLOTANTE) ========== -->
+    <div class="repertoire-modal" id="repertoire-modal">
+        <div class="repertoire-modal-content">
+            <div class="repertoire-modal-header">
+                <div class="repertoire-modal-title">REPERTORIO COMPLETO</div>
+                <!-- CONTADOR DE CANCIONES SELECCIONADAS -->
+                <div class="selected-counter" id="selected-counter">
+                    <i class="bi bi-music-note-beamed"></i> <span id="selected-count">0</span>/3
+                </div>
+            </div>
+            
+            <!-- BUSCADOR EN MODAL -->
+            <div class="repertoire-search">
+                <input type="text" class="repertoire-search-input" id="modal-search" 
+                       placeholder="Buscar canción o artista..." onkeyup="searchInModal()">
+            </div>
+            
+            <!-- LISTA DE CANCIONES EN MODAL -->
+            <div class="songs-header">
+                <h6 class="mb-0"><i class="bi bi-music-note-list"></i> CANCIONES DISPONIBLES</h6>
+                <span class="badge bg-dark" id="modal-total-songs">0 canciones</span>
+            </div>
+            
+            <div class="repertoire-list-container" id="modal-songs-container">
+                <div class="text-center py-4">
+                    <div class="spinner-border text-primary"></div>
+                    <p class="mt-2">Cargando canciones...</p>
+                </div>
+            </div>
+            
+            <!-- BOTÓN ENVIAR PETICIONES -->
+            <button id="modal-submit-votes" class="btn-submit-votes" disabled 
+                    onclick="submitVotesFromModal()">
+                <i class="bi bi-send-check"></i> ENVIAR MIS <span id="selected-count-btn">0</span> CANCIONES
+            </button>
+            
+            <!-- BOTÓN CERRAR MODAL -->
+            <button class="action-btn" onclick="closeRepertoireModal()" style="width: 100%; margin-top: 10px;">
+                <i class="bi bi-check-circle"></i> CERRAR
+            </button>
+            
+            <!-- Feedback al enviar -->
+            <div id="submit-feedback" class="feedback-container mt-2"></div>
+        </div>
+    </div>
 
     <script>
         // ========== CONFIGURACIÓN FIREBASE ==========
