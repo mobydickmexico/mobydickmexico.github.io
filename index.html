@@ -36,7 +36,6 @@
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 5px 20px rgba(0,0,0,0.4);
-            position: relative;
         }
         
         .header-image {
@@ -48,7 +47,7 @@
             opacity: 0;
             transform: scale(1.01);
             transition: filter 0.3s ease-out, opacity 0.3s ease-out, transform 0.3s ease-out;
-            max-height: 150px; /* REDUCIDO: antes era más grande */
+            max-height: 150px; /* REDUCIDO */
         }
         
         .header-image.loaded {
@@ -57,18 +56,7 @@
             transform: scale(1);
         }
         
-        /* Logo de banda superpuesto (opcional) */
-        .band-logo-overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            max-width: 120px;
-            filter: drop-shadow(0 0 10px rgba(0,0,0,0.7));
-            opacity: 0.9;
-        }
-        
-        /* ========== CONTENIDO EN COLUMNA ÚNICA ========== */
+        /* ========== CONTENIDO SIMPLIFICADO ========== */
         .content-column {
             display: flex;
             flex-direction: column;
@@ -153,66 +141,62 @@
             transform: scale(1.05);
         }
         
-        /* BOTÓN VER REPERTORIO */
-        .repertoire-btn {
+        /* ========== BOTONES GRANDES Y SIMPLES ========== */
+        .action-btn {
             background: linear-gradient(145deg, var(--pub-blue), #083354);
             color: white;
             border: none;
-            padding: 0.9rem;
+            padding: 1rem;
             font-weight: bold;
             border-radius: 12px;
             width: 100%;
-            font-size: 1rem;
+            font-size: 1.1rem;
             transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
-            margin-top: 0.5rem;
             box-shadow: 0 4px 10px rgba(10, 64, 98, 0.3);
             border: 2px solid transparent;
+            cursor: pointer;
         }
         
-        .repertoire-btn:hover {
-            background: linear-gradient(145deg, #083354, var(--pub-blue));
+        .action-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 6px 15px rgba(10, 64, 98, 0.4);
             border-color: var(--pub-blue);
         }
         
-        /* Botón ENVIAR MENSAJE */
-        .btn-submit-message {
-            background: linear-gradient(145deg, #17a2b8, #138496);
-            color: white;
-            border: none;
-            padding: 0.9rem;
-            font-weight: bold;
-            border-radius: 12px;
-            width: 100%;
-            font-size: 1rem;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-top: 0.8rem;
-            box-shadow: 0 4px 10px rgba(23, 162, 184, 0.3);
-            border: 2px solid transparent;
+        .action-btn.share-btn {
+            background: linear-gradient(145deg, var(--pub-red), #a80d14);
         }
         
-        .btn-submit-message:hover:not(:disabled) {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(23, 162, 184, 0.4);
+        .action-btn.share-btn:hover {
+            border-color: var(--pub-red);
+        }
+        
+        .action-btn.suggestion-btn {
+            background: linear-gradient(145deg, #28a745, #1e7e34);
+        }
+        
+        .action-btn.suggestion-btn:hover {
+            border-color: #28a745;
+        }
+        
+        .action-btn.repertoire-btn {
+            background: linear-gradient(145deg, #17a2b8, #138496);
+        }
+        
+        .action-btn.repertoire-btn:hover {
             border-color: #17a2b8;
         }
         
-        .btn-submit-message:disabled {
-            background: #555;
-            cursor: not-allowed;
-            opacity: 0.7;
+        /* ========== BOTÓN VER REPERTORIO ========== */
+        .repertoire-section {
+            border-color: var(--pub-blue);
         }
         
-        /* Panel de mensajes */
+        /* ========== MENSAJES A LA BANDA ========== */
         .message-panel {
             border-color: #17a2b8;
             background: linear-gradient(145deg, #1a2a2a, #152222);
@@ -260,38 +244,148 @@
             font-weight: bold;
         }
         
-        /* Compartir */
-        .share-panel {
-            border-color: var(--pub-blue);
-            background: linear-gradient(145deg, #1a1a2a, #151522);
-        }
-        
-        .btn-share {
-            background: linear-gradient(145deg, var(--pub-red), var(--pub-blue));
+        .btn-submit-message {
+            background: linear-gradient(145deg, #17a2b8, #138496);
             color: white;
             border: none;
             padding: 0.9rem;
             font-weight: bold;
-            border-radius: 10px;
-            transition: all 0.3s;
+            border-radius: 12px;
             width: 100%;
             font-size: 1rem;
+            transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
-            margin-top: 0.5rem;
-            box-shadow: 0 4px 10px rgba(194, 11, 23, 0.2);
+            margin-top: 0.8rem;
+            box-shadow: 0 4px 10px rgba(23, 162, 184, 0.3);
             border: 2px solid transparent;
+            cursor: pointer;
         }
         
-        .btn-share:hover {
+        .btn-submit-message:hover:not(:disabled) {
             transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(194, 11, 23, 0.3);
-            border-color: var(--pub-red);
+            box-shadow: 0 6px 15px rgba(23, 162, 184, 0.4);
+            border-color: #17a2b8;
         }
         
-        /* ========== MODAL DE REPERTORIO (TEMA OSCURO) ========== */
+        .btn-submit-message:disabled {
+            background: #555;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        /* ========== MODALES FLOTANTES ========== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .modal-overlay.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background: var(--bg-panel);
+            border-radius: 20px;
+            padding: 20px;
+            max-width: 500px;
+            margin: 20px auto;
+            border: 3px solid var(--pub-blue);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #333;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--pub-yellow);
+            font-weight: 700;
+            flex: 1;
+        }
+        
+        .modal-close {
+            background: var(--pub-red);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .modal-close:hover {
+            background: #ff5e54;
+            transform: scale(1.1);
+        }
+        
+        /* ========== MODAL DE SUGERENCIAS ========== */
+        .suggestion-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 0;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.3rem;
+            color: #ddd;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 10px;
+            border: 2px solid #444;
+            background: #222;
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--pub-red);
+            box-shadow: 0 0 0 3px rgba(194, 11, 23, 0.2);
+            background: #2a2a2a;
+        }
+        
+        /* ========== MODAL DE REPERTORIO ========== */
         .repertoire-modal {
             display: none;
             position: fixed;
@@ -308,11 +402,6 @@
         .repertoire-modal.active {
             display: block;
             animation: fadeIn 0.3s ease-out;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
         }
         
         .repertoire-modal-content {
@@ -482,6 +571,7 @@
             transition: all 0.2s;
             font-size: 0.95rem;
             border: 2px solid transparent;
+            cursor: pointer;
         }
         
         .btn-vote:hover:not(:disabled) {
@@ -521,6 +611,7 @@
             margin-top: 10px;
             box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
             border: 2px solid transparent;
+            cursor: pointer;
         }
         
         .btn-submit-votes:hover:not(:disabled) {
@@ -534,57 +625,6 @@
             cursor: not-allowed;
             opacity: 0.7;
             border-color: #555;
-        }
-        
-        /* ========== SUGERENCIAS ========== */
-        .suggestions-panel {
-            border-color: var(--pub-red);
-            background: linear-gradient(145deg, #2a1a1a, #221515);
-            margin-top: 1rem;
-        }
-        
-        .btn-suggestion {
-            background: linear-gradient(145deg, var(--pub-red), #a80d14);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            font-weight: bold;
-            border-radius: 8px;
-            width: 100%;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            box-shadow: 0 4px 10px rgba(194, 11, 23, 0.3);
-            border: 2px solid transparent;
-        }
-        
-        .btn-suggestion:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(194, 11, 23, 0.4);
-            border-color: var(--pub-red);
-        }
-        
-        /* Form inputs para sugerencias */
-        #suggestion-title, #suggestion-artist {
-            background: #222;
-            border: 2px solid #444;
-            color: var(--text-light);
-            border-radius: 8px;
-            padding: 0.7rem;
-        }
-        
-        #suggestion-title:focus, #suggestion-artist:focus {
-            border-color: var(--pub-red);
-            box-shadow: 0 0 0 3px rgba(194, 11, 23, 0.2);
-            background: #2a2a2a;
-        }
-        
-        /* Feedback */
-        .feedback-container {
-            min-height: 24px;
-            margin-top: 0.5rem;
         }
         
         /* Footer */
@@ -620,6 +660,12 @@
             background: var(--pub-red);
         }
         
+        /* Feedback containers */
+        .feedback-container {
+            min-height: 24px;
+            margin-top: 0.5rem;
+        }
+        
         /* Responsive */
         @media (max-width: 768px) {
             .content-column {
@@ -632,44 +678,21 @@
             }
             
             .header-image {
-                max-height: 130px; /* Aún más pequeño en móviles */
+                max-height: 130px;
             }
             
-            .repertoire-modal-title {
-                font-size: 1.3rem;
-            }
-            
-            .selected-counter {
+            .action-btn {
+                padding: 0.9rem;
                 font-size: 1rem;
-                padding: 6px 12px;
-                min-width: 60px;
             }
             
-            .repertoire-modal-content {
+            .modal-content, .repertoire-modal-content {
                 padding: 15px;
                 margin: 10px;
             }
             
-            .btn-submit-votes {
-                padding: 0.9rem;
-                font-size: 1rem;
-            }
-            
-            .btn-submit-message {
-                padding: 0.9rem;
-                font-size: 1rem;
-            }
-            
-            .btn-vote {
-                min-width: 100px;
-                padding: 0.4rem 1rem;
-                font-size: 0.9rem;
-            }
-            
-            .votes-badge {
-                min-width: 80px;
-                font-size: 0.9rem;
-                padding: 0.3rem 0.7rem;
+            .modal-title, .repertoire-modal-title {
+                font-size: 1.3rem;
             }
         }
         
@@ -678,33 +701,12 @@
                 max-height: 110px;
             }
             
-            .song-title {
-                font-size: 1rem;
+            .action-btn {
+                padding: 0.8rem;
+                font-size: 0.95rem;
             }
             
-            .song-artist {
-                font-size: 0.9rem;
-            }
-            
-            .btn-vote {
-                min-width: 90px;
-                padding: 0.4rem 0.8rem;
-                font-size: 0.85rem;
-            }
-            
-            .votes-badge {
-                min-width: 70px;
-                font-size: 0.85rem;
-                padding: 0.3rem 0.6rem;
-            }
-            
-            .selected-counter {
-                font-size: 0.9rem;
-                padding: 5px 10px;
-                min-width: 50px;
-            }
-            
-            .repertoire-modal-title {
+            .modal-title, .repertoire-modal-title {
                 font-size: 1.2rem;
             }
         }
@@ -716,11 +718,9 @@
         <div class="header-container">
             <img src="images/header.webp" alt="MobyDick @ Porter British Pub" class="header-image" 
                  fetchpriority="high" decoding="async" onload="this.classList.add('loaded')">
-            <!-- Opcional: Logo de banda superpuesto -->
-            <!-- <img src="images/LOGO_NEW.png" alt="MobyDick" class="band-logo-overlay"> -->
         </div>
         
-        <!-- ========== CONTENIDO EN COLUMNA ÚNICA ========== -->
+        <!-- ========== CONTENIDO SIMPLIFICADO ========== -->
         <div class="content-column">
             
             <!-- 1. BUSCAR CANCIONES -->
@@ -738,13 +738,13 @@
             </div>
             
             <!-- 2. BOTÓN VER REPERTORIO COMPLETO (MODAL) -->
-            <div class="content-panel">
-                <button class="repertoire-btn" onclick="openRepertoireModal()">
+            <div class="content-panel repertoire-section">
+                <button class="action-btn repertoire-btn" onclick="openRepertoireModal()">
                     <i class="bi bi-music-note-list"></i> VER REPERTORIO COMPLETO
                 </button>
             </div>
             
-            <!-- 3. MENSAJES A LA BANDA (INDEPENDIENTE) -->
+            <!-- 3. MENSAJES A LA BANDA -->
             <div class="content-panel message-panel">
                 <div class="panel-title">
                     <i class="bi bi-chat-text"></i> MENSAJE A LA BANDA
@@ -757,56 +757,27 @@
                           maxlength="120"></textarea>
                 <div class="char-counter" id="char-counter">0/120 caracteres</div>
                 
-                <!-- BOTÓN ENVIAR MENSAJE -->
                 <button id="submit-message" class="btn-submit-message" onclick="submitMessage()">
                     <i class="bi bi-send"></i> ENVIAR MENSAJE
                 </button>
                 
-                <!-- Feedback mensaje -->
                 <div id="message-feedback" class="feedback-container"></div>
             </div>
             
-            <!-- 4. COMPARTIR CON AMIGOS -->
-            <div class="content-panel share-panel">
-                <div class="panel-title">
-                    <i class="bi bi-share"></i> COMPARTIR CON AMIGOS
-                </div>
-                <p class="small text-muted mb-2">
-                    Invita a más personas para que voten por sus canciones favoritas.
-                </p>
-                <button onclick="shareLink()" class="btn btn-share">
-                    <i class="bi bi-share-fill"></i> Compartir enlace
+            <!-- 4. BOTÓN COMPARTIR ENLACE (SOLO BOTÓN) -->
+            <div class="content-panel">
+                <button class="action-btn share-btn" onclick="shareLink()">
+                    <i class="bi bi-share-fill"></i> COMPARTIR ENLACE CON AMIGOS
                 </button>
                 <div id="share-feedback" class="feedback-container"></div>
             </div>
             
-            <!-- 5. SUGERIR CANCIONES NUEVAS -->
-            <div class="content-panel suggestions-panel">
-                <div class="panel-title">
+            <!-- 5. BOTÓN SUGERIR CANCIONES (ABRE MODAL) -->
+            <div class="content-panel">
+                <button class="action-btn suggestion-btn" onclick="openSuggestionModal()">
                     <i class="bi bi-lightbulb"></i> SUGERIR CANCIONES NUEVAS
-                </div>
-                <p class="small text-muted mb-3">
-                    ¿Quieres que la banda toque una canción que no está en la lista? ¡Sugiérela aquí!
-                </p>
-                
-                <form id="suggestion-form">
-                    <div class="row g-2 mb-3">
-                        <div class="col-md-6">
-                            <input type="text" id="suggestion-title" class="form-control" 
-                                   placeholder="Título de la canción" required>
-                        </div>
-                        <div class="col-md-6">
-                            <input type="text" id="suggestion-artist" class="form-control" 
-                                   placeholder="Artista o banda" required>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-suggestion">
-                        <i class="bi bi-send"></i> ENVIAR SUGERENCIA
-                    </button>
-                </form>
-                
-                <div id="suggestion-feedback" class="feedback-container mt-3"></div>
+                </button>
+                <div id="suggestion-feedback" class="feedback-container"></div>
             </div>
             
             <!-- Footer -->
@@ -828,11 +799,47 @@
         </div>
     </div>
 
-    <!-- ========== MODAL DE REPERTORIO (FLOTANTE) ========== -->
+    <!-- ========== MODAL SUGERENCIAS (FLOTANTE) ========== -->
+    <div class="modal-overlay" id="suggestion-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">SUGERIR CANCIÓN NUEVA</div>
+                <button class="modal-close" onclick="closeSuggestionModal()">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            
+            <form id="suggestion-form" class="suggestion-form">
+                <div class="form-group">
+                    <label class="form-label">TÍTULO DE LA CANCIÓN *</label>
+                    <input type="text" id="suggestion-title" class="form-control" 
+                           placeholder="Ej: Sweet Child O' Mine" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">ARTISTA O BANDA *</label>
+                    <input type="text" id="suggestion-artist" class="form-control" 
+                           placeholder="Ej: Guns N' Roses" required>
+                </div>
+                
+                <button type="submit" class="action-btn suggestion-btn" style="margin-top: 10px;">
+                    <i class="bi bi-send"></i> ENVIAR SUGERENCIA
+                </button>
+            </form>
+            
+            <button class="action-btn" onclick="closeSuggestionModal()" style="margin-top: 10px;">
+                <i class="bi bi-x-circle"></i> CANCELAR
+            </button>
+            
+            <div id="suggestion-modal-feedback" class="feedback-container mt-3"></div>
+        </div>
+    </div>
+
+    <!-- ========== MODAL REPERTORIO (FLOTANTE) ========== -->
     <div class="repertoire-modal" id="repertoire-modal">
         <div class="repertoire-modal-content">
             <div class="repertoire-modal-header">
-                <div class="repertoire-modal-title">ELIGE 3 CANCIONES</div>
+                <div class="repertoire-modal-title">REPERTORIO COMPLETO</div>
                 <!-- CONTADOR DE CANCIONES SELECCIONADAS -->
                 <div class="selected-counter" id="selected-counter">
                     <i class="bi bi-music-note-beamed"></i> <span id="selected-count">0</span>/3
@@ -865,7 +872,7 @@
             </button>
             
             <!-- BOTÓN CERRAR MODAL -->
-            <button class="btn btn-share" onclick="closeRepertoireModal()" style="width: 100%; margin-top: 10px;">
+            <button class="action-btn" onclick="closeRepertoireModal()" style="width: 100%; margin-top: 10px;">
                 <i class="bi bi-check-circle"></i> CERRAR
             </button>
             
@@ -943,17 +950,27 @@
             updateSelectedCounter();
         });
 
-        // ========== FUNCIONES MODAL ==========
+        // ========== FUNCIONES MODALES ==========
         window.openRepertoireModal = function() {
             const modal = document.getElementById('repertoire-modal');
             modal.classList.add('active');
             displaySongsInModal(allSongs);
-            updateSelectedCounter(); // Actualizar contador
-            updateModalSubmitButton(); // Actualizar estado del botón
+            updateSelectedCounter();
+            updateModalSubmitButton();
         };
 
         window.closeRepertoireModal = function() {
             const modal = document.getElementById('repertoire-modal');
+            modal.classList.remove('active');
+        };
+
+        window.openSuggestionModal = function() {
+            const modal = document.getElementById('suggestion-modal');
+            modal.classList.add('active');
+        };
+
+        window.closeSuggestionModal = function() {
+            const modal = document.getElementById('suggestion-modal');
             modal.classList.remove('active');
         };
 
@@ -999,7 +1016,7 @@
             
             songs.forEach((song) => {
                 const isVoted = myVotes.includes(song.id);
-                const canVote = myVotes.length < 3 || isVoted; // Puede votar si tiene menos de 3 O si ya votó por esta canción (para desmarcar)
+                const canVote = myVotes.length < 3 || isVoted;
                 
                 html += `
                     <div class="song-item" data-song-id="${song.id}">
@@ -1030,10 +1047,8 @@
             const isVoted = myVotes.includes(songId);
             
             if (isVoted) {
-                // Si ya está votada, desmarcar
                 removeVote(songId);
             } else {
-                // Si no está votada, marcar
                 if (checkVoteLimit()) {
                     return;
                 }
@@ -1060,7 +1075,6 @@
                 updateSelectedCounter();
                 updateModalSubmitButton();
                 
-                // Actualizar inmediatamente la UI
                 const songElement = document.querySelector(`.song-item[data-song-id="${songId}"]`);
                 if (songElement) {
                     const voteBtn = songElement.querySelector('.btn-vote');
@@ -1069,7 +1083,6 @@
                         voteBtn.innerHTML = '<i class="bi bi-check-circle"></i> ELEJIDA';
                     }
                     
-                    // Actualizar contador de votos
                     const votesBadge = songElement.querySelector('.votes-badge');
                     if (votesBadge) {
                         const currentVotes = parseInt(votesBadge.textContent.split(' ')[0]);
@@ -1098,7 +1111,6 @@
                 updateSelectedCounter();
                 updateModalSubmitButton();
                 
-                // Actualizar inmediatamente la UI
                 const songElement = document.querySelector(`.song-item[data-song-id="${songId}"]`);
                 if (songElement) {
                     const voteBtn = songElement.querySelector('.btn-vote');
@@ -1107,7 +1119,6 @@
                         voteBtn.innerHTML = '<i class="bi bi-hand-thumbs-up"></i> ELEGIR';
                     }
                     
-                    // Actualizar contador de votos
                     const votesBadge = songElement.querySelector('.votes-badge');
                     if (votesBadge) {
                         const currentVotes = parseInt(votesBadge.textContent.split(' ')[0]);
@@ -1137,7 +1148,6 @@
                 btnCountElement.textContent = myVotes.length;
             }
             
-            // Actualizar color del contador según la cantidad
             const counter = document.getElementById("selected-counter");
             if (counter) {
                 if (myVotes.length === 0) {
@@ -1168,13 +1178,11 @@
             btn.innerHTML = '<i class="bi bi-check2-circle"></i> ¡ENVIADO!';
             btn.disabled = true;
             
-            // Registrar voto por dispositivo/día
             const today = new Date().toISOString().split('T')[0];
             const deviceVotesKey = `mobydick_votes_${deviceId}_${today}`;
             const votesToday = parseInt(localStorage.getItem(deviceVotesKey) || '0') + 1;
             localStorage.setItem(deviceVotesKey, votesToday.toString());
             
-            // Guardar en historial local
             const history = JSON.parse(localStorage.getItem("mobydick_history") || "[]");
             const songTitles = myVotes.map(id => {
                 const song = allSongs.find(s => s.id === id);
@@ -1188,22 +1196,17 @@
             });
             localStorage.setItem("mobydick_history", JSON.stringify(history));
             
-            // Limpiar votos
             myVotes = [];
             localStorage.removeItem("mobydick_votes");
             
-            // Actualizar UI
             updateSelectedCounter();
             updateModalSubmitButton();
             
-            // Mensaje de éxito
             showSubmitFeedback("🎉 ¡Gracias por tus votos! Las canciones fueron enviadas.", "success");
             
-            // Cerrar modal después de 2 segundos
             setTimeout(() => {
                 closeRepertoireModal();
                 
-                // Restaurar botón después de 3 segundos
                 setTimeout(() => {
                     btn.innerHTML = originalText;
                     btn.disabled = false;
@@ -1232,21 +1235,18 @@
             btn.innerHTML = '<i class="bi bi-check2-circle"></i> ENVIANDO...';
             btn.disabled = true;
             
-            // Guardar en Firebase (sin límite)
             db.collection("temporary_data").add({
                 type: "message",
                 message: message,
                 deviceId: deviceId,
                 createdAt: new Date().toISOString(),
-                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 24 horas
+                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
                 status: "unread"
             })
             .then(() => {
-                // Limpiar campo
                 messageInput.value = '';
                 updateCharCounter();
                 
-                // Guardar en historial local
                 const history = JSON.parse(localStorage.getItem("mobydick_messages_history") || "[]");
                 history.push({
                     date: new Date().toISOString(),
@@ -1262,7 +1262,6 @@
                 showMessageFeedback("❌ Error al enviar mensaje", "danger");
             })
             .finally(() => {
-                // Restaurar botón
                 setTimeout(() => {
                     btn.innerHTML = originalText;
                     btn.disabled = false;
@@ -1301,203 +1300,10 @@
             
             counter.textContent = `${length}/${maxLength} caracteres`;
             
-            if (length > maxLength * 0.9) { // Más del 90%
+            if (length > maxLength * 0.9) {
                 counter.classList.add('warning');
             } else {
                 counter.classList.remove('warning');
-            }
-        }
-
-        function initializeFirebase() {
-            try {
-                firebase.initializeApp(firebaseConfig);
-                db = firebase.firestore();
-                
-                console.log("✅ Firebase inicializado");
-                
-                // Verificar límite de votos por dispositivo
-                checkVoteLimit();
-                
-                // Iniciar sistema de conexiones
-                setupConnectionCounter();
-                
-                // Cargar canciones
-                loadSongs();
-                setupEventListeners();
-                
-                // Escuchar cambios en tiempo real
-                setupSmartListener();
-                
-            } catch (error) {
-                console.error("❌ Error Firebase:", error);
-                showError("Error de conexión. Recarga la página.");
-            }
-        }
-
-        // ========== VERIFICAR LÍMITE DE VOTOS ==========
-        function checkVoteLimit() {
-            const today = new Date().toISOString().split('T')[0];
-            const deviceVotesKey = `mobydick_votes_${deviceId}_${today}`;
-            
-            const votesToday = localStorage.getItem(deviceVotesKey);
-            if (votesToday && parseInt(votesToday) >= 3) {
-                // Este dispositivo ya votó 3 veces hoy
-                const modalSubmitBtn = document.getElementById('modal-submit-votes');
-                
-                if (modalSubmitBtn) {
-                    modalSubmitBtn.disabled = true;
-                    modalSubmitBtn.innerHTML = '<i class="bi bi-exclamation-triangle"></i> LÍMITE ALCANZADO';
-                    modalSubmitBtn.style.background = '#dc3545';
-                }
-                
-                // Deshabilitar todos los botones de voto (excepto las ya seleccionadas)
-                setTimeout(() => {
-                    const voteButtons = document.querySelectorAll('.btn-vote');
-                    voteButtons.forEach(btn => {
-                        const songItem = btn.closest('.song-item');
-                        const songId = songItem ? songItem.getAttribute('data-song-id') : null;
-                        const isVoted = songId ? myVotes.includes(songId) : false;
-                        
-                        if (!btn.disabled && !isVoted) {
-                            btn.disabled = true;
-                            btn.innerHTML = '<i class="bi bi-exclamation-triangle"></i> LÍMITE';
-                            btn.style.background = '#555';
-                        }
-                    });
-                }, 500);
-                
-                showSubmitFeedback("❌ Has alcanzado el límite de 3 votos por dispositivo/día", "warning");
-                return true;
-            }
-            return false;
-        }
-
-        // ========== CONTADOR REAL DE CONEXIONES ==========
-        function setupConnectionCounter() {
-            const counterRef = db.collection('stats').doc('connections');
-            
-            // Generar un ID único para esta sesión
-            const sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-            localStorage.setItem('mobydick_session_id', sessionId);
-            
-            // Registrar nueva conexión
-            counterRef.update({
-                count: firebase.firestore.FieldValue.increment(1),
-                lastConnection: new Date().toISOString(),
-                sessions: firebase.firestore.FieldValue.arrayUnion(sessionId)
-            })
-            .catch((error) => {
-                // Si no existe el documento, crearlo
-                if (error.code === 'not-found') {
-                    counterRef.set({
-                        count: 1,
-                        lastConnection: new Date().toISOString(),
-                        totalConnections: 1,
-                        sessions: [sessionId],
-                        created: new Date().toISOString()
-                    });
-                }
-            });
-            
-            // Escuchar cambios en tiempo real
-            connectionListener = counterRef.onSnapshot((doc) => {
-                if (doc.exists) {
-                    const data = doc.data();
-                    const currentCount = data.count || 0;
-                    
-                    // Actualizar en la interfaz
-                    const connectedElement = document.getElementById("connected-count");
-                    
-                    if (connectedElement) connectedElement.textContent = `${currentCount} conectados`;
-                }
-            });
-            
-            // Restar al salir
-            window.addEventListener('beforeunload', function() {
-                cleanupConnection(sessionId);
-            });
-            
-            // Manejar cierre de pestaña
-            window.addEventListener('pagehide', function() {
-                cleanupConnection(sessionId);
-            });
-        }
-        
-        function cleanupConnection(sessionId) {
-            const counterRef = db.collection('stats').doc('connections');
-            
-            // Remover la sesión y decrementar el contador
-            counterRef.update({
-                count: firebase.firestore.FieldValue.increment(-1),
-                sessions: firebase.firestore.FieldValue.arrayRemove(sessionId),
-                lastDisconnect: new Date().toISOString()
-            }).catch((error) => {
-                console.log("✅ Sesión cerrada (puede ignorarse)");
-            });
-            
-            // Remover listener si existe
-            if (connectionListener) {
-                connectionListener();
-            }
-        }
-
-        // ========== FUNCIONES DE CANCIONES ==========
-        function loadSongs() {
-            db.collection("songs").orderBy("title").get()
-                .then((snapshot) => {
-                    allSongs = [];
-                    snapshot.forEach((doc) => {
-                        const data = doc.data();
-                        allSongs.push({
-                            id: doc.id,
-                            title: data.title || "Sin título",
-                            artist: data.artist || "Desconocido",
-                            genre: data.genre || "Rock",
-                            votes: data.votes || 0,
-                            duration: data.duration || "",
-                            year: data.year || ""
-                        });
-                    });
-                    
-                    console.log(`✅ ${allSongs.length} canciones cargadas`);
-                    
-                    if (allSongs.length === 0) {
-                        showError("No hay canciones en el repertorio aún.");
-                    }
-                    
-                })
-                .catch((error) => {
-                    console.error("❌ Error cargando canciones:", error);
-                    showError("Error cargando canciones. Intenta recargar.");
-                });
-        }
-
-        function setupSmartListener() {
-            db.collection("songs").onSnapshot((snapshot) => {
-                snapshot.docChanges().forEach((change) => {
-                    if (change.type === "modified") {
-                        const updatedSong = {
-                            id: change.doc.id,
-                            ...change.doc.data()
-                        };
-                        
-                        updateSingleSong(updatedSong);
-                    }
-                });
-            });
-        }
-
-        function updateSingleSong(song) {
-            const index = allSongs.findIndex(s => s.id === song.id);
-            if (index !== -1) {
-                allSongs[index] = song;
-                
-                // Actualizar en modal si está abierto
-                const modal = document.getElementById('repertoire-modal');
-                if (modal.classList.contains('active')) {
-                    // Solo actualizar si el modal está abierto
-                    displaySongsInModal(allSongs);
-                }
             }
         }
 
@@ -1507,16 +1313,15 @@
             const artist = document.getElementById('suggestion-artist').value.trim();
             
             if (!title || !artist) {
-                showSuggestionFeedback("Por favor completa ambos campos", "warning");
+                showSuggestionModalFeedback("Por favor completa ambos campos", "warning");
                 return;
             }
             
             if (title.length > 100 || artist.length > 100) {
-                showSuggestionFeedback("Máximo 100 caracteres por campo", "warning");
+                showSuggestionModalFeedback("Máximo 100 caracteres por campo", "warning");
                 return;
             }
             
-            // Crear objeto de sugerencia
             const suggestion = {
                 title: title,
                 artist: artist,
@@ -1526,26 +1331,28 @@
                 status: "pending"
             };
             
-            // Guardar en Firebase con expiración (24 horas)
             db.collection("temporary_data").add({
                 ...suggestion,
-                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24 horas
+                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
             })
             .then(() => {
-                // Limpiar formulario
                 document.getElementById('suggestion-title').value = '';
                 document.getElementById('suggestion-artist').value = '';
                 
-                showSuggestionFeedback("✅ Sugerencia enviada a la banda", "success");
+                showSuggestionModalFeedback("✅ Sugerencia enviada a la banda", "success");
+                
+                setTimeout(() => {
+                    closeSuggestionModal();
+                }, 1500);
             })
             .catch((error) => {
                 console.error("Error enviando sugerencia:", error);
-                showSuggestionFeedback("❌ Error al enviar sugerencia", "danger");
+                showSuggestionModalFeedback("❌ Error al enviar sugerencia", "danger");
             });
         }
         
-        function showSuggestionFeedback(message, type) {
-            const feedback = document.getElementById("suggestion-feedback");
+        function showSuggestionModalFeedback(message, type) {
+            const feedback = document.getElementById("suggestion-modal-feedback");
             if (!feedback) return;
             
             feedback.innerHTML = `
@@ -1641,9 +1448,180 @@
             }, 3000);
         }
 
+        function initializeFirebase() {
+            try {
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.firestore();
+                
+                console.log("✅ Firebase inicializado");
+                
+                checkVoteLimit();
+                setupConnectionCounter();
+                loadSongs();
+                setupEventListeners();
+                setupSmartListener();
+                
+            } catch (error) {
+                console.error("❌ Error Firebase:", error);
+                showError("Error de conexión. Recarga la página.");
+            }
+        }
+
+        // ========== VERIFICAR LÍMITE DE VOTOS ==========
+        function checkVoteLimit() {
+            const today = new Date().toISOString().split('T')[0];
+            const deviceVotesKey = `mobydick_votes_${deviceId}_${today}`;
+            
+            const votesToday = localStorage.getItem(deviceVotesKey);
+            if (votesToday && parseInt(votesToday) >= 3) {
+                const modalSubmitBtn = document.getElementById('modal-submit-votes');
+                
+                if (modalSubmitBtn) {
+                    modalSubmitBtn.disabled = true;
+                    modalSubmitBtn.innerHTML = '<i class="bi bi-exclamation-triangle"></i> LÍMITE ALCANZADO';
+                    modalSubmitBtn.style.background = '#dc3545';
+                }
+                
+                setTimeout(() => {
+                    const voteButtons = document.querySelectorAll('.btn-vote');
+                    voteButtons.forEach(btn => {
+                        const songItem = btn.closest('.song-item');
+                        const songId = songItem ? songItem.getAttribute('data-song-id') : null;
+                        const isVoted = songId ? myVotes.includes(songId) : false;
+                        
+                        if (!btn.disabled && !isVoted) {
+                            btn.disabled = true;
+                            btn.innerHTML = '<i class="bi bi-exclamation-triangle"></i> LÍMITE';
+                            btn.style.background = '#555';
+                        }
+                    });
+                }, 500);
+                
+                showSubmitFeedback("❌ Has alcanzado el límite de 3 votos por dispositivo/día", "warning");
+                return true;
+            }
+            return false;
+        }
+
+        // ========== CONTADOR REAL DE CONEXIONES ==========
+        function setupConnectionCounter() {
+            const counterRef = db.collection('stats').doc('connections');
+            
+            const sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('mobydick_session_id', sessionId);
+            
+            counterRef.update({
+                count: firebase.firestore.FieldValue.increment(1),
+                lastConnection: new Date().toISOString(),
+                sessions: firebase.firestore.FieldValue.arrayUnion(sessionId)
+            })
+            .catch((error) => {
+                if (error.code === 'not-found') {
+                    counterRef.set({
+                        count: 1,
+                        lastConnection: new Date().toISOString(),
+                        totalConnections: 1,
+                        sessions: [sessionId],
+                        created: new Date().toISOString()
+                    });
+                }
+            });
+            
+            connectionListener = counterRef.onSnapshot((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    const currentCount = data.count || 0;
+                    
+                    const connectedElement = document.getElementById("connected-count");
+                    if (connectedElement) connectedElement.textContent = `${currentCount} conectados`;
+                }
+            });
+            
+            window.addEventListener('beforeunload', function() {
+                cleanupConnection(sessionId);
+            });
+            
+            window.addEventListener('pagehide', function() {
+                cleanupConnection(sessionId);
+            });
+        }
+        
+        function cleanupConnection(sessionId) {
+            const counterRef = db.collection('stats').doc('connections');
+            
+            counterRef.update({
+                count: firebase.firestore.FieldValue.increment(-1),
+                sessions: firebase.firestore.FieldValue.arrayRemove(sessionId),
+                lastDisconnect: new Date().toISOString()
+            }).catch((error) => {
+                console.log("✅ Sesión cerrada");
+            });
+            
+            if (connectionListener) {
+                connectionListener();
+            }
+        }
+
+        // ========== FUNCIONES DE CANCIONES ==========
+        function loadSongs() {
+            db.collection("songs").orderBy("title").get()
+                .then((snapshot) => {
+                    allSongs = [];
+                    snapshot.forEach((doc) => {
+                        const data = doc.data();
+                        allSongs.push({
+                            id: doc.id,
+                            title: data.title || "Sin título",
+                            artist: data.artist || "Desconocido",
+                            genre: data.genre || "Rock",
+                            votes: data.votes || 0,
+                            duration: data.duration || "",
+                            year: data.year || ""
+                        });
+                    });
+                    
+                    console.log(`✅ ${allSongs.length} canciones cargadas`);
+                    
+                    if (allSongs.length === 0) {
+                        showError("No hay canciones en el repertorio aún.");
+                    }
+                    
+                })
+                .catch((error) => {
+                    console.error("❌ Error cargando canciones:", error);
+                    showError("Error cargando canciones. Intenta recargar.");
+                });
+        }
+
+        function setupSmartListener() {
+            db.collection("songs").onSnapshot((snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === "modified") {
+                        const updatedSong = {
+                            id: change.doc.id,
+                            ...change.doc.data()
+                        };
+                        
+                        updateSingleSong(updatedSong);
+                    }
+                });
+            });
+        }
+
+        function updateSingleSong(song) {
+            const index = allSongs.findIndex(s => s.id === song.id);
+            if (index !== -1) {
+                allSongs[index] = song;
+                
+                const modal = document.getElementById('repertoire-modal');
+                if (modal.classList.contains('active')) {
+                    displaySongsInModal(allSongs);
+                }
+            }
+        }
+
         // ========== EVENT LISTENERS ==========
         function setupEventListeners() {
-            // Buscador principal
             const searchInput = document.getElementById("search");
             if (searchInput) {
                 let searchTimeout;
@@ -1653,7 +1631,6 @@
                     searchTimeout = setTimeout(() => {
                         const term = e.target.value.toLowerCase().trim();
                         
-                        // Si hay término, abrir modal y buscar
                         if (term) {
                             openRepertoireModal();
                             document.getElementById('modal-search').value = term;
