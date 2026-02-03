@@ -1290,6 +1290,33 @@
             color: white !important;
             border: 2px solid #cc0044 !important;
         }
+		/* ?? ICONOS PARA TOP 10 */
+.text-bronze {
+    color: #cd7f32 !important; /* Color bronce */
+}
+
+.top-song-rank i {
+    font-size: 1.5rem;
+    display: inline-block;
+}
+
+/* Medalla oro */
+.bi-trophy-fill.text-warning {
+    color: #FFD700 !important;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
+/* Medalla plata */
+.bi-award-fill.text-secondary {
+    color: #C0C0C0 !important;
+    text-shadow: 0 0 6px rgba(192, 192, 192, 0.5);
+}
+
+/* Medalla bronce */
+.bi-award.text-bronze {
+    color: #cd7f32 !important;
+    text-shadow: 0 0 6px rgba(205, 127, 50, 0.4);
+}
     </style>
 </head>
 <body>
@@ -2403,7 +2430,10 @@
             
             let html = '';
             top10.forEach((song, index) => {
-                const medal = index === 0 ? '??' : index === 1 ? '??' : index === 2 ? '??' : `${index + 1}`;
+                const medal = index === 0 ? '<i class="bi bi-trophy-fill text-warning"></i>' : 
+             index === 1 ? '<i class="bi bi-award-fill text-secondary"></i>' : 
+             index === 2 ? '<i class="bi bi-award text-bronze"></i>' : 
+             `${index + 1}`;
                 
                 html += `
                     <div class="top-song-item">
