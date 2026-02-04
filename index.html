@@ -21,34 +21,54 @@
             --text-muted: #888;
         }
         
+        /* ========== FULLSCREEN MODE ========== */
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        
         body { 
             background: var(--bg-dark);
             color: var(--text-light);
-            min-height: 100vh;
+            min-height: 100vh; /* Ocupa toda la altura */
+            width: 100vw; /* Ocupa todo el ancho */
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            padding-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
         }
         
-        /* ========== HEADER MÁS GRANDE ========== */
+        /* ========== CONTAINER PRINCIPAL FULLSCREEN ========== */
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 900px; /* Un poco más ancho */
+            margin: 0 auto;
+            padding: 1.5rem 0.5rem 1rem;
+        }
+        
+        /* ========== HEADER MÁS GRANDE (FULLSCREEN) ========== */
         .header-container {
             width: 100%;
-            margin: 0 auto 1.8rem auto; /* Más margen abajo */
-            max-width: 850px; /* Más ancho */
+            margin: 0 auto 2rem auto;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.7);
+            flex-shrink: 0;
         }
         
         .header-image {
             width: 100%;
             height: auto;
             display: block;
-            object-fit: contain;
-            filter: blur(8px);
+            object-fit: cover;
+            filter: blur(10px);
             opacity: 0;
-            transform: scale(1.01);
-            transition: filter 0.3s ease-out, opacity 0.3s ease-out, transform 0.3s ease-out;
-            max-height: 220px; /* AÚN MÁS GRANDE (antes 200px) */
+            transform: scale(1.02);
+            transition: filter 0.6s ease-out, opacity 0.6s ease-out, transform 0.6s ease-out;
+            max-height: 230px; /* AÚN MÁS GRANDE */
         }
         
         .header-image.loaded {
@@ -57,28 +77,22 @@
             transform: scale(1);
         }
         
-        /* ========== CONTENEDOR UNIFICADO ========== */
-        .main-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 0.5rem;
-        }
-        
-        /* Panel único para todos los botones */
+        /* ========== CONTENEDOR UNIFICADO FULLSCREEN ========== */
         .buttons-panel {
             background: var(--bg-panel);
-            border-radius: 18px;
-            padding: 1.5rem;
-            border: 2px solid #333;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            border-radius: 20px; /* Bordes más redondeados */
+            padding: 2rem; /* Más padding */
+            border: 2px solid #2a2a2a;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             display: flex;
             flex-direction: column;
-            gap: 0.9rem; /* Espacio uniforme entre botones */
+            gap: 1rem; /* Más espacio entre botones */
+            flex: 1;
         }
         
         .buttons-panel:hover {
             border-color: var(--pub-blue);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
         }
         
         /* ========== BOTONES UNIFORMES DENTRO DEL PANEL ========== */
@@ -86,24 +100,24 @@
             background: linear-gradient(145deg, var(--pub-blue), #083354);
             color: white;
             border: none;
-            padding: 0.95rem 1rem; /* Un poco más de padding vertical */
+            padding: 1rem 1.2rem; /* Más padding */
             font-weight: bold;
-            border-radius: 12px;
+            border-radius: 14px; /* Más redondeado */
             width: 100%;
-            font-size: 1.05rem; /* Un poco más grande */
+            font-size: 1.1rem; /* Más grande */
             transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.6rem;
-            box-shadow: 0 4px 12px rgba(10, 64, 98, 0.3);
+            gap: 0.7rem;
+            box-shadow: 0 5px 15px rgba(10, 64, 98, 0.4);
             border: 2px solid transparent;
             cursor: pointer;
         }
         
         .action-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 18px rgba(10, 64, 98, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(10, 64, 98, 0.5);
             border-color: var(--pub-blue);
         }
         
@@ -141,15 +155,57 @@
             background: linear-gradient(145deg, var(--pub-blue), #083354) !important;
         }
         
-        /* ========== MODALES FLOTANTES ========== */
+        /* ========== LOADING SCREEN (FULLSCREEN) ========== */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--bg-darker);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+        }
+        
+        #loading-screen.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--pub-blue);
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            color: var(--pub-yellow);
+            font-size: 1.2rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        
+        /* ========== MODALES FLOTANTES (FULLSCREEN ADAPTED) ========== */
         .modal-overlay {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.95);
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.98);
             z-index: 9999;
             overflow-y: auto;
             padding: 20px;
@@ -168,11 +224,11 @@
         .modal-content {
             background: var(--bg-panel);
             border-radius: 20px;
-            padding: 20px;
+            padding: 25px;
             max-width: 500px;
             margin: 20px auto;
             border: 3px solid var(--pub-blue);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.8);
             max-height: 85vh;
             display: flex;
             flex-direction: column;
@@ -221,7 +277,7 @@
         
         .form-control {
             width: 100%;
-            padding: 0.8rem;
+            padding: 0.9rem;
             border-radius: 10px;
             border: 2px solid #444;
             background: #222;
@@ -267,9 +323,9 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.95);
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.98);
             z-index: 9999;
             overflow-y: auto;
             padding: 20px;
@@ -283,11 +339,11 @@
         .repertoire-modal-content {
             background: var(--bg-panel);
             border-radius: 20px;
-            padding: 20px;
-            max-width: 800px;
+            padding: 25px;
+            max-width: 850px;
             margin: 20px auto;
             border: 3px solid var(--pub-blue);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.8);
             max-height: 85vh;
             display: flex;
             flex-direction: column;
@@ -475,11 +531,11 @@
             background: linear-gradient(145deg, #28a745, #20c997);
             color: white;
             border: none;
-            padding: 0.9rem 1rem; /* COMPACTO ORIGINAL */
+            padding: 1rem 1.2rem;
             font-weight: bold;
             border-radius: 12px;
             width: 100%;
-            font-size: 1rem; /* COMPACTO ORIGINAL */
+            font-size: 1.1rem;
             transition: all 0.3s;
             display: flex;
             align-items: center;
@@ -504,18 +560,17 @@
             border-color: #555;
         }
         
-        /* Footer */
+        /* Footer (FULLSCREEN BOTTOM) */
         .footer {
             background: linear-gradient(90deg, var(--pub-blue), var(--pub-red));
             color: white;
-            padding: 0.8rem;
+            padding: 1rem;
             border-radius: 10px;
-            margin-top: 1.8rem;
+            margin-top: 2rem;
             text-align: center;
             border-top: 3px solid var(--pub-yellow);
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
+            width: 100%;
+            flex-shrink: 0;
         }
         
         /* Scrollbar personalizado */
@@ -543,29 +598,30 @@
             margin-top: 0.5rem;
         }
         
-        /* Responsive */
+        /* Responsive (FULLSCREEN ADAPTED) */
         @media (max-width: 768px) {
-            .main-container {
-                padding: 0 0.3rem;
+            .main-wrapper {
+                padding: 1rem 0.3rem 0.5rem;
+                max-width: 95%;
             }
             
             .buttons-panel {
-                padding: 1.2rem;
-                gap: 0.8rem;
+                padding: 1.5rem;
+                gap: 0.9rem;
                 border-radius: 15px;
             }
             
             .header-image {
-                max-height: 200px; /* Ajustado para móvil */
+                max-height: 200px;
             }
             
             .action-btn {
-                padding: 0.85rem;
-                font-size: 1rem;
+                padding: 0.9rem 1rem;
+                font-size: 1.05rem;
             }
             
             .modal-content, .repertoire-modal-content {
-                padding: 15px;
+                padding: 20px;
                 margin: 10px;
             }
             
@@ -576,76 +632,107 @@
         
         @media (max-width: 480px) {
             .header-image {
-                max-height: 170px; /* Ajustado para móvil pequeño */
+                max-height: 180px;
             }
             
             .buttons-panel {
-                padding: 1rem;
-                gap: 0.7rem;
+                padding: 1.2rem;
+                gap: 0.8rem;
                 border-radius: 12px;
             }
             
             .action-btn {
-                padding: 0.8rem;
-                font-size: 0.95rem;
+                padding: 0.85rem;
+                font-size: 1rem;
             }
             
             .modal-title, .repertoire-modal-title {
                 font-size: 1.2rem;
             }
+            
+            .footer {
+                padding: 0.8rem;
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* Pantallas muy grandes */
+        @media (min-width: 1200px) {
+            .main-wrapper {
+                max-width: 950px;
+                padding: 2rem 0.5rem 1.5rem;
+            }
+            
+            .header-image {
+                max-height: 250px;
+            }
+            
+            .buttons-panel {
+                padding: 2.5rem;
+                gap: 1.2rem;
+            }
+            
+            .action-btn {
+                padding: 1.2rem 1.5rem;
+                font-size: 1.15rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- ========== HEADER MÁS GRANDE ========== -->
-    <div class="container py-3">
+    <!-- ========== LOADING SCREEN (FULLSCREEN) ========== -->
+    <div id="loading-screen">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">MOBY DICK</div>
+    </div>
+
+    <!-- ========== CONTENIDO PRINCIPAL (FULLSCREEN) ========== -->
+    <div class="main-wrapper">
+        <!-- HEADER MÁS GRANDE -->
         <div class="header-container">
             <img src="images/header.webp" alt="MobyDick @ Porter British Pub" class="header-image" 
                  fetchpriority="high" decoding="async" onload="this.classList.add('loaded')">
         </div>
         
-        <!-- ========== CONTENEDOR UNIFICADO ========== -->
-        <div class="main-container">
-            <!-- PANEL ÚNICO CON TODOS LOS BOTONES -->
-            <div class="buttons-panel">
-                <!-- 1. BOTÓN VER REPERTORIO COMPLETO -->
-                <button class="action-btn repertoire-btn" onclick="openRepertoireModal()">
-                    <i class="bi bi-music-note-list"></i> VER REPERTORIO COMPLETO
-                </button>
-                
-                <!-- 2. BOTÓN MENSAJE A LA BANDA -->
-                <button class="action-btn message-btn" onclick="openMessageModal()">
-                    <i class="bi bi-chat-text"></i> MENSAJE PARA LA BANDA
-                </button>
-                
-                <!-- 3. BOTÓN COMPARTIR ENLACE -->
-                <button class="action-btn share-btn" onclick="shareLink()">
-                    <i class="bi bi-share-fill"></i> COMPARTIR ENLACE CON AMIGOS
-                </button>
-                
-                <!-- 4. BOTÓN SUGERIR CANCIONES -->
-                <button class="action-btn suggestion-btn" onclick="openSuggestionModal()">
-                    <i class="bi bi-lightbulb"></i> SUGERIR CANCIONES NUEVAS
-                </button>
-            </div>
+        <!-- PANEL ÚNICO CON TODOS LOS BOTONES -->
+        <div class="buttons-panel">
+            <!-- 1. BOTÓN VER REPERTORIO COMPLETO -->
+            <button class="action-btn repertoire-btn" onclick="openRepertoireModal()">
+                <i class="bi bi-music-note-list"></i> VER REPERTORIO COMPLETO
+            </button>
             
-            <!-- ÁREA DE FEEDBACK (COMPARTIDA PARA TODOS LOS BOTONES) -->
-            <div id="main-feedback" class="feedback-container mt-2"></div>
+            <!-- 2. BOTÓN MENSAJE A LA BANDA -->
+            <button class="action-btn message-btn" onclick="openMessageModal()">
+                <i class="bi bi-chat-text"></i> MENSAJE PARA LA BANDA
+            </button>
             
-            <!-- Footer -->
-            <div class="footer">
-                <div class="row align-items-center">
-                    <div class="col-md-6">
-                        <small>
-                            © 2026 MobyDick • Porter British Pub • Ventura Puente
-                        </small>
-                    </div>
-                    <div class="col-md-6 text-end">
-                        <small>
-                            <i class="bi bi-people"></i> 
-                            <span id="connected-count" class="text-warning fw-bold">0 conectados</span>
-                        </small>
-                    </div>
+            <!-- 3. BOTÓN COMPARTIR ENLACE -->
+            <button class="action-btn share-btn" onclick="shareLink()">
+                <i class="bi bi-share-fill"></i> COMPARTIR ENLACE CON AMIGOS
+            </button>
+            
+            <!-- 4. BOTÓN SUGERIR CANCIONES -->
+            <button class="action-btn suggestion-btn" onclick="openSuggestionModal()">
+                <i class="bi bi-lightbulb"></i> SUGERIR CANCIONES NUEVAS
+            </button>
+        </div>
+        
+        <!-- ÁREA DE FEEDBACK (COMPARTIDA PARA TODOS LOS BOTONES) -->
+        <div id="main-feedback" class="feedback-container mt-2"></div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <small>
+                        © 2026 MobyDick • Porter British Pub • Ventura Puente
+                    </small>
+                </div>
+                <div class="col-md-6 text-end">
+                    <small>
+                        <i class="bi bi-people"></i> 
+                        <span id="connected-count" class="text-warning fw-bold">0 conectados</span>
+                    </small>
                 </div>
             </div>
         </div>
@@ -783,9 +870,20 @@
         let connectionListener = null;
         let deviceId = null;
 
-        // ========== INICIALIZAR ==========
+        // ========== INICIALIZAR (FULLSCREEN) ==========
         document.addEventListener('DOMContentLoaded', function() {
-            console.log("🚀 Iniciando aplicación MobyDick...");
+            console.log("🚀 Iniciando aplicación MobyDick en modo FULLSCREEN...");
+            
+            // Ocultar loading screen después de 1.5 segundos (o cuando cargue todo)
+            setTimeout(() => {
+                const loadingScreen = document.getElementById('loading-screen');
+                if (loadingScreen) {
+                    loadingScreen.classList.add('fade-out');
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                    }, 500);
+                }
+            }, 1500);
             
             // Generar o recuperar ID de dispositivo
             deviceId = localStorage.getItem('mobydick_device_id');
@@ -837,7 +935,28 @@
             
             // Actualizar contador inicial
             updateSelectedCounter();
+            
+            // Ajustar altura para evitar scroll en móviles
+            adjustHeightForMobile();
+            window.addEventListener('resize', adjustHeightForMobile);
         });
+
+        // ========== AJUSTAR ALTURA PARA MÓVILES ==========
+        function adjustHeightForMobile() {
+            const vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+            
+            // En móviles, asegurar que no haya scroll innecesario
+            if (window.innerWidth <= 768) {
+                const mainWrapper = document.querySelector('.main-wrapper');
+                if (mainWrapper) {
+                    const totalHeight = mainWrapper.scrollHeight;
+                    if (totalHeight < window.innerHeight) {
+                        mainWrapper.style.minHeight = `${window.innerHeight - 50}px`;
+                    }
+                }
+            }
+        }
 
         // ========== FUNCIONES MODALES ==========
         window.openRepertoireModal = function() {
