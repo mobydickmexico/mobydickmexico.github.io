@@ -32,11 +32,11 @@
         /* ========== HEADER MÁS GRANDE ========== */
         .header-container {
             width: 100%;
-            margin: 0 auto 1.5rem auto;
-            max-width: 800px;
-            border-radius: 12px;
+            margin: 0 auto 1.8rem auto; /* Más margen abajo */
+            max-width: 850px; /* Más ancho */
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
         }
         
         .header-image {
@@ -48,7 +48,7 @@
             opacity: 0;
             transform: scale(1.01);
             transition: filter 0.3s ease-out, opacity 0.3s ease-out, transform 0.3s ease-out;
-            max-height: 200px; /* AUMENTADO (antes 150px) */
+            max-height: 220px; /* AÚN MÁS GRANDE (antes 200px) */
         }
         
         .header-image.loaded {
@@ -57,55 +57,53 @@
             transform: scale(1);
         }
         
-        /* ========== CONTENIDO MINIMALISTA ========== */
-        .content-column {
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem; 
+        /* ========== CONTENEDOR UNIFICADO ========== */
+        .main-container {
             max-width: 800px;
             margin: 0 auto;
             padding: 0 0.5rem;
         }
         
-        /* Panel genérico - TEMA OSCURO */
-        .content-panel {
+        /* Panel único para todos los botones */
+        .buttons-panel {
             background: var(--bg-panel);
-            border-radius: 15px;
-            padding: 1.2rem;
+            border-radius: 18px;
+            padding: 1.5rem;
             border: 2px solid #333;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem; /* Espacio uniforme entre botones */
         }
         
-        .content-panel:hover {
+        .buttons-panel:hover {
             border-color: var(--pub-blue);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         
-        /* ========== BOTONES UNIFORMES ========== */
+        /* ========== BOTONES UNIFORMES DENTRO DEL PANEL ========== */
         .action-btn {
             background: linear-gradient(145deg, var(--pub-blue), #083354);
             color: white;
             border: none;
-            padding: 0.9rem 1rem; 
+            padding: 0.95rem 1rem; /* Un poco más de padding vertical */
             font-weight: bold;
             border-radius: 12px;
             width: 100%;
-            font-size: 1rem; 
+            font-size: 1.05rem; /* Un poco más grande */
             transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
-            box-shadow: 0 4px 10px rgba(10, 64, 98, 0.3);
+            gap: 0.6rem;
+            box-shadow: 0 4px 12px rgba(10, 64, 98, 0.3);
             border: 2px solid transparent;
             cursor: pointer;
         }
         
         .action-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(10, 64, 98, 0.4);
+            box-shadow: 0 6px 18px rgba(10, 64, 98, 0.4);
             border-color: var(--pub-blue);
         }
         
@@ -512,7 +510,7 @@
             color: white;
             padding: 0.8rem;
             border-radius: 10px;
-            margin-top: 1.5rem;
+            margin-top: 1.8rem;
             text-align: center;
             border-top: 3px solid var(--pub-yellow);
             max-width: 800px;
@@ -547,22 +545,23 @@
         
         /* Responsive */
         @media (max-width: 768px) {
-            .content-column {
+            .main-container {
                 padding: 0 0.3rem;
-                gap: 0.7rem;
             }
             
-            .content-panel {
-                padding: 1rem;
+            .buttons-panel {
+                padding: 1.2rem;
+                gap: 0.8rem;
+                border-radius: 15px;
             }
             
             .header-image {
-                max-height: 180px; /* Ajustado para móvil */
+                max-height: 200px; /* Ajustado para móvil */
             }
             
             .action-btn {
-                padding: 0.8rem;
-                font-size: 0.95rem;
+                padding: 0.85rem;
+                font-size: 1rem;
             }
             
             .modal-content, .repertoire-modal-content {
@@ -577,20 +576,22 @@
         
         @media (max-width: 480px) {
             .header-image {
-                max-height: 150px; /* Ajustado para móvil pequeño */
+                max-height: 170px; /* Ajustado para móvil pequeño */
+            }
+            
+            .buttons-panel {
+                padding: 1rem;
+                gap: 0.7rem;
+                border-radius: 12px;
             }
             
             .action-btn {
-                padding: 0.75rem;
-                font-size: 0.9rem;
+                padding: 0.8rem;
+                font-size: 0.95rem;
             }
             
             .modal-title, .repertoire-modal-title {
                 font-size: 1.2rem;
-            }
-            
-            .content-column {
-                gap: 0.6rem;
             }
         }
     </style>
@@ -603,39 +604,33 @@
                  fetchpriority="high" decoding="async" onload="this.classList.add('loaded')">
         </div>
         
-        <!-- ========== CONTENIDO MINIMALISTA (SOLO BOTONES) ========== -->
-        <div class="content-column">
-            
-            <!-- 1. BOTÓN VER REPERTORIO COMPLETO -->
-            <div class="content-panel">
+        <!-- ========== CONTENEDOR UNIFICADO ========== -->
+        <div class="main-container">
+            <!-- PANEL ÚNICO CON TODOS LOS BOTONES -->
+            <div class="buttons-panel">
+                <!-- 1. BOTÓN VER REPERTORIO COMPLETO -->
                 <button class="action-btn repertoire-btn" onclick="openRepertoireModal()">
                     <i class="bi bi-music-note-list"></i> VER REPERTORIO COMPLETO
                 </button>
-            </div>
-            
-            <!-- 2. BOTÓN MENSAJE A LA BANDA (AHORA MODAL) -->
-            <div class="content-panel">
+                
+                <!-- 2. BOTÓN MENSAJE A LA BANDA -->
                 <button class="action-btn message-btn" onclick="openMessageModal()">
                     <i class="bi bi-chat-text"></i> MENSAJE PARA LA BANDA
                 </button>
-                <div id="message-feedback" class="feedback-container"></div>
-            </div>
-            
-            <!-- 3. BOTÓN COMPARTIR ENLACE -->
-            <div class="content-panel">
+                
+                <!-- 3. BOTÓN COMPARTIR ENLACE -->
                 <button class="action-btn share-btn" onclick="shareLink()">
                     <i class="bi bi-share-fill"></i> COMPARTIR ENLACE CON AMIGOS
                 </button>
-                <div id="share-feedback" class="feedback-container"></div>
-            </div>
-            
-            <!-- 4. BOTÓN SUGERIR CANCIONES -->
-            <div class="content-panel">
+                
+                <!-- 4. BOTÓN SUGERIR CANCIONES -->
                 <button class="action-btn suggestion-btn" onclick="openSuggestionModal()">
                     <i class="bi bi-lightbulb"></i> SUGERIR CANCIONES NUEVAS
                 </button>
-                <div id="suggestion-feedback" class="feedback-container"></div>
             </div>
+            
+            <!-- ÁREA DE FEEDBACK (COMPARTIDA PARA TODOS LOS BOTONES) -->
+            <div id="main-feedback" class="feedback-container mt-2"></div>
             
             <!-- Footer -->
             <div class="footer">
@@ -958,7 +953,7 @@
                 }
                 
                 if (myVotes.length >= 3) {
-                    showSubmitFeedback("❌ Máximo 3 canciones por persona", "danger");
+                    showMainFeedback("❌ Máximo 3 canciones por persona", "danger");
                     return;
                 }
                 
@@ -994,12 +989,12 @@
                     }
                 }
                 
-                showSubmitFeedback("✅ Canción agregada a tu lista", "success");
+                showMainFeedback("✅ Canción agregada a tu lista", "success");
                 
             })
             .catch((error) => {
                 console.error("Error votando:", error);
-                showSubmitFeedback("❌ Error al agregar canción", "danger");
+                showMainFeedback("❌ Error al agregar canción", "danger");
             });
         }
 
@@ -1030,12 +1025,12 @@
                     }
                 }
                 
-                showSubmitFeedback("🗑️ Canción removida de tu lista", "warning");
+                showMainFeedback("🗑️ Canción removida de tu lista", "warning");
                 
             })
             .catch((error) => {
                 console.error("Error removiendo voto:", error);
-                showSubmitFeedback("❌ Error al remover canción", "danger");
+                showMainFeedback("❌ Error al remover canción", "danger");
             });
         }
 
@@ -1106,7 +1101,7 @@
             updateSelectedCounter();
             updateModalSubmitButton();
             
-            showSubmitFeedback("🎉 ¡Gracias por tus votos! Las canciones fueron enviadas.", "success");
+            showMainFeedback("🎉 ¡Gracias por tus votos! Las canciones fueron enviadas.", "success");
             
             setTimeout(() => {
                 closeRepertoireModal();
@@ -1289,7 +1284,7 @@
                     text: text,
                     url: url
                 })
-                .then(() => showShareFeedback("✅ ¡Enlace compartido!", "success"))
+                .then(() => showMainFeedback("✅ ¡Enlace compartido!", "success"))
                 .catch(err => {
                     if (err.name !== 'AbortError') {
                         copyToClipboard(url);
@@ -1303,7 +1298,7 @@
         function copyToClipboard(text) {
             navigator.clipboard.writeText(text)
                 .then(() => {
-                    showShareFeedback("✅ Enlace copiado al portapapeles", "success");
+                    showMainFeedback("✅ Enlace copiado al portapapeles", "success");
                 })
                 .catch(() => {
                     const textarea = document.createElement('textarea');
@@ -1312,16 +1307,17 @@
                     textarea.select();
                     try {
                         document.execCommand('copy');
-                        showShareFeedback("✅ Enlace copiado", "success");
+                        showMainFeedback("✅ Enlace copiado", "success");
                     } catch (e) {
-                        showShareFeedback("❌ No se pudo copiar el enlace", "danger");
+                        showMainFeedback("❌ No se pudo copiar el enlace", "danger");
                     }
                     document.body.removeChild(textarea);
                 });
         }
 
-        function showShareFeedback(message, type) {
-            const feedback = document.getElementById("share-feedback");
+        // ========== FEEDBACK PRINCIPAL UNIFICADO ==========
+        function showMainFeedback(message, type) {
+            const feedback = document.getElementById("main-feedback");
             if (!feedback) return;
             
             feedback.innerHTML = `
@@ -1405,7 +1401,7 @@
                     });
                 }, 500);
                 
-                showSubmitFeedback("❌ Has alcanzado el límite de 3 votos por dispositivo/día", "warning");
+                showMainFeedback("❌ Has alcanzado el límite de 3 votos por dispositivo/día", "warning");
                 return true;
             }
             return false;
@@ -1534,7 +1530,7 @@
         }
 
         function showError(message) {
-            const container = document.getElementById("submit-feedback");
+            const container = document.getElementById("main-feedback");
             if (container) {
                 container.innerHTML = `
                     <div class="alert alert-danger alert-dismissible fade show py-2" role="alert">
