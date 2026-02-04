@@ -83,11 +83,6 @@
             box-shadow: 0 6px 18px rgba(0,0,0,0.4);
         }
         
-        /* Buscador */
-        .search-panel {
-            border-color: var(--pub-blue);
-        }
-        
         .panel-title {
             font-size: 1.1rem;
             font-weight: 700;
@@ -98,48 +93,6 @@
             gap: 0.5rem;
             padding-bottom: 0.5rem;
             border-bottom: 2px solid #333;
-        }
-        
-        .search-input-group {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-        }
-        
-        .search-input {
-            flex: 1;
-            border: 2px solid #444;
-            border-radius: 10px;
-            padding: 0.8rem 1rem;
-            font-size: 1rem;
-            background: #222;
-            color: var(--text-light);
-            transition: all 0.3s;
-        }
-        
-        .search-input:focus {
-            outline: none;
-            border-color: var(--pub-blue);
-            box-shadow: 0 0 0 3px rgba(10, 64, 98, 0.2);
-            background: #2a2a2a;
-        }
-        
-        .btn-clear-search {
-            background: #555;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 0 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .btn-clear-search:hover {
-            background: var(--pub-red);
-            transform: scale(1.05);
         }
         
         /* ========== BOTONES COMPACTOS ORIGINALES ========== */
@@ -409,6 +362,7 @@
             border-bottom: 2px solid #333;
         }
         
+        /* TÍTULO DEL MODAL CAMBIADO A "ELIGE 3 CANCIONES" */
         .repertoire-modal-title {
             font-size: 1.5rem;
             color: var(--pub-yellow);
@@ -710,28 +664,15 @@
         <!-- ========== CONTENIDO SIMPLIFICADO ========== -->
         <div class="content-column">
             
-            <!-- 1. BUSCAR CANCIONES -->
-            <div class="content-panel search-panel">
-                <div class="panel-title">
-                    <i class="bi bi-search"></i> BUSCAR CANCIONES
-                </div>
-                <div class="search-input-group">
-                    <input type="text" id="search" class="search-input" 
-                           placeholder="Escribe el nombre de la canción o artista...">
-                    <button class="btn-clear-search" onclick="clearSearch()" title="Limpiar búsqueda">
-                        <i class="bi bi-x-lg"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- 2. BOTÓN VER REPERTORIO COMPLETO (MODAL) - AHORA AZUL MÁS OSCURO -->
-            <div class="content-panel repertoire-section">
+            <!-- 1. BOTÓN VER REPERTORIO COMPLETO (MODAL) - AHORA AZUL MÁS OSCURO -->
+            <!-- EL BUSCADOR QUE ESTABA AQUÍ FUE ELIMINADO -->
+            <div class="content-panel">
                 <button class="action-btn repertoire-btn" onclick="openRepertoireModal()">
                     <i class="bi bi-music-note-list"></i> VER REPERTORIO COMPLETO
                 </button>
             </div>
             
-            <!-- 3. MENSAJES A LA BANDA -->
+            <!-- 2. MENSAJES A LA BANDA -->
             <div class="content-panel message-panel">
                 <div class="panel-title">
                     <i class="bi bi-chat-text"></i> MENSAJE A LA BANDA
@@ -751,7 +692,7 @@
                 <div id="message-feedback" class="feedback-container"></div>
             </div>
             
-            <!-- 4. BOTÓN COMPARTIR ENLACE (SOLO BOTÓN) -->
+            <!-- 3. BOTÓN COMPARTIR ENLACE (SOLO BOTÓN) -->
             <div class="content-panel">
                 <button class="action-btn share-btn" onclick="shareLink()">
                     <i class="bi bi-share-fill"></i> COMPARTIR ENLACE CON AMIGOS
@@ -759,7 +700,7 @@
                 <div id="share-feedback" class="feedback-container"></div>
             </div>
             
-            <!-- 5. BOTÓN SUGERIR CANCIONES (ABRE MODAL) -->
+            <!-- 4. BOTÓN SUGERIR CANCIONES (ABRE MODAL) -->
             <div class="content-panel">
                 <button class="action-btn suggestion-btn" onclick="openSuggestionModal()">
                     <i class="bi bi-lightbulb"></i> SUGERIR CANCIONES NUEVAS
@@ -824,6 +765,7 @@
     <div class="repertoire-modal" id="repertoire-modal">
         <div class="repertoire-modal-content">
             <div class="repertoire-modal-header">
+                <!-- TÍTULO CAMBIADO A "ELIGE 3 CANCIONES" -->
                 <div class="repertoire-modal-title">ELIGE 3 CANCIONES</div>
                 <!-- CONTADOR DE CANCIONES SELECCIONADAS -->
                 <div class="selected-counter" id="selected-counter">
@@ -1607,28 +1549,12 @@
 
         // ========== EVENT LISTENERS ==========
         function setupEventListeners() {
-            const searchInput = document.getElementById("search");
-            if (searchInput) {
-                let searchTimeout;
-                
-                searchInput.addEventListener("input", function(e) {
-                    clearTimeout(searchTimeout);
-                    searchTimeout = setTimeout(() => {
-                        const term = e.target.value.toLowerCase().trim();
-                        
-                        if (term) {
-                            openRepertoireModal();
-                            document.getElementById('modal-search').value = term;
-                            searchInModal();
-                        }
-                    }, 500);
-                });
-            }
+            // SE ELIMINÓ EL BUSCADOR DEL INICIO, NO ES NECESARIO CONFIGURARLO
         }
 
-        // Función para limpiar búsqueda
+        // Función para limpiar búsqueda (ya no es necesaria)
         window.clearSearch = function() {
-            document.getElementById("search").value = "";
+            // Esta función ya no es necesaria
         };
 
         function showError(message) {
