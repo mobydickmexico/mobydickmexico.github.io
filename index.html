@@ -74,7 +74,7 @@
             margin: auto;
         }
         
-        /* ========== HEADER MÁS GRANDE ========== */
+        /* ========== HEADER ========== */
         .header-container {
             width: 100%;
             max-width: 800px;
@@ -89,7 +89,7 @@
             height: auto;
             display: block;
             object-fit: contain;
-            max-height: 220px; /* AUMENTADO (antes 200px) */
+            max-height: 220px;
             filter: blur(8px);
             opacity: 0;
             transform: scale(1.02);
@@ -116,7 +116,7 @@
             max-width: 800px;
         }
         
-        /* ========== BOTONES UNIFORMES ========== */
+        /* ========== BOTONES PRINCIPALES (CON EFECTO HOVER UNIFORME) ========== */
         .action-btn {
             background: linear-gradient(145deg, var(--pub-blue), #083354);
             color: white;
@@ -137,43 +137,67 @@
             min-height: 56px;
         }
         
-        .action-btn:hover {
+        /* EFECTO HOVER/TAP UNIFORME PARA TODOS LOS BOTONES */
+        .action-btn:hover,
+        .action-btn:active {
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(10, 64, 98, 0.5);
             border-color: var(--pub-blue);
         }
         
-        .action-btn.share-btn {
-            background: linear-gradient(145deg, var(--pub-red), #a80d14);
+        /* BOTÓN SOLICITA TUS CANCIONES (NUEVO COLOR - ROJO) */
+        .action-btn.request-btn {
+            background: linear-gradient(145deg, var(--pub-red), #a80d14) !important;
         }
         
-        .action-btn.share-btn:hover {
+        .action-btn.request-btn:hover,
+        .action-btn.request-btn:active {
             border-color: var(--pub-red);
+            box-shadow: 0 8px 20px rgba(194, 11, 23, 0.5);
         }
         
+        /* BOTÓN COMPARTIR ENLACE (MÁS CORTO) */
+        .action-btn.share-btn {
+            background: linear-gradient(145deg, var(--pub-blue), #083354);
+        }
+        
+        .action-btn.share-btn:hover,
+        .action-btn.share-btn:active {
+            border-color: var(--pub-blue);
+        }
+        
+        /* BOTÓN SUGERIR CANCIONES */
         .action-btn.suggestion-btn {
             background: linear-gradient(145deg, #28a745, #1e7e34);
         }
         
-        .action-btn.suggestion-btn:hover {
+        .action-btn.suggestion-btn:hover,
+        .action-btn.suggestion-btn:active {
             border-color: #28a745;
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.5);
         }
         
+        /* BOTÓN MENSAJE A LA BANDA */
         .action-btn.message-btn {
             background: linear-gradient(145deg, #17a2b8, #138496);
         }
         
-        .action-btn.message-btn:hover {
+        .action-btn.message-btn:hover,
+        .action-btn.message-btn:active {
             border-color: #17a2b8;
+            box-shadow: 0 8px 20px rgba(23, 162, 184, 0.5);
         }
         
-        .action-btn.repertoire-btn {
-            background: linear-gradient(145deg, var(--pub-blue-dark), #061e30) !important;
+        /* ========== BOTONES SECUNDARIOS (CERRAR/CANCELAR EN ROJO) ========== */
+        .action-btn.cancel-btn {
+            background: linear-gradient(145deg, var(--pub-red), #a80d14) !important;
+            margin-top: 10px;
         }
         
-        .action-btn.repertoire-btn:hover {
-            background: linear-gradient(145deg, var(--pub-blue), #083354) !important;
-            border-color: var(--pub-blue);
+        .action-btn.cancel-btn:hover,
+        .action-btn.cancel-btn:active {
+            border-color: var(--pub-red);
+            box-shadow: 0 8px 20px rgba(194, 11, 23, 0.5);
         }
         
         /* ========== LOADING SCREEN ========== */
@@ -240,7 +264,7 @@
             max-width: 800px;
         }
         
-        /* ========== MODALES CON TÍTULOS AJUSTADOS ========== */
+        /* ========== MODALES ========== */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -251,7 +275,7 @@
             background-color: rgba(0, 0, 0, 0.98);
             z-index: 9999;
             overflow-y: auto;
-            padding: 15px; /* REDUCIDO */
+            padding: 15px;
         }
         
         .modal-overlay.active {
@@ -269,10 +293,10 @@
             border-radius: 20px;
             padding: 20px;
             max-width: 500px;
-            margin: 10px auto; /* REDUCIDO */
+            margin: 10px auto;
             border: 3px solid var(--pub-blue);
             box-shadow: 0 15px 50px rgba(0,0,0,0.8);
-            max-height: 90vh; /* AUMENTADO */
+            max-height: 90vh;
             display: flex;
             flex-direction: column;
         }
@@ -286,9 +310,8 @@
             border-bottom: 2px solid #333;
         }
         
-        /* TÍTULOS DE MODALES MÁS COMPACTOS */
         .modal-title {
-            font-size: 1.3rem; /* REDUCIDO (antes 1.5rem) */
+            font-size: 1.3rem;
             color: var(--pub-yellow);
             font-weight: 700;
             flex: 1;
@@ -365,7 +388,7 @@
             gap: 1rem;
         }
         
-        /* ========== MODAL DE REPERTORIO (AJUSTADO) ========== */
+        /* ========== MODAL DE REPERTORIO ========== */
         .repertoire-modal {
             display: none;
             position: fixed;
@@ -376,7 +399,7 @@
             background-color: rgba(0, 0, 0, 0.98);
             z-index: 9999;
             overflow-y: auto;
-            padding: 15px; /* REDUCIDO */
+            padding: 15px;
         }
         
         .repertoire-modal.active {
@@ -389,10 +412,10 @@
             border-radius: 20px;
             padding: 20px;
             max-width: 800px;
-            margin: 10px auto; /* REDUCIDO */
+            margin: 10px auto;
             border: 3px solid var(--pub-blue);
             box-shadow: 0 15px 50px rgba(0,0,0,0.8);
-            max-height: 90vh; /* AUMENTADO */
+            max-height: 90vh;
             display: flex;
             flex-direction: column;
         }
@@ -406,9 +429,8 @@
             border-bottom: 2px solid #333;
         }
         
-        /* TÍTULO MÁS COMPACTO PARA "ELIGE 3 CANCIONES" */
         .repertoire-modal-title {
-            font-size: 1.3rem; /* REDUCIDO (antes 1.5rem) */
+            font-size: 1.3rem;
             color: var(--pub-yellow);
             font-weight: 700;
             flex: 1;
@@ -431,7 +453,7 @@
             align-items: center;
             gap: 5px;
             border: 2px solid transparent;
-            flex-shrink: 0; /* Evita que se reduzca */
+            flex-shrink: 0;
             margin-left: 10px;
         }
         
@@ -461,7 +483,7 @@
             overflow-y: auto;
             padding-right: 8px;
             margin-bottom: 15px;
-            min-height: 250px; /* REDUCIDO */
+            min-height: 250px;
         }
         
         /* Lista de canciones en modal */
@@ -610,7 +632,7 @@
             border-color: #555;
         }
         
-        /* ========== RESPONSIVE (AJUSTADO) ========== */
+        /* ========== RESPONSIVE ========== */
         @media (max-width: 768px) {
             .app-container {
                 padding: 1rem 0.8rem 0.8rem;
@@ -622,7 +644,7 @@
             }
             
             .header-image {
-                max-height: 180px; /* AJUSTADO para móvil */
+                max-height: 180px;
             }
             
             .buttons-panel {
@@ -642,7 +664,6 @@
                 margin-top: 1.5rem;
             }
             
-            /* MODALES EN MÓVIL */
             .modal-overlay {
                 padding: 10px;
             }
@@ -650,11 +671,11 @@
             .modal-content, .repertoire-modal-content {
                 padding: 15px;
                 margin: 5px auto;
-                max-height: 95vh; /* Más alto en móvil */
+                max-height: 95vh;
             }
             
             .modal-title, .repertoire-modal-title {
-                font-size: 1.2rem; /* Más pequeño en móvil */
+                font-size: 1.2rem;
             }
             
             .selected-counter {
@@ -664,7 +685,7 @@
             }
             
             .repertoire-list-container {
-                min-height: 200px; /* Más bajo en móvil */
+                min-height: 200px;
             }
         }
         
@@ -674,7 +695,7 @@
             }
             
             .header-image {
-                max-height: 160px; /* AJUSTADO para móvil pequeño */
+                max-height: 160px;
             }
             
             .buttons-panel {
@@ -694,9 +715,8 @@
                 font-size: 0.9rem;
             }
             
-            /* MODALES EN MÓVIL PEQUEÑO */
             .modal-title, .repertoire-modal-title {
-                font-size: 1.1rem; /* Aún más pequeño */
+                font-size: 1.1rem;
                 line-height: 1.2;
             }
             
@@ -705,18 +725,8 @@
                 padding: 5px 10px;
                 min-width: 55px;
             }
-            
-            /* Títulos más cortos para móvil */
-            .modal-title:before {
-                content: attr(data-short);
-            }
-            
-            .modal-title span.full-text {
-                display: none;
-            }
         }
         
-        /* Para pantallas muy pequeñas, hacer el header más flexible */
         @media (max-width: 350px) {
             .header-image {
                 max-height: 140px;
@@ -752,26 +762,30 @@
     <!-- ========== APLICACIÓN ========== -->
     <div class="app-container">
         <div class="main-content">
-            <!-- HEADER MÁS GRANDE -->
+            <!-- HEADER -->
             <div class="header-container">
                 <img src="images/header.webp" alt="MobyDick @ Porter British Pub" class="header-image" 
                      fetchpriority="high" decoding="async" onload="this.classList.add('loaded')">
             </div>
             
-            <!-- PANEL DE BOTONES -->
+            <!-- PANEL DE BOTONES (ACTUALIZADOS) -->
             <div class="buttons-panel">
-                <button class="action-btn repertoire-btn" onclick="openRepertoireModal()">
-                    <i class="bi bi-music-note-list"></i> VER REPERTORIO COMPLETO
+                <!-- 1. SOLICITA TUS CANCIONES (ROJO, NUEVO NOMBRE) -->
+                <button class="action-btn request-btn" onclick="openRepertoireModal()">
+                    <i class="bi bi-music-note-list"></i> SOLICITA TUS CANCIONES
                 </button>
                 
+                <!-- 2. MENSAJE PARA LA BANDA -->
                 <button class="action-btn message-btn" onclick="openMessageModal()">
                     <i class="bi bi-chat-text"></i> MENSAJE PARA LA BANDA
                 </button>
                 
+                <!-- 3. COMPARTIR ENLACE (MÁS CORTO) -->
                 <button class="action-btn share-btn" onclick="shareLink()">
-                    <i class="bi bi-share-fill"></i> COMPARTIR ENLACE CON AMIGOS
+                    <i class="bi bi-share-fill"></i> COMPARTIR ENLACE
                 </button>
                 
+                <!-- 4. SUGERIR CANCIONES NUEVAS -->
                 <button class="action-btn suggestion-btn" onclick="openSuggestionModal()">
                     <i class="bi bi-lightbulb"></i> SUGERIR CANCIONES NUEVAS
                 </button>
@@ -799,7 +813,7 @@
         </div>
     </div>
 
-    <!-- ========== MODALES CON TÍTULOS AJUSTADOS ========== -->
+    <!-- ========== MODALES ========== -->
     <div class="modal-overlay modal-message" id="message-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -824,7 +838,8 @@
                 </button>
             </form>
             
-            <button class="action-btn" onclick="closeMessageModal()" style="margin-top: 10px;">
+            <!-- BOTÓN CANCELAR (ROJO) -->
+            <button class="action-btn cancel-btn" onclick="closeMessageModal()">
                 <i class="bi bi-x-circle"></i> CANCELAR
             </button>
             
@@ -858,7 +873,8 @@
                 </button>
             </form>
             
-            <button class="action-btn" onclick="closeSuggestionModal()" style="margin-top: 10px;">
+            <!-- BOTÓN CANCELAR (ROJO) -->
+            <button class="action-btn cancel-btn" onclick="closeSuggestionModal()">
                 <i class="bi bi-x-circle"></i> CANCELAR
             </button>
             
@@ -899,7 +915,8 @@
                 <i class="bi bi-send-check"></i> ENVIAR MIS <span id="selected-count-btn">0</span> CANCIONES
             </button>
             
-            <button class="action-btn" onclick="closeRepertoireModal()" style="width: 100%; margin-top: 10px;">
+            <!-- BOTÓN CERRAR (ROJO) -->
+            <button class="action-btn cancel-btn" onclick="closeRepertoireModal()" style="width: 100%; margin-top: 10px;">
                 <i class="bi bi-check-circle"></i> CERRAR
             </button>
             
