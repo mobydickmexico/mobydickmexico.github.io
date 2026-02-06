@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     
     <style>
+	
         /* ========== RESET FULLSCREEN ========== */
         * {
             margin: 0;
@@ -750,6 +751,23 @@
             background: var(--pub-blue);
             border-radius: 4px;
         }
+		/* ========== SOLUCIÓN: COLOR DEL TEXTO EN TEXTAREA E INPUTS ========== */
+.form-control {
+    color: var(--text-light) !important; /* Blanco/color claro */
+}
+
+/* Color del placeholder */
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.6) !important;
+    opacity: 1;
+}
+
+/* Para asegurar que el texto escrito sea visible */
+#modal-user-message,
+#suggestion-title,
+#suggestion-artist {
+    color: white !important;
+}
     </style>
 </head>
 <body>
@@ -981,12 +999,11 @@
             }
             
             // Contador de caracteres para mensaje en modal
-            const modalMessageInput = document.getElementById('modal-user-message');
-            if (modalMessageInput) {
-                modalMessageInput.addEventListener('input', function() {
-                    updateModalCharCounter();
-                });
-            }
+            // Actualizar contador de caracteres
+    const modalMessageInput = document.getElementById('modal-user-message');
+    if (modalMessageInput) {
+        modalMessageInput.addEventListener('input', updateModalCharCounter);
+    }
             
             // Formulario de sugerencias
             const suggestionForm = document.getElementById('suggestion-form');
@@ -1375,24 +1392,25 @@
             });
         };
 
-        function updateModalCharCounter() {
-            const messageInput = document.getElementById('modal-user-message');
-            const counter = document.getElementById('modal-char-counter');
-            
-            if (!messageInput || !counter) return;
-            
-            const message = messageInput.value;
-            const length = message.length;
-            const maxLength = 120;
-            
-            counter.textContent = `${length}/${maxLength} caracteres`;
-            
-            if (length > maxLength * 0.9) {
-                counter.classList.add('warning');
-            } else {
-                counter.classList.remove('warning');
-            }
-        }
+        // ========== ACTUALIZAR CONTADOR DE CARACTERES ==========
+function updateModalCharCounter() {
+    const messageInput = document.getElementById('modal-user-message');
+    const counter = document.getElementById('modal-char-counter');
+    
+    if (!messageInput || !counter) return;
+    
+    const message = messageInput.value;
+    const length = message.length;
+    const maxLength = 120;
+    
+    counter.textContent = `${length}/${maxLength} caracteres`;
+    
+    if (length > maxLength * 0.9) {
+        counter.classList.add('warning');
+    } else {
+        counter.classList.remove('warning');
+    }
+}
 
         function showMessageModalFeedback(message, type) {
             const feedback = document.getElementById("message-modal-feedback");
