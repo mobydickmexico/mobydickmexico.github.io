@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     
     <style>
-	
         /* ========== RESET FULLSCREEN ========== */
         * {
             margin: 0;
@@ -751,23 +750,24 @@
             background: var(--pub-blue);
             border-radius: 4px;
         }
-		/* ========== SOLUCIÓN: COLOR DEL TEXTO EN TEXTAREA E INPUTS ========== */
-.form-control {
-    color: var(--text-light) !important; /* Blanco/color claro */
-}
+        
+        /* ========== SOLUCIÓN: COLOR DEL TEXTO EN TEXTAREA E INPUTS ========== */
+        .form-control {
+            color: var(--text-light) !important; /* Blanco/color claro */
+        }
 
-/* Color del placeholder */
-.form-control::placeholder {
-    color: rgba(255, 255, 255, 0.6) !important;
-    opacity: 1;
-}
+        /* Color del placeholder */
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.6) !important;
+            opacity: 1;
+        }
 
-/* Para asegurar que el texto escrito sea visible */
-#modal-user-message,
-#suggestion-title,
-#suggestion-artist {
-    color: white !important;
-}
+        /* Para asegurar que el texto escrito sea visible */
+        #modal-user-message,
+        #suggestion-title,
+        #suggestion-artist {
+            color: white !important;
+        }
     </style>
 </head>
 <body>
@@ -963,6 +963,7 @@
         let db = null;
         let connectionListener = null;
         let deviceId = null;
+        let songsListener = null; // Para escuchar cambios en tiempo real
 
         // ========== INICIALIZAR ==========
         document.addEventListener('DOMContentLoaded', function() {
@@ -999,11 +1000,12 @@
             }
             
             // Contador de caracteres para mensaje en modal
-            // Actualizar contador de caracteres
-    const modalMessageInput = document.getElementById('modal-user-message');
-    if (modalMessageInput) {
-        modalMessageInput.addEventListener('input', updateModalCharCounter);
-    }
+            const modalMessageInput = document.getElementById('modal-user-message');
+            if (modalMessageInput) {
+                modalMessageInput.addEventListener('input', function() {
+                    updateModalCharCounter();
+                });
+            }
             
             // Formulario de sugerencias
             const suggestionForm = document.getElementById('suggestion-form');
@@ -1183,6 +1185,14 @@
 
         function addVote(songId) {
             const songRef = db.collection("songs").doc(songId);
+            
+            // Deshabilitar botón temporalmente para evitar doble clic
+            const voteBtn = document.querySelector(`.song-item[data-song-id="${songId}"] .btn-vote`);
+            if (voteBtn) {
+                voteBtn.disabled = true;
+                voteBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+            }
+            
             songRef.update({
                 votes: firebase.firestore.FieldValue.increment(1),
                 lastVoted: new Date().toISOString()
@@ -1194,32 +1204,41 @@
                 updateSelectedCounter();
                 updateModalSubmitButton();
                 
+                // NO actualizamos el contador de votos aquí - lo hará el listener
                 const songElement = document.querySelector(`.song-item[data-song-id="${songId}"]`);
                 if (songElement) {
                     const voteBtn = songElement.querySelector('.btn-vote');
                     if (voteBtn) {
                         voteBtn.classList.add('selected');
                         voteBtn.innerHTML = '<i class="bi bi-check-circle"></i> ELEJIDA';
-                    }
-                    
-                    const votesBadge = songElement.querySelector('.votes-badge');
-                    if (votesBadge) {
-                        const currentVotes = parseInt(votesBadge.textContent.split(' ')[0]);
-                        votesBadge.textContent = `${currentVotes + 1} ${currentVotes === 0 ? 'voto' : 'votos'}`;
+                        voteBtn.disabled = false;
                     }
                 }
                 
                 showMainFeedback("✅ Canción agregada a tu lista", "success");
-                
             })
             .catch((error) => {
                 console.error("Error votando:", error);
                 showMainFeedback("❌ Error al agregar canción", "danger");
+                
+                // Rehabilitar botón si hay error
+                if (voteBtn) {
+                    voteBtn.disabled = false;
+                    voteBtn.innerHTML = '<i class="bi bi-hand-thumbs-up"></i> ELEGIR';
+                }
             });
         }
 
         function removeVote(songId) {
             const songRef = db.collection("songs").doc(songId);
+            
+            // Deshabilitar botón temporalmente
+            const voteBtn = document.querySelector(`.song-item[data-song-id="${songId}"] .btn-vote`);
+            if (voteBtn) {
+                voteBtn.disabled = true;
+                voteBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+            }
+            
             songRef.update({
                 votes: firebase.firestore.FieldValue.increment(-1)
             })
@@ -1230,27 +1249,28 @@
                 updateSelectedCounter();
                 updateModalSubmitButton();
                 
+                // NO actualizamos el contador de votos aquí - lo hará el listener
                 const songElement = document.querySelector(`.song-item[data-song-id="${songId}"]`);
                 if (songElement) {
                     const voteBtn = songElement.querySelector('.btn-vote');
                     if (voteBtn) {
                         voteBtn.classList.remove('selected');
                         voteBtn.innerHTML = '<i class="bi bi-hand-thumbs-up"></i> ELEGIR';
-                    }
-                    
-                    const votesBadge = songElement.querySelector('.votes-badge');
-                    if (votesBadge) {
-                        const currentVotes = parseInt(votesBadge.textContent.split(' ')[0]);
-                        votesBadge.textContent = `${currentVotes - 1} ${currentVotes - 1 === 1 ? 'voto' : 'votos'}`;
+                        voteBtn.disabled = false;
                     }
                 }
                 
                 showMainFeedback("🗑️ Canción removida de tu lista", "warning");
-                
             })
             .catch((error) => {
                 console.error("Error removiendo voto:", error);
                 showMainFeedback("❌ Error al remover canción", "danger");
+                
+                // Rehabilitar botón si hay error
+                if (voteBtn) {
+                    voteBtn.disabled = false;
+                    voteBtn.innerHTML = '<i class="bi bi-check-circle"></i> ELEJIDA';
+                }
             });
         }
 
@@ -1392,25 +1412,24 @@
             });
         };
 
-        // ========== ACTUALIZAR CONTADOR DE CARACTERES ==========
-function updateModalCharCounter() {
-    const messageInput = document.getElementById('modal-user-message');
-    const counter = document.getElementById('modal-char-counter');
-    
-    if (!messageInput || !counter) return;
-    
-    const message = messageInput.value;
-    const length = message.length;
-    const maxLength = 120;
-    
-    counter.textContent = `${length}/${maxLength} caracteres`;
-    
-    if (length > maxLength * 0.9) {
-        counter.classList.add('warning');
-    } else {
-        counter.classList.remove('warning');
-    }
-}
+        function updateModalCharCounter() {
+            const messageInput = document.getElementById('modal-user-message');
+            const counter = document.getElementById('modal-char-counter');
+            
+            if (!messageInput || !counter) return;
+            
+            const message = messageInput.value;
+            const length = message.length;
+            const maxLength = 120;
+            
+            counter.textContent = `${length}/${maxLength} caracteres`;
+            
+            if (length > maxLength * 0.9) {
+                counter.classList.add('warning');
+            } else {
+                counter.classList.remove('warning');
+            }
+        }
 
         function showMessageModalFeedback(message, type) {
             const feedback = document.getElementById("message-modal-feedback");
@@ -1591,6 +1610,45 @@ function updateModalCharCounter() {
             }
         }
 
+        // ========== LISTENER EN TIEMPO REAL PARA CANCIONES ==========
+        function setupSmartListener() {
+            // Configurar listener para cambios en tiempo real
+            songsListener = db.collection("songs").onSnapshot((snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === "modified") {
+                        const updatedSong = {
+                            id: change.doc.id,
+                            ...change.doc.data()
+                        };
+                        
+                        // Actualizar en allSongs
+                        const index = allSongs.findIndex(s => s.id === updatedSong.id);
+                        if (index !== -1) {
+                            allSongs[index] = updatedSong;
+                        }
+                        
+                        // Actualizar en la UI si la modal está abierta
+                        const modal = document.getElementById('repertoire-modal');
+                        if (modal.classList.contains('active')) {
+                            updateSongInUI(updatedSong);
+                        }
+                    }
+                });
+            }, (error) => {
+                console.error("Error en listener de canciones:", error);
+            });
+        }
+
+        function updateSongInUI(song) {
+            const songElement = document.querySelector(`.song-item[data-song-id="${song.id}"]`);
+            if (songElement) {
+                const votesBadge = songElement.querySelector('.votes-badge');
+                if (votesBadge) {
+                    votesBadge.textContent = `${song.votes} ${song.votes === 1 ? 'voto' : 'votos'}`;
+                }
+            }
+        }
+
         // ========== VERIFICAR LÍMITE DE VOTOS ==========
         function checkVoteLimit() {
             const today = new Date().toISOString().split('T')[0];
@@ -1715,33 +1773,6 @@ function updateModalCharCounter() {
                     console.error("❌ Error cargando canciones:", error);
                     showError("Error cargando canciones. Intenta recargar.");
                 });
-        }
-
-        function setupSmartListener() {
-            db.collection("songs").onSnapshot((snapshot) => {
-                snapshot.docChanges().forEach((change) => {
-                    if (change.type === "modified") {
-                        const updatedSong = {
-                            id: change.doc.id,
-                            ...change.doc.data()
-                        };
-                        
-                        updateSingleSong(updatedSong);
-                    }
-                });
-            });
-        }
-
-        function updateSingleSong(song) {
-            const index = allSongs.findIndex(s => s.id === song.id);
-            if (index !== -1) {
-                allSongs[index] = song;
-                
-                const modal = document.getElementById('repertoire-modal');
-                if (modal.classList.contains('active')) {
-                    displaySongsInModal(allSongs);
-                }
-            }
         }
 
         // ========== AJUSTAR ALTURA ==========
