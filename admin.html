@@ -386,7 +386,7 @@
         
         /* Icono de arrastre mas visible */
         .playlist-song-item::after {
-            content: '?';
+            content: '=';
             position: absolute;
             right: 12px;
             top: 50%;
@@ -731,7 +731,7 @@
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
         }
         
-        /* ?? ESTILOS PARA MENSAJES LEIDOS - ACTUALIZADOS PARA MOVILES */
+        /* ESTILOS PARA MENSAJES LEIDOS - ACTUALIZADOS PARA MOVILES */
         .message-card.read {
             opacity: 0.6;
             background: linear-gradient(90deg, #2a2a2a, #333) !important;
@@ -802,7 +802,7 @@
             margin-right: 6px;
         }
         
-        /* ?? BOTONES GRANDES PARA MENSAJES - FACIL MANEJO EN ESCENARIO */
+        /* BOTONES GRANDES PARA MENSAJES - FACIL MANEJO EN ESCENARIO */
         .message-actions {
             display: flex;
             gap: 12px;                     /* Más espacio entre botones */
@@ -915,7 +915,7 @@
             justify-content: flex-end;
         }
         
-        /* ?? SUGERENCIAS: SOLO BOTON ELIMINAR */
+        /* SUGERENCIAS: SOLO BOTON ELIMINAR */
         .suggestion-card .suggestion-actions .song-action-btn:first-child {
             display: none !important;
         }
@@ -1135,8 +1135,8 @@
         }
         
         /* ========== RESPONSIVE - MOVILES Y TABLETAS ========== */
-        /* ?? ELIMINE TODOS LOS MEDIA QUERIES PARA ESCRITORIO */
-        /* ?? SOLO MANTENGO LOS AJUSTES PARA MOVILES PEQUENOS */
+        /* ELIMINE TODOS LOS MEDIA QUERIES PARA ESCRITORIO */
+        /* SOLO MANTENGO LOS AJUSTES PARA MOVILES PEQUENOS */
         
         @media (max-width: 576px) {
             .main-content {
@@ -1194,7 +1194,7 @@
                 font-size: 0.9rem;
             }
             
-            /* ?? AJUSTES PARA MOVILES PEQUENOS - MENSAJES */
+            /* AJUSTES PARA MOVILES PEQUENOS - MENSAJES */
             .message-content {
                 font-size: 1rem;
                 line-height: 1.3;
@@ -1245,7 +1245,7 @@
                 font-size: 1.1rem;
             }
             
-            /* ?? AJUSTES ESPECIFICOS PARA TABLETAS */
+            /* AJUSTES ESPECIFICOS PARA TABLETAS */
             .message-action-btn {
                 min-width: 75px !important;
                 padding: 11px 18px !important;
@@ -1258,7 +1258,7 @@
             cursor: move !important;
         }
 
-        /* ?? FIX EXTRA - Asegurar botones grandes en todas las situaciones */
+        /* FIX EXTRA - Asegurar botones grandes en todas las situaciones */
         #messages-section .message-action-btn,
         #messages-container .message-action-btn,
         .message-card .message-action-btn,
@@ -1278,7 +1278,7 @@
             box-shadow: 0 3px 8px rgba(0,0,0,0.4) !important;
         }
 
-        /* Botones específicos */
+        /* Botones espec?icos */
         button[onclick*="markAsRead"] {
             background: linear-gradient(145deg, #28a745, #1e7e34) !important;
             color: white !important;
@@ -1290,37 +1290,45 @@
             color: white !important;
             border: 2px solid #cc0044 !important;
         }
-		/* ?? ICONOS PARA TOP 10 */
-.text-bronze {
-    color: #cd7f32 !important; /* Color bronce */
-}
+        
+        /* ICONOS PARA TOP 10 */
+        .text-bronze {
+            color: #cd7f32 !important; /* Color bronce */
+        }
 
-.top-song-rank i {
-    font-size: 1.5rem;
-    display: inline-block;
-}
+        .top-song-rank i {
+            font-size: 1.5rem;
+            display: inline-block;
+        }
 
-/* Medalla oro */
-.bi-trophy-fill.text-warning {
-    color: #FFD700 !important;
-    text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
-}
+        /* Medalla oro */
+        .bi-trophy-fill.text-warning {
+            color: #FFD700 !important;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+        }
 
-/* Medalla plata */
-.bi-award-fill.text-secondary {
-    color: #C0C0C0 !important;
-    text-shadow: 0 0 6px rgba(192, 192, 192, 0.5);
-}
+        /* Medalla plata */
+        .bi-award-fill.text-secondary {
+            color: #C0C0C0 !important;
+            text-shadow: 0 0 6px rgba(192, 192, 192, 0.5);
+        }
 
-/* Medalla bronce */
-.bi-award.text-bronze {
-    color: #cd7f32 !important;
-    text-shadow: 0 0 6px rgba(205, 127, 50, 0.4);
-}
+        /* Medalla bronce */
+        .bi-award.text-bronze {
+            color: #cd7f32 !important;
+            text-shadow: 0 0 6px rgba(205, 127, 50, 0.4);
+        }
+        
+        /* Indicador de conexiones */
+        .connections-indicator {
+            color: var(--dj-blue);
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
-    <!-- ??? HEADER DINAMICO (SIEMPRE VISIBLE EN MOVIL) -->
+    <!-- HEADER DINAMICO (SIEMPRE VISIBLE EN MOVIL) -->
     <div class="dynamic-header header-home-mode" id="dynamic-header">
         <!-- Modo HOME: muestra todos los botones -->
         <div id="home-mode-header">
@@ -1352,13 +1360,13 @@
 
     <!-- CONTENIDO PRINCIPAL -->
     <main class="main-content">
-        <!-- ?? HOME / DASHBOARD -->
+        <!-- HOME / DASHBOARD -->
         <section id="home-section" class="content-section active">
             <img src="images/LOGO_NEW.png" alt="Logo de MobyDick" class="band-logo">
             <p class="welcome-text">CONSOLA DE CONTROL - LISTOS PARA EL SHOW</p>
         </section>
 
-        <!-- ?? TOP 10 CANCIONES MAS VOTADAS -->
+        <!-- TOP 10 CANCIONES MAS VOTADAS -->
         <section id="top10-section" class="content-section">
             <div class="top10-list" id="top10-list">
                 <!-- Las canciones se cargaran aqui -->
@@ -1367,12 +1375,18 @@
             <!-- BOTON REINICIAR VOTOS EN TOP 10 -->
             <div class="playlist-controls-vertical" style="margin-top: 20px;">
                 <button class="playlist-control-btn playlist-clear-btn" onclick="resetAllVotes()">
-                    <i class="bi bi-arrow-clockwise"></i> REINICIAR TODOS LOS VOTOS
+                    <i class="bi bi-arrow-clockwise"></i> REINICIAR VOTOS Y CONEXIONES
                 </button>
+                
+                <!-- Indicador del conteo actual -->
+                <div class="text-center mt-2" style="color: #aaa; font-size: 0.9rem;">
+                    <i class="bi bi-people"></i> 
+                    <span id="current-connections-count" class="connections-indicator">Cargando...</span> conectados ahora
+                </div>
             </div>
         </section>
 
-        <!-- ?? ESCENARIO (DISENO VERTICAL) -->
+        <!-- ESCENARIO (DISENO VERTICAL) -->
         <section id="stage-section" class="content-section">
             <div class="stage-section-vertical">
                 <!-- CONTENEDOR PRINCIPAL DE PLAYLIST -->
@@ -1436,7 +1450,7 @@
             </div>
         </div>
 
-        <!-- ?? MENSAJES DEL PUBLICO -->
+        <!-- MENSAJES DEL PUBLICO -->
         <section id="messages-section" class="content-section">
             <div class="messages-container" id="messages-container">
                 <!-- Tarjetas de mensajes -->
@@ -1451,7 +1465,7 @@
             </div>
         </section>
 
-        <!-- ?? SUGERENCIAS DEL PUBLICO -->
+        <!-- SUGERENCIAS DEL PUBLICO -->
         <section id="suggestions-section" class="content-section">
             <div class="suggestions-container" id="suggestions-list-container">
                 <!-- Sugerencias del publico -->
@@ -1463,7 +1477,7 @@
             </div>
         </section>
 
-        <!-- ? AGREGAR CANCIONES -->
+        <!-- AGREGAR CANCIONES -->
         <section id="add-section" class="content-section">
             <div class="form-container">
                 <form id="song-form">
@@ -1650,6 +1664,7 @@
             switch(sectionId) {
                 case 'top10':
                     updateTop10List();
+                    loadConnectionCount(); // <-- NUEVO: Cargar contador de conexiones
                     break;
                 case 'stage':
                     loadStageMode();
@@ -1795,7 +1810,7 @@
                     <div class="repertoire-song-item">
                         <div class="repertoire-song-info">
                             <div class="repertoire-song-title">${song.title}</div>
-                            <div class="repertoire-song-artist">${song.artist} ? ${song.genre || 'Rock'}</div>
+                            <div class="repertoire-song-artist">${song.artist} • ${song.genre || 'Rock'}</div>
                         </div>
                         <div class="d-flex align-items-center">
                             <span class="repertoire-song-votes">${song.votes}</span>
@@ -2259,7 +2274,7 @@
                         <div class="suggestion-artist">${suggestion.artist}</div>
                         <div class="d-flex justify-content-between align-items-center mt-2">
                             <small class="text-muted">
-                                <i class="bi bi-clock"></i> ${time} ? 
+                                <i class="bi bi-clock"></i> ${time} • 
                                 <i class="bi bi-person"></i> ${suggestion.deviceId.substring(0, 6)}...
                             </small>
                             <div class="suggestion-actions">
@@ -2431,9 +2446,9 @@
             let html = '';
             top10.forEach((song, index) => {
                 const medal = index === 0 ? '<i class="bi bi-trophy-fill text-warning"></i>' : 
-             index === 1 ? '<i class="bi bi-award-fill text-secondary"></i>' : 
-             index === 2 ? '<i class="bi bi-award text-bronze"></i>' : 
-             `${index + 1}`;
+                            index === 1 ? '<i class="bi bi-award-fill text-secondary"></i>' : 
+                            index === 2 ? '<i class="bi bi-award text-bronze"></i>' : 
+                            `${index + 1}`;
                 
                 html += `
                     <div class="top-song-item">
@@ -2473,7 +2488,7 @@
                     <div class="delete-song-item">
                         <div class="delete-song-info">
                             <div class="delete-song-title">${song.title}</div>
-                            <div class="delete-song-artist">${song.artist} ? ${song.genre || 'Rock'}</div>
+                            <div class="delete-song-artist">${song.artist} • ${song.genre || 'Rock'}</div>
                         </div>
                         <div class="d-flex align-items-center">
                             <span class="delete-song-votes">${song.votes}</span>
@@ -2524,7 +2539,7 @@
                     })
                     .catch((error) => {
                         console.error("Error actualizando cancion:", error);
-                        showNotification("Error al actualizar cancion", "danger");
+                        showNotification("? Error al actualizar cancion", "danger");
                         btn.disabled = false;
                         btn.innerHTML = originalText;
                     });
@@ -2546,7 +2561,7 @@
                     })
                     .catch((error) => {
                         console.error("? Error agregando cancion:", error);
-                        showNotification("Error al agregar cancion", "danger");
+                        showNotification("? Error al agregar cancion", "danger");
                         btn.disabled = false;
                         btn.innerHTML = originalText;
                     });
@@ -2573,37 +2588,71 @@
                 return;
             }
             
-            if (confirm("?Reiniciar TODOS los votos a cero?")) {
+            if (confirm("?? ¿REINICIAR TODOS LOS VOTOS A CERO?\n\n? Esto también reseteará el contador de personas conectadas.")) {
                 const batch = db.batch();
                 
+                // 1. Resetear votos de todas las canciones
                 allSongs.forEach(song => {
                     const songRef = db.collection("songs").doc(song.id);
                     batch.update(songRef, { votes: 0 });
                 });
                 
+                // 2. Resetear contador de conexiones
+                const connectionsRef = db.collection('stats').doc('connections');
+                batch.set(connectionsRef, {
+                    count: 0,
+                    lastConnection: new Date().toISOString(),
+                    totalConnections: 0,
+                    sessions: [],
+                    created: new Date().toISOString(),
+                    lastReset: new Date().toISOString()
+                }, { merge: true });
+                
                 batch.commit()
                 .then(() => {
+                    // Actualizar datos locales
                     allSongs.forEach(song => song.votes = 0);
                     playlistSongs.forEach(song => song.votes = 0);
                     
-                    showNotification("? Todos los votos reiniciados", "success");
+                    showNotification("? Todos los votos reiniciados y contador de conexiones reseteado", "success");
                     
+                    // Actualizar UI si es necesario
                     if (currentSection === 'top10') {
                         updateTop10List();
                     }
+                    
+                    // Actualizar indicador de conexiones
+                    loadConnectionCount();
                 })
                 .catch((error) => {
                     console.error("Error reiniciando votos:", error);
-                    showNotification("? Error al reiniciar votos", "danger");
+                    showNotification("? Error al reiniciar votos y contador", "danger");
                 });
             }
         };
+
+        // ========== MOSTRAR CONTADOR DE CONEXIONES ==========
+        function loadConnectionCount() {
+            const connectionsRef = db.collection('stats').doc('connections');
+            
+            connectionsRef.get().then((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    const currentCount = data.count || 0;
+                    
+                    const connectedElement = document.getElementById("current-connections-count");
+                    if (connectedElement) connectedElement.textContent = currentCount;
+                }
+            }).catch((error) => {
+                console.error("Error cargando contador de conexiones:", error);
+            });
+        }
 
         window.removeFromPlaylist = function(songId) {
             const song = allSongs.find(s => s.id === songId);
             if (!song) return;
             
-            if (confirm(`?Remover "${song.title}" de la playlist?`)) {
+            if (confirm(`? Remover "${song.title}" de la playlist?`)) {
                 db.collection("songs").doc(songId).update({
                     inPlaylist: false,
                     playlistOrder: 999,
@@ -2614,7 +2663,7 @@
                     song.playlistOrder = 999;
                     song.played = false;
                     playlistSongs = playlistSongs.filter(s => s.id !== songId);
-                    showNotification(`? "${song.title}" removida de la playlist`, "info");
+                    showNotification(`?? "${song.title}" removida de la playlist`, "info");
                     loadStageMode();
                     if (document.getElementById('repertoire-modal').classList.contains('active')) {
                         loadRepertoireModal();
@@ -2665,7 +2714,7 @@
                 return;
             }
             
-            if (confirm("?Limpiar TODA la playlist?\nTodas las canciones se marcaran como 'no tocadas'.")) {
+            if (confirm("?? ¿Limpiar TODA la playlist?\nTodas las canciones se marcaran como 'no tocadas'.")) {
                 const batch = db.batch();
                 
                 playlistSongs.forEach(song => {
@@ -2700,7 +2749,7 @@
             const song = allSongs.find(s => s.id === songId);
             if (!song) return;
             
-            if (confirm(`?Eliminar la cancion "${song.title}"?`)) {
+            if (confirm(`? Eliminar la cancion "${song.title}"?`)) {
                 db.collection("songs").doc(songId).delete()
                     .then(() => {
                         allSongs = allSongs.filter(s => s.id !== songId);
@@ -2735,7 +2784,7 @@
                 return;
             }
             
-            if (confirm("?Marcar TODOS los mensajes como leidos?")) {
+            if (confirm("?? Marcar TODOS los mensajes como leidos?")) {
                 const batch = db.batch();
                 const unreadMessages = allMessages.filter(msg => !msg.read);
                 
@@ -2764,7 +2813,7 @@
         };
 
         window.deleteMessage = function(messageId) {
-            if (confirm("?Eliminar este mensaje?")) {
+            if (confirm("? Eliminar este mensaje?")) {
                 db.collection("temporary_data").doc(messageId).delete()
                     .then(() => {
                         allMessages = allMessages.filter(m => m.id !== messageId);
@@ -2787,7 +2836,7 @@
                 return;
             }
             
-            if (confirm(`?Eliminar TODOS los ${allMessages.length} mensajes?`)) {
+            if (confirm(`?? Eliminar TODOS los ${allMessages.length} mensajes?`)) {
                 const batch = db.batch();
                 
                 allMessages.forEach(msg => {
@@ -2840,7 +2889,7 @@
                 return;
             }
             
-            if (confirm("?Marcar TODAS las sugerencias como vistas?")) {
+            if (confirm("?? Marcar TODAS las sugerencias como vistas?")) {
                 const batch = db.batch();
                 const pendingSuggestions = allSuggestions.filter(suggestion => suggestion.status === 'pending');
                 
@@ -2875,7 +2924,7 @@
         };
 
         window.deleteSuggestion = function(suggestionId) {
-            if (confirm("?Eliminar esta sugerencia?")) {
+            if (confirm("? Eliminar esta sugerencia?")) {
                 db.collection("temporary_data").doc(suggestionId).delete()
                     .then(() => {
                         allSuggestions = allSuggestions.filter(s => s.id !== suggestionId);
@@ -2898,7 +2947,7 @@
                 return;
             }
             
-            if (confirm(`?Eliminar TODAS las ${allSuggestions.length} sugerencias?`)) {
+            if (confirm(`?? Eliminar TODAS las ${allSuggestions.length} sugerencias?`)) {
                 const batch = db.batch();
                 
                 allSuggestions.forEach(suggestion => {
