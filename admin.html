@@ -709,6 +709,51 @@
         .text-bronze { color: #cd7f32 !important; }
         .bi-trophy-fill.text-warning { color: #FFD700 !important; }
         .bi-award-fill.text-secondary { color: #C0C0C0 !important; }
+		/* Nuevos estilos para mensajes */
+.message-bubble {
+    background: rgba(23, 162, 184, 0.1);
+    border-radius: 15px;
+    padding: 15px;
+    margin: 10px 0;
+    border-left: 4px solid var(--dj-blue);
+    transition: all 0.3s ease;
+}
+
+.message-bubble:hover {
+    background: rgba(23, 162, 184, 0.15);
+    transform: translateX(5px);
+}
+
+.message-card.read .message-bubble {
+    opacity: 0.7;
+    background: rgba(100, 100, 100, 0.1);
+    border-left-color: #666;
+}
+
+/* Canciones como tags/chips */
+.song-tag {
+    background: #2a2a2a;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: #ddd;
+    display: inline-block;
+    margin: 0 5px 5px 0;
+    border: 1px solid #3a3a3a;
+    transition: all 0.2s;
+}
+
+.song-tag:hover {
+    background: #333;
+    border-color: var(--dj-green);
+    transform: translateY(-2px);
+}
+
+.song-tag i {
+    color: var(--dj-green);
+    margin-right: 4px;
+    font-size: 0.7rem;
+}
     </style>
 </head>
 <body>
@@ -1182,44 +1227,81 @@
         }
 
         function displayMessages() {
-            const container = document.getElementById('messages-container');
-            if (!container) return;
-            
-            if (allMessages.length === 0) {
-                container.innerHTML = '<div class="text-center py-5"><i class="bi bi-chat-text display-1 text-muted"></i><p class="mt-3">No hay mensajes aún</p></div>';
-                return;
-            }
-            
-            let html = '';
-            allMessages.forEach(msg => {
-                const time = new Date(msg.sentAt).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
-                const songsHtml = msg.songs && msg.songs.length > 0 ? `
-                    <div class="message-songs">
-                        <i class="bi bi-music-note-beamed"></i> <strong>CANCIONES SOLICITADAS (${msg.songs.length}):</strong>
-                        <ul>${msg.songs.map(song => `<li><i class="bi bi-music-note"></i> ${song}</li>`).join('')}</ul>
-                    </div>` : '';
-                
-                html += `
-                    <div class="message-card ${msg.read ? 'read' : ''}">
-                        <div class="message-header">
-                            <div class="message-user">
-                                <i class="bi bi-person-circle"></i>
-                                <span>Usuario ${msg.deviceId.substring(0, 8)}</span>
-                                ${msg.songs && msg.songs.length > 0 ? `<span class="badge ms-2" style="background: var(--dj-green);">🎵 ${msg.songs.length}</span>` : ''}
-                            </div>
-                            <span class="message-time">${time}</span>
-                        </div>
-                        <div class="message-content">${msg.message}</div>
-                        ${songsHtml}
-                        <div class="message-actions">
-                            ${!msg.read ? `<button class="message-action-btn message-read-btn" onclick="markAsRead('${msg.id}')"><i class="bi bi-check"></i> LEÍDO</button>` : ''}
-                            <button class="message-action-btn message-delete-btn" onclick="deleteMessage('${msg.id}')"><i class="bi bi-trash"></i> ELIMINAR</button>
-                        </div>
+    const container = document.getElementById('messages-container');
+    if (!container) return;
+    
+    if (allMessages.length === 0) {
+        container.innerHTML = '<div class="text-center py-5"><i class="bi bi-chat-text display-1 text-muted"></i><p class="mt-3">No hay mensajes aún</p></div>';
+        return;
+    }
+    
+    let html = '';
+    allMessages.forEach(msg => {
+        const time = new Date(msg.sentAt).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+        
+        // El mensaje ahora es más grande y destacado
+        const messageHtml = `
+            <div class="message-bubble" style="background: rgba(23, 162, 184, 0.15); padding: 15px; border-radius: 15px; margin: 10px 0; border-left: 4px solid var(--dj-blue);">
+                <div style="font-size: 1.3rem; font-weight: 500; color: #fff; line-height: 1.4; margin-bottom: 5px;">
+                    ${msg.message}
+                </div>
+            </div>
+        `;
+        
+        // Las canciones ahora son más compactas y secundarias
+        const songsHtml = msg.songs && msg.songs.length > 0 ? `
+            <div style="margin-top: 12px; padding-top: 10px; border-top: 1px dashed #444;">
+                <small style="color: var(--dj-green); display: block; margin-bottom: 8px;">
+                    <i class="bi bi-music-note-beamed"></i> Canciones solicitadas (${msg.songs.length}):
+                </small>
+                <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                    ${msg.songs.map(song => `
+                        <span style="background: #2a2a2a; padding: 4px 10px; border-radius: 15px; font-size: 0.85rem; color: #ddd;">
+                            <i class="bi bi-music-note" style="color: var(--dj-green); font-size: 0.7rem;"></i> 
+                            ${song}
+                        </span>
+                    `).join('')}
+                </div>
+            </div>
+        ` : '';
+        
+        // Badge de canciones (pequeño)
+        const songBadge = msg.songs && msg.songs.length > 0 
+            ? `<span class="badge ms-2" style="background: var(--dj-green); font-size: 0.7rem;">${msg.songs.length} 🎵</span>` 
+            : '';
+        
+        html += `
+            <div class="message-card ${msg.read ? 'read' : ''}" style="padding: 15px; margin-bottom: 15px;">
+                <div class="message-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <div class="message-user">
+                        <i class="bi bi-person-circle"></i>
+                        <span>Usuario ${msg.deviceId.substring(0, 8)}</span>
+                        ${songBadge}
                     </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
+                    <span class="message-time" style="background: #333; padding: 3px 8px; border-radius: 12px; font-size: 0.75rem;">${time}</span>
+                </div>
+                
+                ${messageHtml}
+                ${songsHtml}
+                
+                <div class="message-actions" style="margin-top: 15px; display: flex; gap: 10px;">
+                    ${!msg.read ? `
+                        <button class="message-action-btn message-read-btn" onclick="markAsRead('${msg.id}')" 
+                                style="padding: 8px 15px; font-size: 0.85rem;">
+                            <i class="bi bi-check"></i> LEÍDO
+                        </button>
+                    ` : ''}
+                    <button class="message-action-btn message-delete-btn" onclick="deleteMessage('${msg.id}')"
+                            style="padding: 8px 15px; font-size: 0.85rem;">
+                        <i class="bi bi-trash"></i> ELIMINAR
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+}
 
         function updateMessageStats() {
             const unread = allMessages.filter(m => !m.read).length;
