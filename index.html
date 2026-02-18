@@ -144,13 +144,6 @@
             background: linear-gradient(145deg, var(--pub-red), #a80d14) !important;
             margin-top: 10px;
         }
-		.action-btn.green-btn {
-    background: linear-gradient(145deg, #28a745, #1e7e34) !important;
-}
-.action-btn.green-btn:hover {
-    border-color: #28a745;
-    box-shadow: 0 8px 20px rgba(40, 167, 69, 0.5);
-}
         #loading-screen {
             position: fixed;
             top: 0;
@@ -555,9 +548,9 @@
                           rows="3"></textarea>
             </div>
             
-            <button class="action-btn green-btn" onclick="submitCompleteRequest()">
-    <i class="bi bi-send"></i> ENVIAR SOLICITUD COMPLETA
-</button>
+            <button class="action-btn request-btn" onclick="submitCompleteRequest()">
+                <i class="bi bi-send"></i> ENVIAR SOLICITUD COMPLETA
+            </button>
             
             <button class="action-btn cancel-btn" onclick="closeRequestModal()">
                 <i class="bi bi-x-circle"></i> CANCELAR
