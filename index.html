@@ -450,7 +450,6 @@
         .form-control, #modal-user-message, #suggestion-title, #suggestion-artist { color: white !important; }
         .form-control::placeholder { color: rgba(255, 255, 255, 0.6) !important; }
         
-        /* Nuevos estilos para solicitud integrada */
         .selected-song-item {
             background: #2a2a2a;
             border-radius: 5px;
@@ -486,7 +485,7 @@
             
             <div class="buttons-panel">
                 <button class="action-btn request-btn" onclick="openRequestModal()">
-                    <i class="bi bi-music-note-list"></i> PEDIR CANCIONES + MENSAJE
+                    <i class="bi bi-music-note-list"></i> SOLICITAR CANCIONES + MENSAJE
                 </button>
                 
                 <button class="action-btn suggestion-btn" onclick="openSuggestionModal()">
@@ -516,7 +515,7 @@
         </div>
     </div>
 
-    <!-- MODAL DE SOLICITUD INTEGRADA (NUEVO) -->
+    <!-- MODAL DE SOLICITUD INTEGRADA (CON BOTÓN VERDE FUNCIONAL) -->
     <div class="modal-overlay" id="request-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -548,9 +547,10 @@
                           rows="3"></textarea>
             </div>
             
-            <button class="action-btn" onclick="submitCompleteRequest()" style="background: linear-gradient(145deg, #28a745, #1e7e34); color: white; border: none; padding: 1rem; font-weight: bold; border-radius: 14px; width: 100%; font-size: 1.1rem; margin-top: 10px;">
-    <i class="bi bi-send"></i> ENVIAR SOLICITUD COMPLETA
-</button>
+            <!-- BOTÓN VERDE CON LA FUNCIÓN CORRECTA -->
+            <button class="action-btn" onclick="submitCompleteRequest()" style="background: linear-gradient(145deg, #28a745, #1e7e34); margin-top: 10px;">
+                <i class="bi bi-send"></i> ENVIAR SOLICITUD COMPLETA
+            </button>
             
             <button class="action-btn cancel-btn" onclick="closeRequestModal()">
                 <i class="bi bi-x-circle"></i> CANCELAR
@@ -758,7 +758,6 @@
             const today = new Date().toISOString().split('T')[0];
             const votesToday = localStorage.getItem(`mobydick_votes_${deviceId}_${today}`);
             if (votesToday && parseInt(votesToday) >= 3) {
-                document.getElementById('modal-submit-votes').disabled = true;
                 return true;
             }
             return false;
@@ -853,7 +852,6 @@
                 tempSelectedSongs.push(songId);
             }
             
-            // Actualizar UI
             const songElement = document.querySelector(`.song-item[data-song-id="${songId}"]`);
             if (songElement) {
                 const btn = songElement.querySelector('.btn-vote');
@@ -922,7 +920,7 @@
                 return;
             }
             
-            const btn = document.querySelector('#request-modal .request-btn');
+            const btn = event ? event.target : document.querySelector('#request-modal .action-btn[onclick="submitCompleteRequest()"]');
             const originalText = btn.innerHTML;
             
             btn.innerHTML = '<i class="bi bi-check2-circle"></i> ENVIANDO...';
