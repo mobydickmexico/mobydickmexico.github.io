@@ -15,32 +15,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     
     <style>
-        /* ========== RESET FULLSCREEN ========== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        html {
-            height: 100%;
-            overflow-x: hidden;
-            background: #0a0a0a;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { height: 100%; overflow-x: hidden; background: #0a0a0a; }
         body { 
             background: #0a0a0a;
             color: #f0f0f0;
             min-height: 100vh;
             min-height: -webkit-fill-available;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            position: relative;
             overflow-x: hidden;
-            padding-top: env(safe-area-inset-top);
-            padding-bottom: env(safe-area-inset-bottom);
         }
-        
-        /* ========== TEMA OSCURO COMPLETO ========== */
         :root {
             --pub-red: #C20B17;
             --pub-blue: #0A4062;
@@ -52,8 +36,6 @@
             --text-light: #f0f0f0;
             --text-muted: #888;
         }
-        
-        /* ========== CONTAINER PRINCIPAL ========== */
         .app-container {
             width: 100%;
             min-height: 100vh;
@@ -61,9 +43,7 @@
             flex-direction: column;
             align-items: center;
             padding: 1.5rem 1rem 1rem;
-            position: relative;
         }
-        
         .main-content {
             width: 100%;
             max-width: 850px;
@@ -73,8 +53,6 @@
             gap: 2rem;
             margin: auto;
         }
-        
-        /* ========== HEADER ========== */
         .header-container {
             width: 100%;
             max-width: 800px;
@@ -83,7 +61,6 @@
             box-shadow: 0 15px 40px rgba(0,0,0,0.8);
             margin-top: 1rem;
         }
-        
         .header-image {
             width: 100%;
             height: auto;
@@ -95,14 +72,11 @@
             transform: scale(1.02);
             transition: filter 0.8s ease-out, opacity 0.8s ease-out, transform 0.8s ease-out;
         }
-        
         .header-image.loaded {
             filter: blur(0);
             opacity: 1;
             transform: scale(1);
         }
-        
-        /* ========== PANEL DE BOTONES ========== */
         .buttons-panel {
             background: var(--bg-panel);
             border-radius: 20px;
@@ -115,8 +89,6 @@
             width: 100%;
             max-width: 800px;
         }
-        
-        /* ========== BOTONES PRINCIPALES (CON EFECTO HOVER UNIFORME) ========== */
         .action-btn {
             background: linear-gradient(145deg, var(--pub-blue), #083354);
             color: white;
@@ -136,71 +108,42 @@
             cursor: pointer;
             min-height: 56px;
         }
-        
-        /* EFECTO HOVER/TAP UNIFORME PARA TODOS LOS BOTONES */
-        .action-btn:hover,
-        .action-btn:active {
+        .action-btn:hover, .action-btn:active {
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(10, 64, 98, 0.5);
             border-color: var(--pub-blue);
         }
-        
-        /* BOTÓN SOLICITA TUS CANCIONES (NUEVO COLOR - ROJO) */
         .action-btn.request-btn {
             background: linear-gradient(145deg, var(--pub-red), #a80d14) !important;
         }
-        
-        .action-btn.request-btn:hover,
-        .action-btn.request-btn:active {
+        .action-btn.request-btn:hover, .action-btn.request-btn:active {
             border-color: var(--pub-red);
             box-shadow: 0 8px 20px rgba(194, 11, 23, 0.5);
         }
-        
-        /* BOTÓN COMPARTIR ENLACE (MÁS CORTO) */
         .action-btn.share-btn {
             background: linear-gradient(145deg, var(--pub-blue), #083354);
         }
-        
-        .action-btn.share-btn:hover,
-        .action-btn.share-btn:active {
+        .action-btn.share-btn:hover, .action-btn.share-btn:active {
             border-color: var(--pub-blue);
         }
-        
-        /* BOTÓN SUGERIR CANCIONES */
         .action-btn.suggestion-btn {
             background: linear-gradient(145deg, #28a745, #1e7e34);
         }
-        
-        .action-btn.suggestion-btn:hover,
-        .action-btn.suggestion-btn:active {
+        .action-btn.suggestion-btn:hover, .action-btn.suggestion-btn:active {
             border-color: #28a745;
             box-shadow: 0 8px 20px rgba(40, 167, 69, 0.5);
         }
-        
-        /* BOTÓN MENSAJE A LA BANDA */
         .action-btn.message-btn {
             background: linear-gradient(145deg, #17a2b8, #138496);
         }
-        
-        .action-btn.message-btn:hover,
-        .action-btn.message-btn:active {
+        .action-btn.message-btn:hover, .action-btn.message-btn:active {
             border-color: #17a2b8;
             box-shadow: 0 8px 20px rgba(23, 162, 184, 0.5);
         }
-        
-        /* ========== BOTONES SECUNDARIOS (CERRAR/CANCELAR EN ROJO) ========== */
         .action-btn.cancel-btn {
             background: linear-gradient(145deg, var(--pub-red), #a80d14) !important;
             margin-top: 10px;
         }
-        
-        .action-btn.cancel-btn:hover,
-        .action-btn.cancel-btn:active {
-            border-color: var(--pub-red);
-            box-shadow: 0 8px 20px rgba(194, 11, 23, 0.5);
-        }
-        
-        /* ========== LOADING SCREEN ========== */
         #loading-screen {
             position: fixed;
             top: 0;
@@ -215,12 +158,10 @@
             z-index: 99999;
             transition: opacity 0.6s ease-out, visibility 0.6s ease-out;
         }
-        
         #loading-screen.fade-out {
             opacity: 0;
             visibility: hidden;
         }
-        
         .loading-spinner {
             width: 60px;
             height: 60px;
@@ -230,19 +171,13 @@
             animation: spin 1s ease-in-out infinite;
             margin-bottom: 20px;
         }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
+        @keyframes spin { to { transform: rotate(360deg); } }
         .loading-text {
             color: var(--pub-yellow);
             font-size: 1.3rem;
             font-weight: bold;
             letter-spacing: 1.5px;
         }
-        
-        /* ========== FOOTER ========== */
         .footer {
             background: linear-gradient(90deg, var(--pub-blue), var(--pub-red));
             color: white;
@@ -253,18 +188,13 @@
             border-top: 3px solid var(--pub-yellow);
             width: 100%;
             max-width: 800px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
-        
-        /* ========== FEEDBACK ========== */
         .feedback-container {
             min-height: 30px;
             margin-top: 0.8rem;
             width: 100%;
             max-width: 800px;
         }
-        
-        /* ========== MODALES ========== */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -277,17 +207,14 @@
             overflow-y: auto;
             padding: 15px;
         }
-        
         .modal-overlay.active {
             display: block;
             animation: fadeIn 0.3s ease-out;
         }
-        
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
-        
         .modal-content {
             background: var(--bg-panel);
             border-radius: 20px;
@@ -295,12 +222,10 @@
             max-width: 500px;
             margin: 10px auto;
             border: 3px solid var(--pub-blue);
-            box-shadow: 0 15px 50px rgba(0,0,0,0.8);
             max-height: 90vh;
             display: flex;
             flex-direction: column;
         }
-        
         .modal-header {
             display: flex;
             justify-content: space-between;
@@ -309,35 +234,13 @@
             padding-bottom: 10px;
             border-bottom: 2px solid #333;
         }
-        
         .modal-title {
             font-size: 1.3rem;
             color: var(--pub-yellow);
             font-weight: 700;
             flex: 1;
-            line-height: 1.3;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            hyphens: auto;
         }
-        
-        /* QUITADO EL BOTÓN ROJO DE CERRAR */
-        .modal-suggestions .modal-close,
-        .modal-message .modal-close {
-            display: none !important;
-        }
-        
-        /* ========== MODAL DE MENSAJES ========== */
-        .message-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-        
-        .form-group {
-            margin-bottom: 0;
-        }
-        
+        .form-group { margin-bottom: 1rem; }
         .form-label {
             display: block;
             margin-bottom: 0.3rem;
@@ -345,7 +248,6 @@
             font-weight: 500;
             font-size: 0.9rem;
         }
-        
         .form-control {
             width: 100%;
             padding: 0.8rem;
@@ -354,41 +256,23 @@
             background: #222;
             color: var(--text-light);
             font-size: 1rem;
-            font-family: inherit;
         }
-        
         .form-control:focus {
             outline: none;
             border-color: #17a2b8;
-            box-shadow: 0 0 0 3px rgba(23, 162, 184, 0.2);
             background: #2a2a2a;
         }
-        
         .form-control.message-input {
             min-height: 120px;
             resize: vertical;
         }
-        
         .char-counter {
             font-size: 0.8rem;
             color: #777;
             text-align: right;
             margin-top: 0.3rem;
         }
-        
-        .char-counter.warning {
-            color: #ff6b6b;
-            font-weight: bold;
-        }
-        
-        /* ========== MODAL DE SUGERENCIAS ========== */
-        .suggestion-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-        
-        /* ========== MODAL DE REPERTORIO ========== */
+        .char-counter.warning { color: #ff6b6b; }
         .repertoire-modal {
             display: none;
             position: fixed;
@@ -401,12 +285,7 @@
             overflow-y: auto;
             padding: 15px;
         }
-        
-        .repertoire-modal.active {
-            display: block;
-            animation: fadeIn 0.3s ease-out;
-        }
-        
+        .repertoire-modal.active { display: block; }
         .repertoire-modal-content {
             background: var(--bg-panel);
             border-radius: 20px;
@@ -414,12 +293,10 @@
             max-width: 800px;
             margin: 10px auto;
             border: 3px solid var(--pub-blue);
-            box-shadow: 0 15px 50px rgba(0,0,0,0.8);
             max-height: 90vh;
             display: flex;
             flex-direction: column;
         }
-        
         .repertoire-modal-header {
             display: flex;
             justify-content: space-between;
@@ -428,17 +305,11 @@
             padding-bottom: 10px;
             border-bottom: 2px solid #333;
         }
-        
         .repertoire-modal-title {
             font-size: 1.3rem;
             color: var(--pub-yellow);
             font-weight: 700;
-            flex: 1;
-            line-height: 1.3;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
         }
-        
         .selected-counter {
             background: linear-gradient(145deg, var(--pub-red), #a80d14);
             color: white;
@@ -448,19 +319,14 @@
             font-size: 1.1rem;
             min-width: 70px;
             text-align: center;
-            box-shadow: 0 3px 8px rgba(194, 11, 23, 0.4);
             display: flex;
             align-items: center;
             gap: 5px;
-            border: 2px solid transparent;
-            flex-shrink: 0;
             margin-left: 10px;
         }
-        
         .repertoire-search {
             margin-bottom: 15px;
         }
-        
         .repertoire-search-input {
             width: 100%;
             padding: 12px 15px;
@@ -468,25 +334,7 @@
             border: 2px solid #444;
             background: #222;
             color: var(--text-light);
-            font-size: 1rem;
         }
-        
-        .repertoire-search-input:focus {
-            border-color: var(--pub-blue);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(10, 64, 98, 0.2);
-            background: #2a2a2a;
-        }
-        
-        .repertoire-list-container {
-            flex: 1;
-            overflow-y: auto;
-            padding-right: 8px;
-            margin-bottom: 15px;
-            min-height: 250px;
-        }
-        
-        /* Lista de canciones en modal */
         .songs-header {
             background: linear-gradient(90deg, var(--pub-blue), var(--pub-red));
             color: white;
@@ -495,65 +343,40 @@
             margin-bottom: 5px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            font-size: 0.95rem;
-            border-bottom: 2px solid #333;
         }
-        
+        .repertoire-list-container {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 8px;
+            margin-bottom: 15px;
+        }
         .song-item {
             display: flex;
             flex-direction: column;
             padding: 0.8rem;
             border-bottom: 1px solid #333;
-            transition: all 0.2s;
             background: #1a1a1a;
             border-radius: 8px;
             margin-bottom: 5px;
         }
-        
-        .song-item:hover {
-            background-color: #222;
-            transform: translateX(5px);
-        }
-        
         @media (min-width: 768px) {
-            .song-item {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
+            .song-item { flex-direction: row; justify-content: space-between; align-items: center; }
         }
-        
         .song-info {
             flex: 1;
             margin-bottom: 0.5rem;
         }
-        
         @media (min-width: 768px) {
-            .song-info {
-                margin-bottom: 0;
-                margin-right: 1rem;
-            }
+            .song-info { margin-bottom: 0; margin-right: 1rem; }
         }
-        
         .song-title {
             font-weight: 600;
             color: var(--text-light);
             margin-bottom: 0.2rem;
             font-size: 1.05rem;
         }
-        
-        .song-artist {
-            color: #aaa;
-            font-size: 0.95rem;
-        }
-        
-        .song-actions {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
+        .song-artist { color: #aaa; font-size: 0.95rem; }
+        .song-actions { display: flex; align-items: center; gap: 0.5rem; }
         .votes-badge {
             background: linear-gradient(145deg, var(--pub-red), #a80d14);
             color: white;
@@ -563,9 +386,7 @@
             min-width: 90px;
             text-align: center;
             font-size: 0.95rem;
-            border: 1px solid #a80d14;
         }
-        
         .btn-vote {
             background: linear-gradient(145deg, var(--pub-blue), #011954);
             color: white;
@@ -577,28 +398,22 @@
             border-radius: 20px;
             transition: all 0.2s;
             font-size: 0.95rem;
-            border: 2px solid transparent;
             cursor: pointer;
         }
-        
         .btn-vote:hover:not(:disabled) {
             transform: scale(1.05);
             box-shadow: 0 4px 10px rgba(1, 33, 105, 0.3);
             border-color: var(--pub-blue);
         }
-        
         .btn-vote:disabled {
             background: linear-gradient(145deg, #28a745, #20c997) !important;
             color: white;
-            cursor: pointer;
             border-color: #28a745;
         }
-        
         .btn-vote.selected {
             background: linear-gradient(145deg, #28a745, #20c997) !important;
             border-color: #28a745;
         }
-        
         .btn-submit-votes {
             background: linear-gradient(145deg, #28a745, #20c997);
             color: white;
@@ -614,211 +429,81 @@
             justify-content: center;
             gap: 0.5rem;
             margin-top: 10px;
-            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
-            border: 2px solid transparent;
             cursor: pointer;
         }
-        
-        .btn-submit-votes:hover:not(:disabled) {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
-            border-color: #28a745;
-        }
-        
         .btn-submit-votes:disabled {
             background: #555;
             cursor: not-allowed;
-            opacity: 0.7;
-            border-color: #555;
         }
-        
-        /* ========== RESPONSIVE ========== */
         @media (max-width: 768px) {
-            .app-container {
-                padding: 1rem 0.8rem 0.8rem;
-            }
-            
-            .header-container {
-                margin-top: 0.5rem;
-                border-radius: 15px;
-            }
-            
-            .header-image {
-                max-height: 180px;
-            }
-            
-            .buttons-panel {
-                padding: 1.5rem;
-                gap: 0.9rem;
-                border-radius: 18px;
-            }
-            
-            .action-btn {
-                padding: 0.9rem 1rem;
-                font-size: 1.05rem;
-                min-height: 52px;
-            }
-            
-            .footer {
-                padding: 0.9rem;
-                margin-top: 1.5rem;
-            }
-            
-            .modal-overlay {
-                padding: 10px;
-            }
-            
-            .modal-content, .repertoire-modal-content {
-                padding: 15px;
-                margin: 5px auto;
-                max-height: 95vh;
-            }
-            
-            .modal-title, .repertoire-modal-title {
-                font-size: 1.2rem;
-            }
-            
-            .selected-counter {
-                font-size: 1rem;
-                padding: 6px 12px;
-                min-width: 60px;
-            }
-            
-            .repertoire-list-container {
-                min-height: 200px;
-            }
+            .app-container { padding: 1rem 0.8rem 0.8rem; }
+            .header-image { max-height: 180px; }
+            .buttons-panel { padding: 1.5rem; }
+            .action-btn { padding: 0.9rem 1rem; font-size: 1.05rem; }
         }
-        
         @media (max-width: 480px) {
-            .app-container {
-                padding: 0.8rem 0.5rem 0.5rem;
-            }
-            
-            .header-image {
-                max-height: 160px;
-            }
-            
-            .buttons-panel {
-                padding: 1.2rem;
-                gap: 0.8rem;
-                border-radius: 15px;
-            }
-            
-            .action-btn {
-                padding: 0.8rem 0.9rem;
-                font-size: 1rem;
-                min-height: 50px;
-            }
-            
-            .footer {
-                padding: 0.8rem;
-                font-size: 0.9rem;
-            }
-            
-            .modal-title, .repertoire-modal-title {
-                font-size: 1.1rem;
-                line-height: 1.2;
-            }
-            
-            .selected-counter {
-                font-size: 0.9rem;
-                padding: 5px 10px;
-                min-width: 55px;
-            }
+            .header-image { max-height: 160px; }
+            .buttons-panel { padding: 1.2rem; }
+            .action-btn { padding: 0.8rem 0.9rem; font-size: 1rem; }
+            .modal-title { font-size: 1.1rem; }
         }
+        .form-control, #modal-user-message, #suggestion-title, #suggestion-artist { color: white !important; }
+        .form-control::placeholder { color: rgba(255, 255, 255, 0.6) !important; }
         
-        @media (max-width: 350px) {
-            .header-image {
-                max-height: 140px;
-            }
-            
-            .modal-title, .repertoire-modal-title {
-                font-size: 1rem;
-            }
+        /* Nuevos estilos para solicitud integrada */
+        .selected-song-item {
+            background: #2a2a2a;
+            border-radius: 5px;
+            padding: 5px 8px;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 3px solid var(--pub-yellow);
         }
-        
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
+        .remove-song-btn {
+            color: var(--pub-red);
+            cursor: pointer;
+            padding: 0 5px;
         }
-        
-        ::-webkit-scrollbar-track {
-            background: #1a1a1a;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: var(--pub-blue);
-            border-radius: 4px;
-        }
-        
-        /* ========== SOLUCIÓN: COLOR DEL TEXTO EN TEXTAREA E INPUTS ========== */
-        .form-control {
-            color: var(--text-light) !important; /* Blanco/color claro */
-        }
-
-        /* Color del placeholder */
-        .form-control::placeholder {
-            color: rgba(255, 255, 255, 0.6) !important;
-            opacity: 1;
-        }
-
-        /* Para asegurar que el texto escrito sea visible */
-        #modal-user-message,
-        #suggestion-title,
-        #suggestion-artist {
-            color: white !important;
+        .remove-song-btn:hover {
+            transform: scale(1.2);
         }
     </style>
 </head>
 <body>
-    <!-- ========== LOADING SCREEN ========== -->
     <div id="loading-screen">
         <div class="loading-spinner"></div>
         <div class="loading-text">MOBY DICK</div>
     </div>
 
-    <!-- ========== APLICACIÓN ========== -->
     <div class="app-container">
         <div class="main-content">
-            <!-- HEADER -->
             <div class="header-container">
                 <img src="images/header.webp" alt="MobyDick @ Porter British Pub" class="header-image" 
                      fetchpriority="high" decoding="async" onload="this.classList.add('loaded')">
             </div>
             
-            <!-- PANEL DE BOTONES (ACTUALIZADOS) -->
             <div class="buttons-panel">
-                <!-- 1. SOLICITA TUS CANCIONES (ROJO, NUEVO NOMBRE) -->
-                <button class="action-btn request-btn" onclick="openRepertoireModal()">
-                    <i class="bi bi-music-note-list"></i> SOLICITA TUS CANCIONES
+                <button class="action-btn request-btn" onclick="openRequestModal()">
+                    <i class="bi bi-music-note-list"></i> SOLICITAR CANCIONES + MENSAJE
                 </button>
                 
-                <!-- 2. MENSAJE PARA LA BANDA -->
-                <button class="action-btn message-btn" onclick="openMessageModal()">
-                    <i class="bi bi-chat-text"></i> MENSAJE PARA LA BANDA
-                </button>
-                              
-                <!-- 3. SUGERIR CANCIONES NUEVAS -->
                 <button class="action-btn suggestion-btn" onclick="openSuggestionModal()">
                     <i class="bi bi-lightbulb"></i> SUGERIR CANCIONES NUEVAS
                 </button>
-				
-				<!-- 4. COMPARTIR ENLACE (MÁS CORTO) -->
+                
                 <button class="action-btn share-btn" onclick="shareLink()">
                     <i class="bi bi-share-fill"></i> COMPARTIR ENLACE
                 </button>
             </div>
             
-            <!-- FEEDBACK -->
             <div id="main-feedback" class="feedback-container"></div>
             
-            <!-- FOOTER -->
             <div class="footer">
                 <div class="row align-items-center">
                     <div class="col-md-6">
-                        <small>
-                            © 2026 MobyDick • Porter British Pub • Ventura Puente
-                        </small>
+                        <small>© 2026 MobyDick • Porter British Pub • Ventura Puente</small>
                     </div>
                     <div class="col-md-6 text-end">
                         <small>
@@ -831,114 +516,108 @@
         </div>
     </div>
 
-    <!-- ========== MODALES ========== -->
-    <div class="modal-overlay modal-message" id="message-modal">
+    <!-- MODAL DE SOLICITUD INTEGRADA (NUEVO) -->
+    <div class="modal-overlay" id="request-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="modal-title" data-short="MENSAJE A LA BANDA">
-                    <span class="full-text">MENSAJE PARA LA BANDA</span>
-                </div>
+                <div class="modal-title">SOLICITA TUS CANCIONES</div>
             </div>
             
-            <form id="message-form" class="message-form">
-                <div class="form-group">
-                    <label class="form-label">
-                        <i class="bi bi-info-circle"></i> Envía saludos, felicitaciones o mensajes especiales
-                    </label>
-                    <textarea id="modal-user-message" class="form-control message-input" 
-                              placeholder="Ej: ¡Feliz cumpleaños a Juan! 🎉 / Saludos a MOBY DICK / ¡Excelente show! 🤘"
-                              maxlength="120" required></textarea>
-                    <div class="char-counter" id="modal-char-counter">0/120 caracteres</div>
+            <div id="request-selected-songs" class="mb-3 p-2" style="background: #222; border-radius: 10px;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="fw-bold" style="color: var(--pub-yellow);">
+                        <i class="bi bi-music-note-list"></i> TUS CANCIONES
+                    </span>
+                    <span class="badge" style="background: var(--pub-red);" id="request-count">0/3</span>
                 </div>
-                
-                <button type="submit" class="action-btn message-btn" style="margin-top: 10px;">
-                    <i class="bi bi-send"></i> ENVIAR MENSAJE
+                <div id="request-songs-list" style="min-height: 60px;">
+                    <small class="text-muted">No has seleccionado canciones</small>
+                </div>
+                <button class="btn btn-sm w-100 mt-2" style="background: var(--pub-blue); color: white;" 
+                        onclick="openRepertoireModalForRequest()">
+                    <i class="bi bi-plus-circle"></i> ELEGIR CANCIONES
                 </button>
-            </form>
+            </div>
             
-            <!-- BOTÓN CANCELAR (ROJO) -->
-            <button class="action-btn cancel-btn" onclick="closeMessageModal()">
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="bi bi-chat-text"></i> MENSAJE PARA LA BANDA (opcional)
+                </label>
+                <textarea id="request-message" class="form-control" 
+                          placeholder="Ej: ¡Feliz cumpleaños a Juan! 🎉 / Saludos a MOBY DICK..."
+                          rows="3"></textarea>
+            </div>
+            
+            <button class="action-btn request-btn" onclick="submitCompleteRequest()">
+                <i class="bi bi-send"></i> ENVIAR SOLICITUD COMPLETA
+            </button>
+            
+            <button class="action-btn cancel-btn" onclick="closeRequestModal()">
                 <i class="bi bi-x-circle"></i> CANCELAR
             </button>
             
-            <div id="message-modal-feedback" class="feedback-container mt-3"></div>
+            <div id="request-modal-feedback" class="feedback-container mt-3"></div>
         </div>
     </div>
 
+    <!-- MODAL DE SUGERENCIAS -->
     <div class="modal-overlay" id="suggestion-modal">
-        <div class="modal-content modal-suggestions">
+        <div class="modal-content">
             <div class="modal-header">
-                <div class="modal-title" data-short="SUGERIR CANCIÓN">
-                    <span class="full-text">SUGERIR CANCIÓN NUEVA</span>
-                </div>
+                <div class="modal-title">SUGERIR CANCIÓN NUEVA</div>
             </div>
             
-            <form id="suggestion-form" class="suggestion-form">
+            <form id="suggestion-form">
                 <div class="form-group">
                     <label class="form-label">TÍTULO DE LA CANCIÓN *</label>
                     <input type="text" id="suggestion-title" class="form-control" 
                            placeholder="Ej: Sweet Child O' Mine" required>
                 </div>
-                
                 <div class="form-group">
                     <label class="form-label">ARTISTA O BANDA *</label>
                     <input type="text" id="suggestion-artist" class="form-control" 
                            placeholder="Ej: Guns N' Roses" required>
                 </div>
-                
-                <button type="submit" class="action-btn suggestion-btn" style="margin-top: 10px;">
-                    <i class="bi bi-send"></i> ENVIAR SUGERENCIA
-                </button>
+                <button type="submit" class="action-btn suggestion-btn">ENVIAR SUGERENCIA</button>
             </form>
             
-            <!-- BOTÓN CANCELAR (ROJO) -->
-            <button class="action-btn cancel-btn" onclick="closeSuggestionModal()">
-                <i class="bi bi-x-circle"></i> CANCELAR
-            </button>
-            
+            <button class="action-btn cancel-btn" onclick="closeSuggestionModal()">CANCELAR</button>
             <div id="suggestion-modal-feedback" class="feedback-container mt-3"></div>
         </div>
     </div>
 
+    <!-- MODAL DE REPERTORIO (para elegir canciones) -->
     <div class="repertoire-modal" id="repertoire-modal">
         <div class="repertoire-modal-content">
             <div class="repertoire-modal-header">
-                <div class="repertoire-modal-title" data-short="ELIGE 3 CANCIONES">
-                    <span class="full-text">ELIGE 3 CANCIONES</span>
-                </div>
-                <div class="selected-counter" id="selected-counter">
-                    <i class="bi bi-music-note-beamed"></i> <span id="selected-count">0</span>/3
+                <div class="repertoire-modal-title">ELIGE TUS CANCIONES</div>
+                <div class="selected-counter" id="repertoire-selected-counter">
+                    <i class="bi bi-music-note-beamed"></i> <span id="repertoire-selected-count">0</span>/3
                 </div>
             </div>
             
             <div class="repertoire-search">
-                <input type="text" class="repertoire-search-input" id="modal-search" 
-                       placeholder="Buscar canción o artista..." onkeyup="searchInModal()">
+                <input type="text" class="repertoire-search-input" id="repertoire-search" 
+                       placeholder="Buscar canción o artista..." onkeyup="searchRepertoire()">
             </div>
             
             <div class="songs-header">
                 <h6 class="mb-0"><i class="bi bi-music-note-list"></i> CANCIONES DISPONIBLES</h6>
-                <span class="badge bg-dark" id="modal-total-songs">0 canciones</span>
+                <span class="badge bg-dark" id="repertoire-total-songs">0 canciones</span>
             </div>
             
-            <div class="repertoire-list-container" id="modal-songs-container">
+            <div class="repertoire-list-container" id="repertoire-songs-container">
                 <div class="text-center py-4">
                     <div class="spinner-border text-primary"></div>
                     <p class="mt-2">Cargando canciones...</p>
                 </div>
             </div>
             
-            <button id="modal-submit-votes" class="btn-submit-votes" disabled 
-                    onclick="submitVotesFromModal()">
-                <i class="bi bi-send-check"></i> ENVIAR MIS <span id="selected-count-btn">0</span> CANCIONES
+            <button class="action-btn message-btn" onclick="confirmSongSelection()" style="margin-top: 10px;">
+                <i class="bi bi-check-circle"></i> CONFIRMAR SELECCIÓN
             </button>
             
-            <!-- BOTÓN CERRAR (ROJO) -->
-            <button class="action-btn cancel-btn" onclick="closeRepertoireModal()" style="width: 100%; margin-top: 10px;">
-                <i class="bi bi-check-circle"></i> CERRAR
-            </button>
-            
-            <div id="submit-feedback" class="feedback-container mt-2"></div>
+            <button class="action-btn cancel-btn" onclick="closeRepertoireModal()">CANCELAR</button>
         </div>
     </div>
 
@@ -947,7 +626,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
     <script>
-        // ========== CONFIGURACIÓN FIREBASE ==========
         const firebaseConfig = {
             apiKey: "AIzaSyAitXyfb6Zc9GVEm0X_Hen_QOiA5Y3Aw1U",
             authDomain: "rockrequests.firebaseapp.com",
@@ -957,57 +635,31 @@
             appId: "1:1000216858616:web:00bbd448eb034cba15d00d"
         };
 
-        // ========== VARIABLES GLOBALES ==========
         let allSongs = [];
         let myVotes = [];
+        let tempSelectedSongs = [];
         let db = null;
         let connectionListener = null;
         let deviceId = null;
-        let songsListener = null; // Para escuchar cambios en tiempo real
+        let songsListener = null;
 
-        // ========== INICIALIZAR ==========
         document.addEventListener('DOMContentLoaded', function() {
-            console.log("🚀 Iniciando aplicación MobyDick...");
-            
-            // Ocultar loading screen
             setTimeout(() => {
                 const loadingScreen = document.getElementById('loading-screen');
                 if (loadingScreen) {
                     loadingScreen.classList.add('fade-out');
-                    setTimeout(() => {
-                        loadingScreen.style.display = 'none';
-                    }, 500);
+                    setTimeout(() => loadingScreen.style.display = 'none', 500);
                 }
             }, 1500);
             
-            // Generar o recuperar ID de dispositivo
             deviceId = localStorage.getItem('mobydick_device_id');
             if (!deviceId) {
                 deviceId = 'device_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
                 localStorage.setItem('mobydick_device_id', deviceId);
             }
-            console.log("📱 ID de dispositivo:", deviceId);
             
             initializeFirebase();
             
-            // Formulario de mensajes
-            const messageForm = document.getElementById('message-form');
-            if (messageForm) {
-                messageForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    submitMessage();
-                });
-            }
-            
-            // Contador de caracteres para mensaje en modal
-            const modalMessageInput = document.getElementById('modal-user-message');
-            if (modalMessageInput) {
-                modalMessageInput.addEventListener('input', function() {
-                    updateModalCharCounter();
-                });
-            }
-            
-            // Formulario de sugerencias
             const suggestionForm = document.getElementById('suggestion-form');
             if (suggestionForm) {
                 suggestionForm.addEventListener('submit', function(e) {
@@ -1016,735 +668,28 @@
                 });
             }
             
-            // Cargar votos guardados
             const saved = localStorage.getItem('mobydick_votes');
             if (saved) {
                 try {
                     myVotes = JSON.parse(saved);
-                    console.log(`📋 ${myVotes.length} votos cargados`);
-                } catch (e) {
-                    console.error("Error cargando votos:", e);
-                    myVotes = [];
-                }
+                } catch (e) { myVotes = []; }
             }
-            
-            // Actualizar contador inicial
-            updateSelectedCounter();
-            
-            // Ajustar altura para móviles
-            adjustHeightForMobile();
-            window.addEventListener('resize', adjustHeightForMobile);
-            
-            // Ajustar títulos en móviles muy pequeños
-            adjustTitlesForSmallScreens();
-            window.addEventListener('resize', adjustTitlesForSmallScreens);
         });
-
-        // ========== AJUSTAR TÍTULOS PARA PANTALLAS PEQUEÑAS ==========
-        function adjustTitlesForSmallScreens() {
-            const titles = document.querySelectorAll('.modal-title, .repertoire-modal-title');
-            titles.forEach(title => {
-                const shortVersion = title.getAttribute('data-short');
-                const fullText = title.querySelector('.full-text');
-                
-                if (window.innerWidth <= 480 && shortVersion) {
-                    title.textContent = shortVersion;
-                } else if (fullText) {
-                    title.innerHTML = fullText.outerHTML;
-                }
-            });
-        }
-
-        // ========== FUNCIONES MODALES ==========
-        window.openRepertoireModal = function() {
-            const modal = document.getElementById('repertoire-modal');
-            modal.classList.add('active');
-            displaySongsInModal(allSongs);
-            updateSelectedCounter();
-            updateModalSubmitButton();
-            document.body.style.overflow = 'hidden';
-        };
-
-        window.closeRepertoireModal = function() {
-            const modal = document.getElementById('repertoire-modal');
-            modal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        };
-
-        window.openMessageModal = function() {
-            const modal = document.getElementById('message-modal');
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        };
-
-        window.closeMessageModal = function() {
-            const modal = document.getElementById('message-modal');
-            modal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        };
-
-        window.openSuggestionModal = function() {
-            const modal = document.getElementById('suggestion-modal');
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        };
-
-        window.closeSuggestionModal = function() {
-            const modal = document.getElementById('suggestion-modal');
-            modal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        };
-
-        window.searchInModal = function() {
-            const searchTerm = document.getElementById('modal-search').value.toLowerCase();
-            
-            if (!searchTerm) {
-                displaySongsInModal(allSongs);
-                return;
-            }
-            
-            const filtered = allSongs.filter(song => 
-                song.title.toLowerCase().includes(searchTerm) ||
-                song.artist.toLowerCase().includes(searchTerm) ||
-                (song.genre && song.genre.toLowerCase().includes(searchTerm))
-            );
-            
-            displaySongsInModal(filtered);
-        };
-
-        function displaySongsInModal(songs) {
-            const container = document.getElementById("modal-songs-container");
-            const totalElement = document.getElementById("modal-total-songs");
-            
-            if (!container) return;
-            
-            if (songs.length === 0) {
-                container.innerHTML = `
-                    <div class="alert alert-info m-3">
-                        <i class="bi bi-info-circle"></i>
-                        No hay canciones que coincidan.
-                    </div>
-                `;
-                if (totalElement) totalElement.textContent = "0 canciones";
-                return;
-            }
-            
-            if (totalElement) {
-                totalElement.textContent = `${songs.length} cancion${songs.length !== 1 ? "es" : ""}`;
-            }
-            
-            let html = "";
-            
-            songs.forEach((song) => {
-                const isVoted = myVotes.includes(song.id);
-                const canVote = myVotes.length < 3 || isVoted;
-                
-                html += `
-                    <div class="song-item" data-song-id="${song.id}">
-                        <div class="song-info">
-                            <div class="song-title">${song.title}</div>
-                            <div class="song-artist">${song.artist}</div>
-                            <div class="mt-1">
-                                ${song.genre ? `<span class="badge" style="background: var(--pub-blue); color: white;">${song.genre}</span>` : ""}
-                            </div>
-                        </div>
-                        <div class="song-actions">
-                            <span class="votes-badge">${song.votes} ${song.votes === 1 ? 'voto' : 'votos'}</span>
-                            <button class="btn btn-vote ${isVoted ? 'selected' : ''}" 
-                                    onclick="toggleVoteForSong('${song.id}')"
-                                    ${!canVote && !isVoted ? "disabled" : ""}>
-                                ${isVoted ? '<i class="bi bi-check-circle"></i> ELEJIDA' : '<i class="bi bi-hand-thumbs-up"></i> ELEGIR'}
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-        }
-
-        // ========== FUNCIÓN TOGGLE VOTE ==========
-        window.toggleVoteForSong = function(songId) {
-            const isVoted = myVotes.includes(songId);
-            
-            if (isVoted) {
-                removeVote(songId);
-            } else {
-                if (checkVoteLimit()) {
-                    return;
-                }
-                
-                if (myVotes.length >= 3) {
-                    showMainFeedback("❌ Máximo 3 canciones por persona", "danger");
-                    return;
-                }
-                
-                addVote(songId);
-            }
-        };
-
-        function addVote(songId) {
-            const songRef = db.collection("songs").doc(songId);
-            
-            // Deshabilitar botón temporalmente para evitar doble clic
-            const voteBtn = document.querySelector(`.song-item[data-song-id="${songId}"] .btn-vote`);
-            if (voteBtn) {
-                voteBtn.disabled = true;
-                voteBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
-            }
-            
-            songRef.update({
-                votes: firebase.firestore.FieldValue.increment(1),
-                lastVoted: new Date().toISOString()
-            })
-            .then(() => {
-                myVotes.push(songId);
-                localStorage.setItem("mobydick_votes", JSON.stringify(myVotes));
-                
-                updateSelectedCounter();
-                updateModalSubmitButton();
-                
-                // NO actualizamos el contador de votos aquí - lo hará el listener
-                const songElement = document.querySelector(`.song-item[data-song-id="${songId}"]`);
-                if (songElement) {
-                    const voteBtn = songElement.querySelector('.btn-vote');
-                    if (voteBtn) {
-                        voteBtn.classList.add('selected');
-                        voteBtn.innerHTML = '<i class="bi bi-check-circle"></i> ELEJIDA';
-                        voteBtn.disabled = false;
-                    }
-                }
-                
-                showMainFeedback("✅ Canción agregada a tu lista", "success");
-            })
-            .catch((error) => {
-                console.error("Error votando:", error);
-                showMainFeedback("❌ Error al agregar canción", "danger");
-                
-                // Rehabilitar botón si hay error
-                if (voteBtn) {
-                    voteBtn.disabled = false;
-                    voteBtn.innerHTML = '<i class="bi bi-hand-thumbs-up"></i> ELEGIR';
-                }
-            });
-        }
-
-        function removeVote(songId) {
-            const songRef = db.collection("songs").doc(songId);
-            
-            // Deshabilitar botón temporalmente
-            const voteBtn = document.querySelector(`.song-item[data-song-id="${songId}"] .btn-vote`);
-            if (voteBtn) {
-                voteBtn.disabled = true;
-                voteBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
-            }
-            
-            songRef.update({
-                votes: firebase.firestore.FieldValue.increment(-1)
-            })
-            .then(() => {
-                myVotes = myVotes.filter(id => id !== songId);
-                localStorage.setItem("mobydick_votes", JSON.stringify(myVotes));
-                
-                updateSelectedCounter();
-                updateModalSubmitButton();
-                
-                // NO actualizamos el contador de votos aquí - lo hará el listener
-                const songElement = document.querySelector(`.song-item[data-song-id="${songId}"]`);
-                if (songElement) {
-                    const voteBtn = songElement.querySelector('.btn-vote');
-                    if (voteBtn) {
-                        voteBtn.classList.remove('selected');
-                        voteBtn.innerHTML = '<i class="bi bi-hand-thumbs-up"></i> ELEGIR';
-                        voteBtn.disabled = false;
-                    }
-                }
-                
-                showMainFeedback("🗑️ Canción removida de tu lista", "warning");
-            })
-            .catch((error) => {
-                console.error("Error removiendo voto:", error);
-                showMainFeedback("❌ Error al remover canción", "danger");
-                
-                // Rehabilitar botón si hay error
-                if (voteBtn) {
-                    voteBtn.disabled = false;
-                    voteBtn.innerHTML = '<i class="bi bi-check-circle"></i> ELEJIDA';
-                }
-            });
-        }
-
-        // ========== ACTUALIZAR CONTADORES ==========
-        function updateSelectedCounter() {
-            const countElement = document.getElementById("selected-count");
-            const btnCountElement = document.getElementById("selected-count-btn");
-            
-            if (countElement) {
-                countElement.textContent = myVotes.length;
-            }
-            
-            if (btnCountElement) {
-                btnCountElement.textContent = myVotes.length;
-            }
-            
-            const counter = document.getElementById("selected-counter");
-            if (counter) {
-                if (myVotes.length === 0) {
-                    counter.style.background = "linear-gradient(145deg, #555, #444)";
-                } else if (myVotes.length < 3) {
-                    counter.style.background = "linear-gradient(145deg, var(--pub-blue), #083354)";
-                } else {
-                    counter.style.background = "linear-gradient(145deg, var(--pub-red), #a80d14)";
-                }
-            }
-        }
-
-        function updateModalSubmitButton() {
-            const modalSubmitBtn = document.getElementById("modal-submit-votes");
-            if (modalSubmitBtn) {
-                modalSubmitBtn.disabled = myVotes.length === 0;
-                modalSubmitBtn.innerHTML = `<i class="bi bi-send-check"></i> ENVIAR MIS ${myVotes.length} CANCIONES`;
-            }
-        }
-
-        // ========== ENVIAR VOTOS ==========
-        window.submitVotesFromModal = function() {
-            if (myVotes.length === 0) return;
-            
-            const btn = document.getElementById("modal-submit-votes");
-            const originalText = btn.innerHTML;
-            
-            btn.innerHTML = '<i class="bi bi-check2-circle"></i> ¡ENVIADO!';
-            btn.disabled = true;
-            
-            const today = new Date().toISOString().split('T')[0];
-            const deviceVotesKey = `mobydick_votes_${deviceId}_${today}`;
-            const votesToday = parseInt(localStorage.getItem(deviceVotesKey) || '0') + 1;
-            localStorage.setItem(deviceVotesKey, votesToday.toString());
-            
-            const history = JSON.parse(localStorage.getItem("mobydick_history") || "[]");
-            const songTitles = myVotes.map(id => {
-                const song = allSongs.find(s => s.id === id);
-                return song ? song.title : "";
-            }).filter(Boolean);
-            
-            history.push({
-                date: new Date().toISOString(),
-                songs: songTitles,
-                type: "votes"
-            });
-            localStorage.setItem("mobydick_history", JSON.stringify(history));
-            
-            myVotes = [];
-            localStorage.removeItem("mobydick_votes");
-            
-            updateSelectedCounter();
-            updateModalSubmitButton();
-            
-            showMainFeedback("🎉 ¡Gracias por tus votos! Las canciones fueron enviadas.", "success");
-            
-            setTimeout(() => {
-                closeRepertoireModal();
-                
-                setTimeout(() => {
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
-                }, 1000);
-            }, 2000);
-        };
-
-        // ========== ENVIAR MENSAJE ==========
-        window.submitMessage = function() {
-            const messageInput = document.getElementById('modal-user-message');
-            const message = messageInput.value.trim();
-            
-            if (!message) {
-                showMessageModalFeedback("Escribe un mensaje para la banda", "warning");
-                return;
-            }
-            
-            if (message.length > 120) {
-                showMessageModalFeedback("Máximo 120 caracteres", "warning");
-                return;
-            }
-            
-            const btn = document.querySelector('#message-form button[type="submit"]');
-            const originalText = btn.innerHTML;
-            
-            btn.innerHTML = '<i class="bi bi-check2-circle"></i> ENVIANDO...';
-            btn.disabled = true;
-            
-            db.collection("temporary_data").add({
-                type: "message",
-                message: message,
-                deviceId: deviceId,
-                createdAt: new Date().toISOString(),
-                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-                status: "unread"
-            })
-            .then(() => {
-                messageInput.value = '';
-                updateModalCharCounter();
-                
-                const history = JSON.parse(localStorage.getItem("mobydick_messages_history") || "[]");
-                history.push({
-                    date: new Date().toISOString(),
-                    message: message,
-                    type: "message"
-                });
-                localStorage.setItem("mobydick_messages_history", JSON.stringify(history));
-                
-                showMessageModalFeedback("✅ ¡Mensaje enviado a la banda!", "success");
-                
-                setTimeout(() => {
-                    closeMessageModal();
-                }, 1500);
-            })
-            .catch(error => {
-                console.error("Error enviando mensaje:", error);
-                showMessageModalFeedback("❌ Error al enviar mensaje", "danger");
-            })
-            .finally(() => {
-                setTimeout(() => {
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
-                }, 2000);
-            });
-        };
-
-        function updateModalCharCounter() {
-            const messageInput = document.getElementById('modal-user-message');
-            const counter = document.getElementById('modal-char-counter');
-            
-            if (!messageInput || !counter) return;
-            
-            const message = messageInput.value;
-            const length = message.length;
-            const maxLength = 120;
-            
-            counter.textContent = `${length}/${maxLength} caracteres`;
-            
-            if (length > maxLength * 0.9) {
-                counter.classList.add('warning');
-            } else {
-                counter.classList.remove('warning');
-            }
-        }
-
-        function showMessageModalFeedback(message, type) {
-            const feedback = document.getElementById("message-modal-feedback");
-            if (!feedback) return;
-            
-            feedback.innerHTML = `
-                <div class="alert alert-${type} alert-dismissible fade show py-2" role="alert">
-                    <small>${message}</small>
-                    <button type="button" class="btn-close btn-sm" onclick="this.parentElement.remove()"></button>
-                </div>
-            `;
-            
-            setTimeout(() => {
-                if (feedback.firstChild) {
-                    feedback.firstChild.remove();
-                }
-            }, 3000);
-        }
-
-        // ========== SUGERENCIAS ==========
-        function submitSuggestion() {
-            const title = document.getElementById('suggestion-title').value.trim();
-            const artist = document.getElementById('suggestion-artist').value.trim();
-            
-            if (!title || !artist) {
-                showSuggestionModalFeedback("Por favor completa ambos campos", "warning");
-                return;
-            }
-            
-            if (title.length > 100 || artist.length > 100) {
-                showSuggestionModalFeedback("Máximo 100 caracteres por campo", "warning");
-                return;
-            }
-            
-            const suggestion = {
-                title: title,
-                artist: artist,
-                deviceId: deviceId,
-                createdAt: new Date().toISOString(),
-                type: "suggestion",
-                status: "pending"
-            };
-            
-            db.collection("temporary_data").add({
-                ...suggestion,
-                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
-            })
-            .then(() => {
-                document.getElementById('suggestion-title').value = '';
-                document.getElementById('suggestion-artist').value = '';
-                
-                showSuggestionModalFeedback("✅ Sugerencia enviada a la banda", "success");
-                
-                setTimeout(() => {
-                    closeSuggestionModal();
-                }, 1500);
-            })
-            .catch((error) => {
-                console.error("Error enviando sugerencia:", error);
-                showSuggestionModalFeedback("❌ Error al enviar sugerencia", "danger");
-            });
-        }
-        
-        function showSuggestionModalFeedback(message, type) {
-            const feedback = document.getElementById("suggestion-modal-feedback");
-            if (!feedback) return;
-            
-            feedback.innerHTML = `
-                <div class="alert alert-${type} alert-dismissible fade show py-2" role="alert">
-                    <small>${message}</small>
-                    <button type="button" class="btn-close btn-sm" onclick="this.parentElement.remove()"></button>
-                </div>
-            `;
-            
-            setTimeout(() => {
-                if (feedback.firstChild) {
-                    feedback.firstChild.remove();
-                }
-            }, 3000);
-        }
-
-        // ========== COMPARTIR ENLACE ==========
-        window.shareLink = function() {
-            const url = window.location.href;
-            const title = "¡Vota por MobyDick en Porter British Pub!";
-            const text = "Elige las canciones que quieres escuchar. ¡Rock en vivo! 🎸";
-            
-            if (navigator.share) {
-                navigator.share({
-                    title: title,
-                    text: text,
-                    url: url
-                })
-                .then(() => showMainFeedback("✅ ¡Enlace compartido!", "success"))
-                .catch(err => {
-                    if (err.name !== 'AbortError') {
-                        copyToClipboard(url);
-                    }
-                });
-            } else {
-                copyToClipboard(url);
-            }
-        };
-
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text)
-                .then(() => {
-                    showMainFeedback("✅ Enlace copiado al portapapeles", "success");
-                })
-                .catch(() => {
-                    const textarea = document.createElement('textarea');
-                    textarea.value = text;
-                    document.body.appendChild(textarea);
-                    textarea.select();
-                    try {
-                        document.execCommand('copy');
-                        showMainFeedback("✅ Enlace copiado", "success");
-                    } catch (e) {
-                        showMainFeedback("❌ No se pudo copiar el enlace", "danger");
-                    }
-                    document.body.removeChild(textarea);
-                });
-        }
-
-        // ========== FEEDBACK PRINCIPAL ==========
-        function showMainFeedback(message, type) {
-            const feedback = document.getElementById("main-feedback");
-            if (!feedback) return;
-            
-            feedback.innerHTML = `
-                <div class="alert alert-${type} alert-dismissible fade show py-2" role="alert">
-                    <small>${message}</small>
-                    <button type="button" class="btn-close btn-sm" onclick="this.parentElement.remove()"></button>
-                </div>
-            `;
-            
-            setTimeout(() => {
-                if (feedback.firstChild) {
-                    feedback.firstChild.remove();
-                }
-            }, 3000);
-        }
-
-        function showSubmitFeedback(message, type) {
-            const feedback = document.getElementById("submit-feedback");
-            if (!feedback) return;
-            
-            feedback.innerHTML = `
-                <div class="alert alert-${type} alert-dismissible fade show py-2" role="alert">
-                    <small>${message}</small>
-                    <button type="button" class="btn-close btn-sm" onclick="this.parentElement.remove()"></button>
-                </div>
-            `;
-            
-            setTimeout(() => {
-                if (feedback.firstChild) {
-                    feedback.firstChild.remove();
-                }
-            }, 3000);
-        }
 
         function initializeFirebase() {
             try {
                 firebase.initializeApp(firebaseConfig);
                 db = firebase.firestore();
                 
-                console.log("✅ Firebase inicializado");
-                
                 checkVoteLimit();
                 setupConnectionCounter();
                 loadSongs();
-                setupEventListeners();
                 setupSmartListener();
-                
             } catch (error) {
-                console.error("❌ Error Firebase:", error);
-                showError("Error de conexión. Recarga la página.");
+                console.error("Error Firebase:", error);
             }
         }
 
-        // ========== LISTENER EN TIEMPO REAL PARA CANCIONES ==========
-        function setupSmartListener() {
-            // Configurar listener para cambios en tiempo real
-            songsListener = db.collection("songs").onSnapshot((snapshot) => {
-                snapshot.docChanges().forEach((change) => {
-                    if (change.type === "modified") {
-                        const updatedSong = {
-                            id: change.doc.id,
-                            ...change.doc.data()
-                        };
-                        
-                        // Actualizar en allSongs
-                        const index = allSongs.findIndex(s => s.id === updatedSong.id);
-                        if (index !== -1) {
-                            allSongs[index] = updatedSong;
-                        }
-                        
-                        // Actualizar en la UI si la modal está abierta
-                        const modal = document.getElementById('repertoire-modal');
-                        if (modal.classList.contains('active')) {
-                            updateSongInUI(updatedSong);
-                        }
-                    }
-                });
-            }, (error) => {
-                console.error("Error en listener de canciones:", error);
-            });
-        }
-
-        function updateSongInUI(song) {
-            const songElement = document.querySelector(`.song-item[data-song-id="${song.id}"]`);
-            if (songElement) {
-                const votesBadge = songElement.querySelector('.votes-badge');
-                if (votesBadge) {
-                    votesBadge.textContent = `${song.votes} ${song.votes === 1 ? 'voto' : 'votos'}`;
-                }
-            }
-        }
-
-        // ========== VERIFICAR LÍMITE DE VOTOS ==========
-        function checkVoteLimit() {
-            const today = new Date().toISOString().split('T')[0];
-            const deviceVotesKey = `mobydick_votes_${deviceId}_${today}`;
-            
-            const votesToday = localStorage.getItem(deviceVotesKey);
-            if (votesToday && parseInt(votesToday) >= 3) {
-                const modalSubmitBtn = document.getElementById('modal-submit-votes');
-                
-                if (modalSubmitBtn) {
-                    modalSubmitBtn.disabled = true;
-                    modalSubmitBtn.innerHTML = '<i class="bi bi-exclamation-triangle"></i> LÍMITE ALCANZADO';
-                    modalSubmitBtn.style.background = '#dc3545';
-                }
-                
-                setTimeout(() => {
-                    const voteButtons = document.querySelectorAll('.btn-vote');
-                    voteButtons.forEach(btn => {
-                        const songItem = btn.closest('.song-item');
-                        const songId = songItem ? songItem.getAttribute('data-song-id') : null;
-                        const isVoted = songId ? myVotes.includes(songId) : false;
-                        
-                        if (!btn.disabled && !isVoted) {
-                            btn.disabled = true;
-                            btn.innerHTML = '<i class="bi bi-exclamation-triangle"></i> LÍMITE';
-                            btn.style.background = '#555';
-                        }
-                    });
-                }, 500);
-                
-                showMainFeedback("❌ Has alcanzado el límite de 3 votos por dispositivo/día", "warning");
-                return true;
-            }
-            return false;
-        }
-
-        // ========== CONTADOR DE CONEXIONES ==========
-        function setupConnectionCounter() {
-            const counterRef = db.collection('stats').doc('connections');
-            
-            const sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-            localStorage.setItem('mobydick_session_id', sessionId);
-            
-            counterRef.update({
-                count: firebase.firestore.FieldValue.increment(1),
-                lastConnection: new Date().toISOString(),
-                sessions: firebase.firestore.FieldValue.arrayUnion(sessionId)
-            })
-            .catch((error) => {
-                if (error.code === 'not-found') {
-                    counterRef.set({
-                        count: 1,
-                        lastConnection: new Date().toISOString(),
-                        totalConnections: 1,
-                        sessions: [sessionId],
-                        created: new Date().toISOString()
-                    });
-                }
-            });
-            
-            connectionListener = counterRef.onSnapshot((doc) => {
-                if (doc.exists) {
-                    const data = doc.data();
-                    const currentCount = data.count || 0;
-                    
-                    const connectedElement = document.getElementById("connected-count");
-                    if (connectedElement) connectedElement.textContent = `${currentCount} conectados`;
-                }
-            });
-            
-            window.addEventListener('beforeunload', function() {
-                cleanupConnection(sessionId);
-            });
-            
-            window.addEventListener('pagehide', function() {
-                cleanupConnection(sessionId);
-            });
-        }
-        
-        function cleanupConnection(sessionId) {
-            const counterRef = db.collection('stats').doc('connections');
-            
-            counterRef.update({
-                count: firebase.firestore.FieldValue.increment(-1),
-                sessions: firebase.firestore.FieldValue.arrayRemove(sessionId),
-                lastDisconnect: new Date().toISOString()
-            }).catch((error) => {
-                console.log("✅ Sesión cerrada");
-            });
-            
-            if (connectionListener) {
-                connectionListener();
-            }
-        }
-
-        // ========== FUNCIONES DE CANCIONES ==========
         function loadSongs() {
             db.collection("songs").orderBy("title").get()
                 .then((snapshot) => {
@@ -1756,66 +701,387 @@
                             title: data.title || "Sin título",
                             artist: data.artist || "Desconocido",
                             genre: data.genre || "Rock",
-                            votes: data.votes || 0,
-                            duration: data.duration || "",
-                            year: data.year || ""
+                            votes: data.votes || 0
                         });
                     });
-                    
-                    console.log(`✅ ${allSongs.length} canciones cargadas`);
-                    
-                    if (allSongs.length === 0) {
-                        showError("No hay canciones en el repertorio aún.");
-                    }
-                    
                 })
-                .catch((error) => {
-                    console.error("❌ Error cargando canciones:", error);
-                    showError("Error cargando canciones. Intenta recargar.");
+                .catch(error => console.error("Error cargando canciones:", error));
+        }
+
+        function setupSmartListener() {
+            songsListener = db.collection("songs").onSnapshot((snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === "modified") {
+                        const updatedSong = { id: change.doc.id, ...change.doc.data() };
+                        const index = allSongs.findIndex(s => s.id === updatedSong.id);
+                        if (index !== -1) allSongs[index] = updatedSong;
+                        
+                        if (document.getElementById('repertoire-modal').classList.contains('active')) {
+                            displayRepertoireSongs();
+                        }
+                    }
+                });
+            });
+        }
+
+        function setupConnectionCounter() {
+            const counterRef = db.collection('stats').doc('connections');
+            const sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            
+            counterRef.update({
+                count: firebase.firestore.FieldValue.increment(1),
+                sessions: firebase.firestore.FieldValue.arrayUnion(sessionId)
+            }).catch(() => {
+                counterRef.set({
+                    count: 1,
+                    sessions: [sessionId],
+                    created: new Date().toISOString()
+                });
+            });
+            
+            connectionListener = counterRef.onSnapshot((doc) => {
+                if (doc.exists) {
+                    document.getElementById("connected-count").textContent = `${doc.data().count || 0} conectados`;
+                }
+            });
+            
+            window.addEventListener('beforeunload', () => {
+                counterRef.update({
+                    count: firebase.firestore.FieldValue.increment(-1),
+                    sessions: firebase.firestore.FieldValue.arrayRemove(sessionId)
+                }).catch(() => {});
+                if (connectionListener) connectionListener();
+            });
+        }
+
+        function checkVoteLimit() {
+            const today = new Date().toISOString().split('T')[0];
+            const votesToday = localStorage.getItem(`mobydick_votes_${deviceId}_${today}`);
+            if (votesToday && parseInt(votesToday) >= 3) {
+                document.getElementById('modal-submit-votes').disabled = true;
+                return true;
+            }
+            return false;
+        }
+
+        // ========== FUNCIONES DE MODALES ==========
+        window.openRequestModal = function() {
+            tempSelectedSongs = [...myVotes];
+            updateRequestSelectedSongs();
+            document.getElementById('request-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.closeRequestModal = function() {
+            document.getElementById('request-modal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        };
+
+        window.openSuggestionModal = function() {
+            document.getElementById('suggestion-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.closeSuggestionModal = function() {
+            document.getElementById('suggestion-modal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        };
+
+        window.openRepertoireModalForRequest = function() {
+            document.getElementById('repertoire-modal').classList.add('active');
+            displayRepertoireSongs();
+            updateRepertoireCounter();
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.closeRepertoireModal = function() {
+            document.getElementById('repertoire-modal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        };
+
+        window.searchRepertoire = function() {
+            displayRepertoireSongs();
+        };
+
+        function displayRepertoireSongs() {
+            const container = document.getElementById('repertoire-songs-container');
+            const searchTerm = document.getElementById('repertoire-search').value.toLowerCase();
+            
+            let filteredSongs = allSongs;
+            if (searchTerm) {
+                filteredSongs = allSongs.filter(song => 
+                    song.title.toLowerCase().includes(searchTerm) ||
+                    song.artist.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            document.getElementById('repertoire-total-songs').textContent = `${filteredSongs.length} canciones`;
+            
+            let html = '';
+            filteredSongs.forEach(song => {
+                const isSelected = tempSelectedSongs.includes(song.id);
+                html += `
+                    <div class="song-item" data-song-id="${song.id}">
+                        <div class="song-info">
+                            <div class="song-title">${song.title}</div>
+                            <div class="song-artist">${song.artist}</div>
+                        </div>
+                        <div class="song-actions">
+                            <span class="votes-badge">${song.votes} votos</span>
+                            <button class="btn-vote ${isSelected ? 'selected' : ''}" 
+                                    onclick="toggleTempSong('${song.id}')">
+                                ${isSelected ? '<i class="bi bi-check-circle"></i> SELECCIONADA' : '<i class="bi bi-hand-thumbs-up"></i> SELECCIONAR'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        window.toggleTempSong = function(songId) {
+            const isSelected = tempSelectedSongs.includes(songId);
+            
+            if (isSelected) {
+                tempSelectedSongs = tempSelectedSongs.filter(id => id !== songId);
+            } else {
+                if (tempSelectedSongs.length >= 3) {
+                    showMainFeedback("❌ Máximo 3 canciones por solicitud", "danger");
+                    return;
+                }
+                tempSelectedSongs.push(songId);
+            }
+            
+            // Actualizar UI
+            const songElement = document.querySelector(`.song-item[data-song-id="${songId}"]`);
+            if (songElement) {
+                const btn = songElement.querySelector('.btn-vote');
+                if (btn) {
+                    if (tempSelectedSongs.includes(songId)) {
+                        btn.classList.add('selected');
+                        btn.innerHTML = '<i class="bi bi-check-circle"></i> SELECCIONADA';
+                    } else {
+                        btn.classList.remove('selected');
+                        btn.innerHTML = '<i class="bi bi-hand-thumbs-up"></i> SELECCIONAR';
+                    }
+                }
+            }
+            
+            updateRepertoireCounter();
+        };
+
+        function updateRepertoireCounter() {
+            document.getElementById('repertoire-selected-count').textContent = tempSelectedSongs.length;
+        }
+
+        window.confirmSongSelection = function() {
+            updateRequestSelectedSongs();
+            closeRepertoireModal();
+        };
+
+        function updateRequestSelectedSongs() {
+            const container = document.getElementById('request-songs-list');
+            const countSpan = document.getElementById('request-count');
+            
+            countSpan.textContent = `${tempSelectedSongs.length}/3`;
+            
+            if (tempSelectedSongs.length === 0) {
+                container.innerHTML = '<small class="text-muted">No has seleccionado canciones</small>';
+                return;
+            }
+            
+            let html = '';
+            tempSelectedSongs.forEach(songId => {
+                const song = allSongs.find(s => s.id === songId);
+                if (song) {
+                    html += `
+                        <div class="selected-song-item">
+                            <small><i class="bi bi-music-note"></i> <strong>${song.title}</strong> - ${song.artist}</small>
+                            <span class="remove-song-btn" onclick="removeTempSong('${song.id}')">
+                                <i class="bi bi-x-circle"></i>
+                            </span>
+                        </div>
+                    `;
+                }
+            });
+            
+            container.innerHTML = html;
+        }
+
+        window.removeTempSong = function(songId) {
+            tempSelectedSongs = tempSelectedSongs.filter(id => id !== songId);
+            updateRequestSelectedSongs();
+        };
+
+        window.submitCompleteRequest = function() {
+            const message = document.getElementById('request-message').value.trim();
+            
+            if (tempSelectedSongs.length === 0 && !message) {
+                showRequestModalFeedback("Selecciona canciones o escribe un mensaje", "warning");
+                return;
+            }
+            
+            const btn = document.querySelector('#request-modal .request-btn');
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="bi bi-check2-circle"></i> ENVIANDO...';
+            btn.disabled = true;
+            
+            const selectedSongTitles = tempSelectedSongs.map(id => {
+                const song = allSongs.find(s => s.id === id);
+                return song ? `${song.title} - ${song.artist}` : null;
+            }).filter(Boolean);
+            
+            const requestData = {
+                type: "complete_request",
+                message: message || "(Sin mensaje)",
+                songs: selectedSongTitles,
+                songIds: tempSelectedSongs,
+                deviceId: deviceId,
+                createdAt: new Date().toISOString(),
+                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+                status: "unread"
+            };
+            
+            db.collection("temporary_data").add(requestData)
+            .then(() => {
+                if (tempSelectedSongs.length > 0) {
+                    const batch = db.batch();
+                    tempSelectedSongs.forEach(songId => {
+                        const songRef = db.collection("songs").doc(songId);
+                        batch.update(songRef, {
+                            votes: firebase.firestore.FieldValue.increment(1),
+                            lastVoted: new Date().toISOString()
+                        });
+                    });
+                    return batch.commit();
+                }
+                return Promise.resolve();
+            })
+            .then(() => {
+                document.getElementById('request-message').value = '';
+                tempSelectedSongs = [];
+                
+                showRequestModalFeedback("✅ ¡Solicitud enviada a la banda!", "success");
+                
+                setTimeout(() => {
+                    closeRequestModal();
+                }, 1500);
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                showRequestModalFeedback("❌ Error al enviar solicitud", "danger");
+            })
+            .finally(() => {
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }, 2000);
+            });
+        };
+
+        function showRequestModalFeedback(message, type) {
+            const feedback = document.getElementById("request-modal-feedback");
+            if (!feedback) return;
+            
+            feedback.innerHTML = `
+                <div class="alert alert-${type} alert-dismissible fade show py-2">
+                    <small>${message}</small>
+                    <button type="button" class="btn-close btn-sm" onclick="this.parentElement.remove()"></button>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                if (feedback.firstChild) feedback.firstChild.remove();
+            }, 3000);
+        }
+
+        function showMainFeedback(message, type) {
+            const feedback = document.getElementById("main-feedback");
+            if (!feedback) return;
+            
+            feedback.innerHTML = `
+                <div class="alert alert-${type} alert-dismissible fade show py-2">
+                    <small>${message}</small>
+                    <button type="button" class="btn-close btn-sm" onclick="this.parentElement.remove()"></button>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                if (feedback.firstChild) feedback.firstChild.remove();
+            }, 3000);
+        }
+
+        function submitSuggestion() {
+            const title = document.getElementById('suggestion-title').value.trim();
+            const artist = document.getElementById('suggestion-artist').value.trim();
+            
+            if (!title || !artist) {
+                showSuggestionModalFeedback("Completa ambos campos", "warning");
+                return;
+            }
+            
+            db.collection("temporary_data").add({
+                type: "suggestion",
+                title: title,
+                artist: artist,
+                deviceId: deviceId,
+                createdAt: new Date().toISOString(),
+                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+                status: "pending"
+            })
+            .then(() => {
+                document.getElementById('suggestion-title').value = '';
+                document.getElementById('suggestion-artist').value = '';
+                showSuggestionModalFeedback("✅ Sugerencia enviada", "success");
+                setTimeout(() => closeSuggestionModal(), 1500);
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                showSuggestionModalFeedback("❌ Error al enviar", "danger");
+            });
+        }
+
+        function showSuggestionModalFeedback(message, type) {
+            const feedback = document.getElementById("suggestion-modal-feedback");
+            if (!feedback) return;
+            
+            feedback.innerHTML = `
+                <div class="alert alert-${type} alert-dismissible fade show py-2">
+                    <small>${message}</small>
+                    <button type="button" class="btn-close btn-sm" onclick="this.parentElement.remove()"></button>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                if (feedback.firstChild) feedback.firstChild.remove();
+            }, 3000);
+        }
+
+        window.shareLink = function() {
+            const url = window.location.href;
+            if (navigator.share) {
+                navigator.share({ title: "MobyDick", url: url })
+                    .catch(() => copyToClipboard(url));
+            } else {
+                copyToClipboard(url);
+            }
+        };
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text)
+                .then(() => showMainFeedback("✅ Enlace copiado", "success"))
+                .catch(() => {
+                    const textarea = document.createElement('textarea');
+                    textarea.value = text;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    showMainFeedback("✅ Enlace copiado", "success");
                 });
         }
-
-        // ========== AJUSTAR ALTURA ==========
-        function adjustHeightForMobile() {
-            if (window.innerWidth <= 768) {
-                const appContainer = document.querySelector('.app-container');
-                if (appContainer) {
-                    appContainer.style.minHeight = `${window.innerHeight}px`;
-                }
-            }
-        }
-
-        // ========== EVENT LISTENERS ==========
-        function setupEventListeners() {
-            // Prevenir zoom en iOS
-            document.addEventListener('touchstart', function(e) {
-                if (e.touches.length > 1) {
-                    e.preventDefault();
-                }
-            }, { passive: false });
-            
-            let lastTouchEnd = 0;
-            document.addEventListener('touchend', function(e) {
-                const now = Date.now();
-                if (now - lastTouchEnd <= 300) {
-                    e.preventDefault();
-                }
-                lastTouchEnd = now;
-            }, false);
-        }
-
-        function showError(message) {
-            const container = document.getElementById("main-feedback");
-            if (container) {
-                container.innerHTML = `
-                    <div class="alert alert-danger alert-dismissible fade show py-2" role="alert">
-                        <small>${message}</small>
-                        <button type="button" class="btn-close btn-sm" onclick="this.parentElement.remove()"></button>
-                </div>
-                `;
-            }
-        }
-
     </script>
 </body>
 </html>
