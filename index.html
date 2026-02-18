@@ -516,50 +516,49 @@
         </div>
     </div>
 
-    <!-- MODAL DE SOLICITUD INTEGRADA (CORREGIDO) -->
-<div class="modal-overlay" id="request-modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <div class="modal-title">SOLICITA TUS CANCIONES</div>
-        </div>
-        
-        <div id="request-selected-songs" class="mb-3 p-2" style="background: #222; border-radius: 10px;">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="fw-bold" style="color: var(--pub-yellow);">
-                    <i class="bi bi-music-note-list"></i> TUS CANCIONES
-                </span>
-                <span class="badge" style="background: var(--pub-red);" id="request-count">0/3</span>
+    <!-- MODAL DE SOLICITUD INTEGRADA (NUEVO) -->
+    <div class="modal-overlay" id="request-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">SOLICITA TUS CANCIONES</div>
             </div>
-            <div id="request-songs-list" style="min-height: 60px;">
-                <small class="text-muted">No has seleccionado canciones</small>
-            </div>
-            <button class="btn btn-sm w-100 mt-2" style="background: var(--pub-blue); color: white;" 
-                    onclick="openRepertoireModalForRequest()">
-                <i class="bi bi-plus-circle"></i> ELEGIR CANCIONES
-            </button>
-        </div>
-        
-        <div class="form-group">
-            <label class="form-label">
-                <i class="bi bi-chat-text"></i> MENSAJE PARA LA BANDA (opcional)
-            </label>
-            <textarea id="request-message" class="form-control" 
-                      placeholder="Ej: ¡Feliz cumpleaños a Juan! 🎉 / Saludos a MOBY DICK..."
-                      rows="3"></textarea>
-        </div>
             
-             <!-- BOTÓN CON COLOR VERDE Y FUNCIÓN ASEGURADA -->
-        <button class="action-btn" id="submit-request-btn" style="background: linear-gradient(145deg, #28a745, #1e7e34); color: white; border: none; padding: 1rem; font-weight: bold; border-radius: 14px; width: 100%; font-size: 1.1rem; margin-top: 10px;">
-            <i class="bi bi-send"></i> ENVIAR SOLICITUD COMPLETA
-        </button>
-        
-        <button class="action-btn cancel-btn" onclick="closeRequestModal()">
-            <i class="bi bi-x-circle"></i> CANCELAR
-        </button>
-        
-        <div id="request-modal-feedback" class="feedback-container mt-3"></div>
+            <div id="request-selected-songs" class="mb-3 p-2" style="background: #222; border-radius: 10px;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="fw-bold" style="color: var(--pub-yellow);">
+                        <i class="bi bi-music-note-list"></i> TUS CANCIONES
+                    </span>
+                    <span class="badge" style="background: var(--pub-red);" id="request-count">0/3</span>
+                </div>
+                <div id="request-songs-list" style="min-height: 60px;">
+                    <small class="text-muted">No has seleccionado canciones</small>
+                </div>
+                <button class="btn btn-sm w-100 mt-2" style="background: var(--pub-blue); color: white;" 
+                        onclick="openRepertoireModalForRequest()">
+                    <i class="bi bi-plus-circle"></i> ELEGIR CANCIONES
+                </button>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="bi bi-chat-text"></i> MENSAJE PARA LA BANDA (opcional)
+                </label>
+                <textarea id="request-message" class="form-control" 
+                          placeholder="Ej: ¡Feliz cumpleaños a Juan! 🎉 / Saludos a MOBY DICK..."
+                          rows="3"></textarea>
+            </div>
+            
+            <button class="action-btn" onclick="submitCompleteRequest()" style="background: linear-gradient(145deg, #28a745, #1e7e34); color: white; border: none; padding: 1rem; font-weight: bold; border-radius: 14px; width: 100%; font-size: 1.1rem; margin-top: 10px;">
+    <i class="bi bi-send"></i> ENVIAR SOLICITUD COMPLETA
+</button>
+            
+            <button class="action-btn cancel-btn" onclick="closeRequestModal()">
+                <i class="bi bi-x-circle"></i> CANCELAR
+            </button>
+            
+            <div id="request-modal-feedback" class="feedback-container mt-3"></div>
+        </div>
     </div>
-</div>
 
     <!-- MODAL DE SUGERENCIAS -->
     <div class="modal-overlay" id="suggestion-modal">
@@ -1083,8 +1082,6 @@
                     showMainFeedback("✅ Enlace copiado", "success");
                 });
         }
-		
-    
-	</script>
+    </script>
 </body>
 </html>
