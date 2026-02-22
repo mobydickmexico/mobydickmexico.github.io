@@ -431,6 +431,7 @@
             font-weight: 600;
         }
         
+        /* ESTILOS MEJORADOS PARA MENSAJES */
         .messages-container {
             background: var(--panel-bg);
             border-radius: 15px;
@@ -444,7 +445,7 @@
             background: linear-gradient(90deg, #1a1a1a, #252525);
             border-radius: 12px;
             padding: 15px;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             border-left: 6px solid var(--dj-blue);
         }
         
@@ -453,8 +454,6 @@
             background: linear-gradient(90deg, #2a2a2a, #333) !important;
             border-left-color: #666 !important;
         }
-        
-        .message-card.read .message-content { text-decoration: line-through; color: #aaa; }
         
         .message-header {
             display: flex;
@@ -474,61 +473,81 @@
         }
         
         .message-time {
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             color: #bbb;
             background: #333;
-            padding: 4px 8px;
-            border-radius: 6px;
+            padding: 3px 8px;
+            border-radius: 12px;
         }
         
-        .message-content {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            font-weight: 600;
-            color: #fff;
-        }
-        
-        .message-songs {
-            background: rgba(76, 217, 100, 0.1);
-            border-radius: 8px;
-            padding: 10px;
+        /* BURBUJA DE MENSAJE - PROTAGONISTA */
+        .message-bubble {
+            background: rgba(23, 162, 184, 0.15);
+            border-radius: 15px;
+            padding: 15px;
             margin: 10px 0;
-            border-left: 4px solid var(--dj-green);
+            border-left: 4px solid var(--dj-blue);
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: #fff;
+            line-height: 1.4;
         }
         
-        .message-songs ul {
-            list-style: none;
-            padding-left: 0;
-            margin-top: 5px;
+        .message-card.read .message-bubble {
+            opacity: 0.7;
+            background: rgba(100, 100, 100, 0.1);
+            border-left-color: #666;
         }
         
-        .message-songs li {
-            padding: 3px 0;
+        /* CANCIONES COMO TAGS - SECUNDARIAS */
+        .songs-tag-container {
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px dashed #444;
+        }
+        
+        .songs-tag-label {
+            color: var(--dj-green);
+            font-size: 0.8rem;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .song-tag {
+            background: #2a2a2a;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
             color: #ddd;
+            display: inline-block;
+            margin: 0 5px 5px 0;
+            border: 1px solid #3a3a3a;
         }
         
-        .message-songs i { color: var(--dj-green); margin-right: 8px; }
+        .song-tag i {
+            color: var(--dj-green);
+            margin-right: 4px;
+            font-size: 0.7rem;
+        }
         
         .message-actions {
-            display: flex;
-            gap: 12px;
             margin-top: 15px;
-            padding-top: 12px;
-            border-top: 2px dashed #444;
+            display: flex;
+            gap: 10px;
         }
         
         .message-action-btn {
             background: #333;
             color: white;
             border: none;
-            border-radius: 10px;
-            padding: 10px 16px;
-            font-size: 0.9rem;
+            border-radius: 8px;
+            padding: 8px 15px;
+            font-size: 0.85rem;
             cursor: pointer;
-            font-weight: 700;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
         
         .message-read-btn { background: linear-gradient(145deg, #28a745, #1e7e34); }
@@ -536,13 +555,89 @@
         
         .message-card:not(.read) .message-read-btn {
             animation: pulse-attention 2s infinite;
-            border: 2px solid #28a745;
         }
         
         @keyframes pulse-attention {
-            0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); transform: scale(1); }
-            70% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); transform: scale(1.05); }
-            100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); transform: scale(1); }
+            0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+        }
+        
+        /* MODAL DE LOGIN */
+        #admin-login-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-box {
+            background: #151515;
+            padding: 30px;
+            border-radius: 20px;
+            border: 3px solid var(--admin-accent);
+            max-width: 350px;
+            width: 90%;
+        }
+        
+        .login-box h3 {
+            color: var(--dj-yellow);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .login-input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 2px solid #444;
+            background: #222;
+            color: white;
+        }
+        
+        .login-input:focus {
+            border-color: var(--admin-accent);
+            outline: none;
+        }
+        
+        .login-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .login-btn {
+            flex: 2;
+            background: linear-gradient(145deg, var(--admin-accent), #cc0044);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .cancel-btn {
+            flex: 1;
+            background: #333;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .login-error {
+            color: #ff3366;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.9rem;
         }
         
         .suggestions-container {
@@ -570,8 +665,6 @@
             margin-top: 6px;
             justify-content: flex-end;
         }
-        
-        .suggestion-card .suggestion-actions .song-action-btn:first-child { display: none !important; }
         
         .form-container {
             background: var(--panel-bg);
@@ -643,9 +736,6 @@
             padding: 8px 15px;
             cursor: pointer;
             font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
         
         .notification {
@@ -680,80 +770,16 @@
             justify-content: center;
         }
         
-        .dragging {
-            opacity: 0.8 !important;
-            transform: rotate(3deg) !important;
-            box-shadow: 0 10px 30px rgba(255, 149, 0, 0.6) !important;
-            z-index: 10000 !important;
-        }
-        
-        #stage-section .section-title,
-        #messages-section .section-title,
-        #suggestions-section .section-title,
-        #add-section .section-title,
-        #top10-section .section-title {
-            display: none;
-        }
+        .text-bronze { color: #cd7f32 !important; }
+        .bi-trophy-fill.text-warning { color: #FFD700 !important; }
+        .bi-award-fill.text-secondary { color: #C0C0C0 !important; }
         
         @media (max-width: 576px) {
             .nav-btn { min-width: calc(50% - 4px); max-width: calc(50% - 4px); padding: 8px 6px; font-size: 0.75rem; }
             .playlist-control-btn { min-width: 100%; }
             .playlist-controls-vertical { flex-direction: column; }
-            .playlist-song-item { flex-direction: column; align-items: flex-start; gap: 10px; }
-            .playlist-song-actions { display: flex; gap: 6px; width: 100%; justify-content: flex-end; }
             .fullscreen-btn { bottom: 8px; right: 8px; width: 32px; height: 32px; }
-            .message-content { font-size: 1rem; }
-            .message-action-btn { padding: 8px 12px !important; font-size: 0.85rem !important; }
         }
-        
-        .text-bronze { color: #cd7f32 !important; }
-        .bi-trophy-fill.text-warning { color: #FFD700 !important; }
-        .bi-award-fill.text-secondary { color: #C0C0C0 !important; }
-		/* Nuevos estilos para mensajes */
-.message-bubble {
-    background: rgba(23, 162, 184, 0.1);
-    border-radius: 15px;
-    padding: 15px;
-    margin: 10px 0;
-    border-left: 4px solid var(--dj-blue);
-    transition: all 0.3s ease;
-}
-
-.message-bubble:hover {
-    background: rgba(23, 162, 184, 0.15);
-    transform: translateX(5px);
-}
-
-.message-card.read .message-bubble {
-    opacity: 0.7;
-    background: rgba(100, 100, 100, 0.1);
-    border-left-color: #666;
-}
-
-/* Canciones como tags/chips */
-.song-tag {
-    background: #2a2a2a;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    color: #ddd;
-    display: inline-block;
-    margin: 0 5px 5px 0;
-    border: 1px solid #3a3a3a;
-    transition: all 0.2s;
-}
-
-.song-tag:hover {
-    background: #333;
-    border-color: var(--dj-green);
-    transform: translateY(-2px);
-}
-
-.song-tag i {
-    color: var(--dj-green);
-    margin-right: 4px;
-    font-size: 0.7rem;
-}
     </style>
 </head>
 <body>
@@ -913,17 +939,206 @@
         let songsListener = null;
         let isUpdatingOrder = false;
         let filteredRepertoire = null;
+        
+        // ========== VARIABLES PARA SEGURIDAD ==========
+        let loginAttempts = 0;
+        let lastAttemptTime = 0;
 
         document.addEventListener('DOMContentLoaded', function() {
+            console.log("🚀 Iniciando admin...");
+            
             setupNavigation();
             setupForm();
             initializeFirebase();
-            checkAuth();
             setupFullscreen();
             setupFullscreenDetectors();
             updateDynamicHeader('home');
         });
 
+        // ========== NUEVO SISTEMA DE AUTENTICACIÓN SEGURA ==========
+        function checkAuth() {
+            const session = localStorage.getItem('mobydick_admin_session');
+            const sessionExpiry = localStorage.getItem('mobydick_admin_expiry');
+            
+            if (session === 'true' && sessionExpiry && new Date().getTime() < parseInt(sessionExpiry)) {
+                console.log("✅ Sesión válida");
+                setupMessagesListener();
+                setupSuggestionsListener();
+                loadAllData();
+                setupTemporaryDataCleanup();
+                setupSongsListener();
+                return;
+            }
+            
+            showLoginModal();
+        }
+
+        function showLoginModal() {
+            const oldModal = document.getElementById('admin-login-modal');
+            if (oldModal) oldModal.remove();
+            
+            const modalHtml = `
+                <div id="admin-login-modal">
+                    <div class="login-box">
+                        <h3>🔐 ACCESO ADMIN</h3>
+                        <input type="password" id="admin-password-input" class="login-input" placeholder="Contraseña" autofocus>
+                        <div class="login-buttons">
+                            <button class="login-btn" onclick="validateAdminPassword()">INGRESAR</button>
+                            <button class="cancel-btn" onclick="window.location.href='index.html'">SALIR</button>
+                        </div>
+                        <div id="login-error" class="login-error"></div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+            document.getElementById('admin-password-input').focus();
+            
+            document.getElementById('admin-password-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') validateAdminPassword();
+            });
+        }
+
+        function checkRateLimit() {
+            const now = new Date().getTime();
+            
+            if (now - lastAttemptTime > 15 * 60 * 1000) {
+                loginAttempts = 0;
+            }
+            
+            if (loginAttempts >= 5) {
+                document.getElementById('login-error').textContent = "❌ Demasiados intentos. Espera 15 minutos.";
+                return false;
+            }
+            
+            return true;
+        }
+
+        function validateAdminPassword() {
+            if (!checkRateLimit()) return;
+            
+            const password = document.getElementById('admin-password-input').value;
+            const errorDiv = document.getElementById('login-error');
+            
+            loginAttempts++;
+            lastAttemptTime = new Date().getTime();
+            
+            db.collection('admins').doc('credentials').get()
+                .then(doc => {
+                    if (doc.exists && doc.data().password === password) {
+                        const expiry = new Date().getTime() + (8 * 60 * 60 * 1000);
+                        localStorage.setItem('mobydick_admin_session', 'true');
+                        localStorage.setItem('mobydick_admin_expiry', expiry.toString());
+                        
+                        document.getElementById('admin-login-modal').remove();
+                        showNotification("✅ Acceso concedido", "success");
+                        
+                        db.collection('admin_logs').add({
+                            action: 'login_success',
+                            timestamp: new Date().toISOString()
+                        }).catch(() => {});
+                        
+                        setupMessagesListener();
+                        setupSuggestionsListener();
+                        loadAllData();
+                        setupTemporaryDataCleanup();
+                        setupSongsListener();
+                    } else {
+                        errorDiv.textContent = "❌ Contraseña incorrecta";
+                        
+                        db.collection('admin_logs').add({
+                            action: 'login_failed',
+                            timestamp: new Date().toISOString()
+                        }).catch(() => {});
+                    }
+                })
+                .catch(error => {
+                    console.error("Error verificando credenciales:", error);
+                    errorDiv.textContent = "❌ Error de conexión";
+                });
+        }
+
+        setInterval(() => {
+            const expiry = localStorage.getItem('mobydick_admin_expiry');
+            if (expiry && new Date().getTime() > parseInt(expiry)) {
+                localStorage.removeItem('mobydick_admin_session');
+                localStorage.removeItem('mobydick_admin_expiry');
+                window.location.reload();
+            }
+        }, 60000);
+
+        // ========== FUNCIÓN DISPLAY MESSAGES MEJORADA ==========
+        function displayMessages() {
+            const container = document.getElementById('messages-container');
+            if (!container) return;
+            
+            if (allMessages.length === 0) {
+                container.innerHTML = '<div class="text-center py-5"><i class="bi bi-chat-text display-1 text-muted"></i><p class="mt-3">No hay mensajes aún</p></div>';
+                return;
+            }
+            
+            let html = '';
+            allMessages.forEach(msg => {
+                const time = new Date(msg.sentAt).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+                
+                const messageHtml = `
+                    <div class="message-bubble">
+                        ${msg.message}
+                    </div>
+                `;
+                
+                const songsHtml = msg.songs && msg.songs.length > 0 ? `
+                    <div class="songs-tag-container">
+                        <span class="songs-tag-label">
+                            <i class="bi bi-music-note-beamed"></i> Canciones solicitadas (${msg.songs.length}):
+                        </span>
+                        <div>
+                            ${msg.songs.map(song => `
+                                <span class="song-tag">
+                                    <i class="bi bi-music-note"></i> 
+                                    ${song}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                ` : '';
+                
+                const songBadge = msg.songs && msg.songs.length > 0 
+                    ? `<span class="badge ms-2" style="background: var(--dj-green); font-size: 0.7rem;">${msg.songs.length} 🎵</span>` 
+                    : '';
+                
+                html += `
+                    <div class="message-card ${msg.read ? 'read' : ''}">
+                        <div class="message-header">
+                            <div class="message-user">
+                                <i class="bi bi-person-circle"></i>
+                                <span>Usuario ${msg.deviceId.substring(0, 8)}</span>
+                                ${songBadge}
+                            </div>
+                            <span class="message-time">${time}</span>
+                        </div>
+                        
+                        ${messageHtml}
+                        ${songsHtml}
+                        
+                        <div class="message-actions">
+                            ${!msg.read ? `
+                                <button class="message-action-btn message-read-btn" onclick="markAsRead('${msg.id}')">
+                                    <i class="bi bi-check"></i> LEÍDO
+                                </button>
+                            ` : ''}
+                            <button class="message-action-btn message-delete-btn" onclick="deleteMessage('${msg.id}')">
+                                <i class="bi bi-trash"></i> ELIMINAR
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // ========== FUNCIONES DE NAVEGACIÓN ==========
         function updateDynamicHeader(sectionId) {
             const dynamicHeader = document.getElementById('dynamic-header');
             const homeModeHeader = document.getElementById('home-mode-header');
@@ -991,6 +1206,7 @@
             }
         }
 
+        // ========== FUNCIONES DE PANTALLA COMPLETA ==========
         function setupFullscreen() {
             if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
                 setTimeout(() => requestFullscreen(), 1500);
@@ -1021,6 +1237,7 @@
             else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
         }
 
+        // ========== FUNCIONES DE MODAL DE REPERTORIO ==========
         window.openRepertoireModal = function() {
             document.getElementById('repertoire-modal').classList.add('active');
             loadRepertoireModal();
@@ -1089,6 +1306,7 @@
             }).catch(error => showNotification("❌ Error", "danger"));
         };
 
+        // ========== FUNCIONES DE PLAYLIST ==========
         function setupTouchReordering() {
             const container = document.getElementById('playlist-songs-container');
             if (!container) return;
@@ -1115,33 +1333,43 @@
             });
         }
 
+        // ========== INICIALIZAR FIREBASE ==========
         function initializeFirebase() {
             try {
                 firebase.initializeApp(firebaseConfig);
                 db = firebase.firestore();
-                setupMessagesListener();
-                setupSuggestionsListener();
-                loadAllData();
-                setupTemporaryDataCleanup();
-                setupSongsListener();
+                console.log("✅ Firebase inicializado");
+                
+                checkAuth();
+                
             } catch (error) {
-                showNotification("Error de conexion", "danger");
+                console.error("❌ Error Firebase:", error);
             }
         }
 
-        function checkAuth() {
-            if (!localStorage.getItem('mobydick_admin')) {
-                if (prompt("🔐 Contraseña:") === "MobyDick2024") {
-                    localStorage.setItem('mobydick_admin', 'true');
-                } else window.location.href = "index.html";
+        function loadAllData() { 
+            if (localStorage.getItem('mobydick_admin_session') === 'true') {
+                loadSongs(); 
             }
         }
 
-        function setupForm() {
-            document.getElementById('song-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                submitSong();
-            });
+        function loadSongs() {
+            db.collection("songs").get().then(snapshot => {
+                allSongs = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    allSongs.push({
+                        id: doc.id, title: data.title || "Sin titulo", artist: data.artist || "Desconocido",
+                        genre: data.genre || "Rock", votes: data.votes || 0,
+                        inPlaylist: data.inPlaylist || false, played: data.played || false,
+                        playlistOrder: data.playlistOrder || 999
+                    });
+                });
+                playlistSongs = allSongs.filter(s => s.inPlaylist).sort((a, b) => a.playlistOrder - b.playlistOrder);
+                if (currentSection === 'stage') loadStageMode();
+                else if (currentSection === 'top10') updateTop10List();
+                else if (currentSection === 'add') loadDeleteList();
+            }).catch(error => showNotification("Error cargando canciones", "danger"));
         }
 
         function setupSongsListener() {
@@ -1177,28 +1405,9 @@
             }
         }
 
-        function loadAllData() { loadSongs(); }
-
-        function loadSongs() {
-            db.collection("songs").get().then(snapshot => {
-                allSongs = [];
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    allSongs.push({
-                        id: doc.id, title: data.title || "Sin titulo", artist: data.artist || "Desconocido",
-                        genre: data.genre || "Rock", votes: data.votes || 0,
-                        inPlaylist: data.inPlaylist || false, played: data.played || false,
-                        playlistOrder: data.playlistOrder || 999
-                    });
-                });
-                playlistSongs = allSongs.filter(s => s.inPlaylist).sort((a, b) => a.playlistOrder - b.playlistOrder);
-                if (currentSection === 'stage') loadStageMode();
-                else if (currentSection === 'top10') updateTop10List();
-                else if (currentSection === 'add') loadDeleteList();
-            }).catch(error => showNotification("Error cargando canciones", "danger"));
-        }
-
+        // ========== LISTENER DE MENSAJES ==========
         function setupMessagesListener() {
+            if (messagesListener) messagesListener();
             messagesListener = db.collection("temporary_data")
                 .where("type", "in", ["message", "complete_request"])
                 .onSnapshot(snapshot => {
@@ -1226,89 +1435,14 @@
                 }, error => showNotification("Error cargando mensajes", "danger"));
         }
 
-        function displayMessages() {
-    const container = document.getElementById('messages-container');
-    if (!container) return;
-    
-    if (allMessages.length === 0) {
-        container.innerHTML = '<div class="text-center py-5"><i class="bi bi-chat-text display-1 text-muted"></i><p class="mt-3">No hay mensajes aún</p></div>';
-        return;
-    }
-    
-    let html = '';
-    allMessages.forEach(msg => {
-        const time = new Date(msg.sentAt).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
-        
-        // El mensaje ahora es más grande y destacado
-        const messageHtml = `
-            <div class="message-bubble" style="background: rgba(23, 162, 184, 0.15); padding: 15px; border-radius: 15px; margin: 10px 0; border-left: 4px solid var(--dj-blue);">
-                <div style="font-size: 1.3rem; font-weight: 500; color: #fff; line-height: 1.4; margin-bottom: 5px;">
-                    ${msg.message}
-                </div>
-            </div>
-        `;
-        
-        // Las canciones ahora son más compactas y secundarias
-        const songsHtml = msg.songs && msg.songs.length > 0 ? `
-            <div style="margin-top: 12px; padding-top: 10px; border-top: 1px dashed #444;">
-                <small style="color: var(--dj-green); display: block; margin-bottom: 8px;">
-                    <i class="bi bi-music-note-beamed"></i> Canciones solicitadas (${msg.songs.length}):
-                </small>
-                <div style="display: flex; flex-wrap: wrap; gap: 5px;">
-                    ${msg.songs.map(song => `
-                        <span style="background: #2a2a2a; padding: 4px 10px; border-radius: 15px; font-size: 0.85rem; color: #ddd;">
-                            <i class="bi bi-music-note" style="color: var(--dj-green); font-size: 0.7rem;"></i> 
-                            ${song}
-                        </span>
-                    `).join('')}
-                </div>
-            </div>
-        ` : '';
-        
-        // Badge de canciones (pequeño)
-        const songBadge = msg.songs && msg.songs.length > 0 
-            ? `<span class="badge ms-2" style="background: var(--dj-green); font-size: 0.7rem;">${msg.songs.length} 🎵</span>` 
-            : '';
-        
-        html += `
-            <div class="message-card ${msg.read ? 'read' : ''}" style="padding: 15px; margin-bottom: 15px;">
-                <div class="message-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                    <div class="message-user">
-                        <i class="bi bi-person-circle"></i>
-                        <span>Usuario ${msg.deviceId.substring(0, 8)}</span>
-                        ${songBadge}
-                    </div>
-                    <span class="message-time" style="background: #333; padding: 3px 8px; border-radius: 12px; font-size: 0.75rem;">${time}</span>
-                </div>
-                
-                ${messageHtml}
-                ${songsHtml}
-                
-                <div class="message-actions" style="margin-top: 15px; display: flex; gap: 10px;">
-                    ${!msg.read ? `
-                        <button class="message-action-btn message-read-btn" onclick="markAsRead('${msg.id}')" 
-                                style="padding: 8px 15px; font-size: 0.85rem;">
-                            <i class="bi bi-check"></i> LEÍDO
-                        </button>
-                    ` : ''}
-                    <button class="message-action-btn message-delete-btn" onclick="deleteMessage('${msg.id}')"
-                            style="padding: 8px 15px; font-size: 0.85rem;">
-                        <i class="bi bi-trash"></i> ELIMINAR
-                    </button>
-                </div>
-            </div>
-        `;
-    });
-    
-    container.innerHTML = html;
-}
-
         function updateMessageStats() {
             const unread = allMessages.filter(m => !m.read).length;
             document.getElementById('messages-indicator').style.display = unread > 0 ? 'inline-block' : 'none';
         }
 
+        // ========== LISTENER DE SUGERENCIAS ==========
         function setupSuggestionsListener() {
+            if (suggestionsListener) suggestionsListener();
             suggestionsListener = db.collection("temporary_data")
                 .where("type", "==", "suggestion")
                 .onSnapshot(snapshot => {
@@ -1364,6 +1498,7 @@
             document.getElementById('suggestions-indicator').style.display = pending > 0 ? 'inline-block' : 'none';
         }
 
+        // ========== FUNCIONES DE ESCENARIO ==========
         function loadStageMode() {
             loadPlaylist();
             updatePlaylistStats();
@@ -1434,6 +1569,7 @@
                 .catch(() => isUpdatingOrder = false);
         }
 
+        // ========== TOP 10 ==========
         function updateTop10List() {
             const container = document.getElementById('top10-list');
             if (!container) return;
@@ -1460,64 +1596,16 @@
             container.innerHTML = html;
         }
 
-        function loadDeleteList() {
-            const container = document.getElementById('delete-songs-list');
-            if (!container) return;
-            
-            if (allSongs.length === 0) {
-                container.innerHTML = '<div class="text-center py-5"><i class="bi bi-music-note-beamed display-1 text-muted"></i><p class="mt-3">No hay canciones para eliminar</p></div>';
-                return;
-            }
-            
-            let html = '';
-            allSongs.forEach(song => {
-                html += `
-                    <div class="delete-song-item">
-                        <div class="delete-song-info">
-                            <div class="delete-song-title">${song.title}</div>
-                            <div class="delete-song-artist">${song.artist} • ${song.genre || 'Rock'}</div>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <span class="delete-song-votes">${song.votes}</span>
-                            <button class="delete-song-btn" onclick="deleteSong('${song.id}')"><i class="bi bi-trash"></i> ELIMINAR</button>
-                        </div>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
+        function loadConnectionCount() {
+            db.collection('stats').doc('connections').get()
+                .then(doc => {
+                    if (doc.exists) {
+                        document.getElementById("current-connections-count").textContent = doc.data().count || 0;
+                    }
+                }).catch(() => {});
         }
 
-        function submitSong() {
-            const title = document.getElementById('song-title').value.trim();
-            const artist = document.getElementById('song-artist').value.trim();
-            const genre = document.getElementById('song-genre').value;
-            
-            if (!title || !artist) {
-                showNotification("Título y artista requeridos", "warning");
-                return;
-            }
-            
-            const btn = document.querySelector('#song-form .submit-btn');
-            btn.disabled = true;
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Procesando...';
-            
-            db.collection("songs").add({
-                title, artist, genre, votes: 0, inPlaylist: false, played: false, playlistOrder: 999,
-                addedAt: new Date().toISOString()
-            }).then(() => {
-                showNotification(`✅ "${title}" agregada`, "success");
-                document.getElementById('song-title').value = '';
-                document.getElementById('song-artist').value = '';
-                loadAllData();
-                btn.disabled = false;
-                btn.innerHTML = '<i class="bi bi-check-circle"></i> AGREGAR CANCION AL REPERTORIO';
-            }).catch(() => {
-                showNotification("❌ Error", "danger");
-                btn.disabled = false;
-                btn.innerHTML = '<i class="bi bi-check-circle"></i> AGREGAR CANCION AL REPERTORIO';
-            });
-        }
-
+        // ========== FUNCIONES DE ACCIÓN ==========
         window.resetAllVotes = function() {
             if (allSongs.length === 0) {
                 showNotification("No hay canciones", "info");
@@ -1541,15 +1629,6 @@
                 }).catch(() => showNotification("❌ Error", "danger"));
             }
         };
-
-        function loadConnectionCount() {
-            db.collection('stats').doc('connections').get()
-                .then(doc => {
-                    if (doc.exists) {
-                        document.getElementById("current-connections-count").textContent = doc.data().count || 0;
-                    }
-                }).catch(() => {});
-        }
 
         window.removeFromPlaylist = function(songId) {
             const song = allSongs.find(s => s.id === songId);
@@ -1602,6 +1681,72 @@
             }
         };
 
+        // ========== FUNCIONES DE ELIMINACIÓN ==========
+        function loadDeleteList() {
+            const container = document.getElementById('delete-songs-list');
+            if (!container) return;
+            
+            if (allSongs.length === 0) {
+                container.innerHTML = '<div class="text-center py-5"><i class="bi bi-music-note-beamed display-1 text-muted"></i><p class="mt-3">No hay canciones para eliminar</p></div>';
+                return;
+            }
+            
+            let html = '';
+            allSongs.forEach(song => {
+                html += `
+                    <div class="delete-song-item">
+                        <div class="delete-song-info">
+                            <div class="delete-song-title">${song.title}</div>
+                            <div class="delete-song-artist">${song.artist} • ${song.genre || 'Rock'}</div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="delete-song-votes">${song.votes}</span>
+                            <button class="delete-song-btn" onclick="deleteSong('${song.id}')"><i class="bi bi-trash"></i> ELIMINAR</button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function setupForm() {
+            document.getElementById('song-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitSong();
+            });
+        }
+
+        function submitSong() {
+            const title = document.getElementById('song-title').value.trim();
+            const artist = document.getElementById('song-artist').value.trim();
+            const genre = document.getElementById('song-genre').value;
+            
+            if (!title || !artist) {
+                showNotification("Título y artista requeridos", "warning");
+                return;
+            }
+            
+            const btn = document.querySelector('#song-form .submit-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Procesando...';
+            
+            db.collection("songs").add({
+                title, artist, genre, votes: 0, inPlaylist: false, played: false, playlistOrder: 999,
+                addedAt: new Date().toISOString()
+            }).then(() => {
+                showNotification(`✅ "${title}" agregada`, "success");
+                document.getElementById('song-title').value = '';
+                document.getElementById('song-artist').value = '';
+                loadAllData();
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-check-circle"></i> AGREGAR CANCION AL REPERTORIO';
+            }).catch(() => {
+                showNotification("❌ Error", "danger");
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-check-circle"></i> AGREGAR CANCION AL REPERTORIO';
+            });
+        }
+
         window.deleteSong = function(songId) {
             const song = allSongs.find(s => s.id === songId);
             if (!song) return;
@@ -1616,6 +1761,7 @@
             }
         };
 
+        // ========== FUNCIONES DE MENSAJES ==========
         window.markAsRead = function(messageId) {
             db.collection("temporary_data").doc(messageId).update({ status: "read" })
             .then(() => showNotification("✅ Marcado como leído", "success"))
@@ -1667,6 +1813,7 @@
             }
         };
 
+        // ========== FUNCIONES DE SUGERENCIAS ==========
         window.deleteSuggestion = function(suggestionId) {
             if (confirm("❓ Eliminar esta sugerencia?")) {
                 db.collection("temporary_data").doc(suggestionId).delete()
@@ -1697,6 +1844,7 @@
             }
         };
 
+        // ========== LIMPIEZA AUTOMÁTICA ==========
         function setupTemporaryDataCleanup() {
             setInterval(() => {
                 const now = new Date();
@@ -1715,6 +1863,7 @@
             }, 60 * 60 * 1000);
         }
 
+        // ========== NOTIFICACIONES ==========
         function showNotification(message, type = "info") {
             document.querySelectorAll('.notification').forEach(n => n.remove());
             const n = document.createElement('div');
