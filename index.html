@@ -35,6 +35,8 @@
             --bg-panel: #151515;
             --text-light: #f0f0f0;
             --text-muted: #888;
+            --neon-green: #39ff14;
+            --neon-pink: #ff44cc;
         }
         .app-container {
             width: 100%;
@@ -253,18 +255,35 @@
             padding: 0.8rem;
             border-radius: 10px;
             border: 2px solid #444;
-            background: #222;
+            background: #2a2a2a;  /* MÁS CLARO */
             color: var(--text-light);
             font-size: 1rem;
+            transition: all 0.3s;
         }
         .form-control:focus {
             outline: none;
             border-color: #17a2b8;
-            background: #2a2a2a;
+            background: #333;  /* MÁS CLARO AL ENFOCAR */
+            box-shadow: 0 0 0 3px rgba(23, 162, 184, 0.2);
         }
         .form-control.message-input {
             min-height: 120px;
             resize: vertical;
+        }
+        /* Comportamiento NORMAL del placeholder - desaparece al hacer foco */
+.form-control::placeholder {
+    color: #aaa;
+    opacity: 1;
+    transition: opacity 0.2s;
+}
+
+.form-control:focus::placeholder {
+    opacity: 0;  /* Se desvanece al hacer foco */
+}
+        .form-control::placeholder {
+            color: #aaa;  /* Placeholder más visible */
+            opacity: 1;
+            transition: color 0.3s;
         }
         .char-counter {
             font-size: 0.8rem;
@@ -273,6 +292,8 @@
             margin-top: 0.3rem;
         }
         .char-counter.warning { color: #ff6b6b; }
+        
+        /* REPERTORIO MODAL */
         .repertoire-modal {
             display: none;
             position: fixed;
@@ -332,8 +353,12 @@
             padding: 12px 15px;
             border-radius: 10px;
             border: 2px solid #444;
-            background: #222;
+            background: #2a2a2a;  /* MÁS CLARO */
             color: var(--text-light);
+        }
+        .repertoire-search-input:focus {
+            border-color: var(--pub-blue);
+            background: #333;
         }
         .songs-header {
             background: linear-gradient(90deg, var(--pub-blue), var(--pub-red));
@@ -355,9 +380,14 @@
             flex-direction: column;
             padding: 0.8rem;
             border-bottom: 1px solid #333;
-            background: #1a1a1a;
+            background: #2a2a2a;  /* MÁS CLARO */
             border-radius: 8px;
             margin-bottom: 5px;
+            transition: all 0.3s;
+        }
+        .song-item:hover {
+            background: #333;
+            transform: translateX(5px);
         }
         @media (min-width: 768px) {
             .song-item { flex-direction: row; justify-content: space-between; align-items: center; }
@@ -435,39 +465,110 @@
             background: #555;
             cursor: not-allowed;
         }
+        
+        /* ===== NUEVOS ESTILOS MEJORADOS ===== */
+        
+        /* Botón llamativo ELEGIR CANCIONES */
+        .btn-choose-songs {
+            background: linear-gradient(145deg, #28a745, #006400) !important;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 10px;
+            cursor: pointer;
+            animation: pulse-glow 2s infinite;
+            box-shadow: 0 0 15px #39ff14;
+            transition: all 0.3s;
+            border: 2px solid #39ff14;
+        }
+        
+        .btn-choose-songs:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 25px #39ff14;
+            animation: none;
+        }
+        
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 5px #39ff14; }
+            50% { box-shadow: 0 0 20px #39ff14, 0 0 30px #ff44cc; }
+            100% { box-shadow: 0 0 5px #39ff14; }
+        }
+        
+        /* Contenedor de canciones seleccionadas mejorado */
+        #request-selected-songs {
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 15px;
+            border: 2px solid #444;
+        }
+        
+        .selected-song-item {
+            background: #333;
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--pub-yellow);
+            transition: all 0.2s;
+        }
+        
+        .selected-song-item:hover {
+            background: #3a3a3a;
+            transform: translateX(3px);
+        }
+        
+        .remove-song-btn {
+            color: var(--pub-red);
+            cursor: pointer;
+            padding: 5px 8px;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+        
+        .remove-song-btn:hover {
+            background: rgba(194, 11, 23, 0.2);
+            transform: scale(1.2);
+        }
+        
+        /* Badge de contador mejorado */
+        #request-count {
+            background: var(--pub-red) !important;
+            font-size: 0.9rem;
+            padding: 5px 10px;
+            border-radius: 20px;
+            animation: subtle-pulse 2s infinite;
+        }
+        
+        @keyframes subtle-pulse {
+            0% { opacity: 0.9; }
+            50% { opacity: 1; box-shadow: 0 0 10px var(--pub-red); }
+            100% { opacity: 0.9; }
+        }
+        
+        /* Responsive */
         @media (max-width: 768px) {
             .app-container { padding: 1rem 0.8rem 0.8rem; }
             .header-image { max-height: 180px; }
             .buttons-panel { padding: 1.5rem; }
             .action-btn { padding: 0.9rem 1rem; font-size: 1.05rem; }
         }
+        
         @media (max-width: 480px) {
             .header-image { max-height: 160px; }
             .buttons-panel { padding: 1.2rem; }
             .action-btn { padding: 0.8rem 0.9rem; font-size: 1rem; }
             .modal-title { font-size: 1.1rem; }
+            .btn-choose-songs { font-size: 0.9rem; }
         }
-        .form-control, #modal-user-message, #suggestion-title, #suggestion-artist { color: white !important; }
-        .form-control::placeholder { color: rgba(255, 255, 255, 0.6) !important; }
         
-        .selected-song-item {
-            background: #2a2a2a;
-            border-radius: 5px;
-            padding: 5px 8px;
-            margin-bottom: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-left: 3px solid var(--pub-yellow);
-        }
-        .remove-song-btn {
-            color: var(--pub-red);
-            cursor: pointer;
-            padding: 0 5px;
-        }
-        .remove-song-btn:hover {
-            transform: scale(1.2);
-        }
+        /* Texto siempre visible */
+        .form-control, #modal-user-message, #suggestion-title, #suggestion-artist { color: white !important; }
+        .form-control::placeholder { color: #aaa !important; opacity: 1; }
     </style>
 </head>
 <body>
@@ -485,7 +586,7 @@
             
             <div class="buttons-panel">
                 <button class="action-btn request-btn" onclick="openRequestModal()">
-                    <i class="bi bi-music-note-list"></i> PEDIR CANCIONES + MENSAJE
+                    <i class="bi bi-music-note-list"></i> SOLICITAR CANCIONES + MENSAJE
                 </button>
                 
                 <button class="action-btn suggestion-btn" onclick="openSuggestionModal()">
@@ -515,26 +616,27 @@
         </div>
     </div>
 
-    <!-- MODAL DE SOLICITUD INTEGRADA (CON BOTÓN VERDE FUNCIONAL) -->
+    <!-- MODAL DE SOLICITUD INTEGRADA (MEJORADO) -->
     <div class="modal-overlay" id="request-modal">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title">SOLICITA TUS CANCIONES</div>
             </div>
             
-            <div id="request-selected-songs" class="mb-3 p-2" style="background: #222; border-radius: 10px;">
+            <div id="request-selected-songs" class="mb-3">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <span class="fw-bold" style="color: var(--pub-yellow);">
                         <i class="bi bi-music-note-list"></i> TUS CANCIONES
                     </span>
-                    <span class="badge" style="background: var(--pub-red);" id="request-count">0/3</span>
+                    <span class="badge" id="request-count">0/3</span>
                 </div>
                 <div id="request-songs-list" style="min-height: 60px;">
                     <small class="text-muted">No has seleccionado canciones</small>
                 </div>
-                <button class="btn btn-sm w-100 mt-2" style="background: var(--pub-blue); color: white;" 
-                        onclick="openRepertoireModalForRequest()">
-                    <i class="bi bi-plus-circle"></i> ELEGIR CANCIONES
+                
+                <!-- BOTÓN MEJORADO CON EFECTO LLAMATIVO -->
+                <button class="btn-choose-songs" onclick="openRepertoireModalForRequest()">
+                    <i class="bi bi-plus-circle"></i> + ELEGIR CANCIONES
                 </button>
             </div>
             
@@ -547,9 +649,9 @@
                           rows="3"></textarea>
             </div>
             
-            <!-- BOTÓN VERDE CON LA FUNCIÓN CORRECTA -->
+            <!-- BOTÓN CON TEXTO OPTIMIZADO -->
             <button class="action-btn" onclick="submitCompleteRequest()" style="background: linear-gradient(145deg, #28a745, #1e7e34); margin-top: 10px;">
-                <i class="bi bi-send"></i> ENVIAR SOLICITUD COMPLETA
+                <i class="bi bi-send"></i> ENVIAR SOLICITUD/MENSAJE
             </button>
             
             <button class="action-btn cancel-btn" onclick="closeRequestModal()">
@@ -586,7 +688,7 @@
         </div>
     </div>
 
-    <!-- MODAL DE REPERTORIO (para elegir canciones) -->
+    <!-- MODAL DE REPERTORIO -->
     <div class="repertoire-modal" id="repertoire-modal">
         <div class="repertoire-modal-content">
             <div class="repertoire-modal-header">
@@ -920,7 +1022,7 @@
                 return;
             }
             
-            const btn = event ? event.target : document.querySelector('#request-modal .action-btn[onclick="submitCompleteRequest()"]');
+            const btn = document.querySelector('#request-modal .action-btn[style*="background: linear-gradient(145deg, #28a745"]');
             const originalText = btn.innerHTML;
             
             btn.innerHTML = '<i class="bi bi-check2-circle"></i> ENVIANDO...';
